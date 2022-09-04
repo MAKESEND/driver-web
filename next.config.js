@@ -16,7 +16,9 @@ const nextConfig = {
   publicRuntimeConfig: {
     production: process.env.APP_ENV === 'production',
     staging: process.env.APP_ENV === 'staging',
+    development: process.env.APP_ENV === 'development',
     local: process.env.APP_ENV === 'local',
+    APP_ENV: process.env.APP_ENV,
     MAPBOX_GL_ACCESS_TOKEN: process.env.MAPBOX_GL_ACCESS_TOKEN,
   },
   // pwa: {
