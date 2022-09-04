@@ -32,6 +32,7 @@
     "next-i18next": "^11.3.0",
     "next-pwa": "^5.5.5",
     "next-seo": "^5.5.0",
+    "pdfjs": "^2.4.7",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "18.2.0",
