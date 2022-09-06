@@ -21,7 +21,7 @@ const AppLogo = styled(Typography)(() => ({
 }));
 
 export const DrawerSideHead: FC<DrawerSideHeadProps> = ({
-  placeholder = 'Warehouse',
+  placeholder = 'MAKESEND',
   imgSrc,
   drawerWidth = '16rem',
 }) => {
@@ -33,14 +33,14 @@ export const DrawerSideHead: FC<DrawerSideHeadProps> = ({
     >
       {imgSrc ? (
         <Image
-          layout='responsive'
+          layout="responsive"
           width={drawerWidth}
-          height='3rem'
+          height="3rem"
           src={imgSrc}
-          alt='logo'
+          alt="logo"
         />
       ) : (
-        <AppLogo variant='h1'>{placeholder}</AppLogo>
+        <AppLogo variant="h1">{placeholder}</AppLogo>
       )}
     </Container>
   );

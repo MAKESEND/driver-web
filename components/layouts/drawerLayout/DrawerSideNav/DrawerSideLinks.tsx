@@ -31,15 +31,13 @@ const BugReportIcon = dynamic(() => import('@mui/icons-material/BugReport'));
 const linkIcons: { [key: string]: ReactNode } = {
   dashboard: <AnalyticsIcon />,
   warehouse: <WarehouseIcon />,
+  sorting: <WarehouseIcon />,
   map: <MapIcon />,
   scanner: <QrCodeScannerIcon />,
   components: <BugReportIcon />,
 };
 
 export const DrawerSideLinks: FC = () => {
-  const {
-    publicRuntimeConfig: { production },
-  } = getConfig();
   const { t } = useTranslation('common');
   const [onPath, setOnPath] = useState<string>('');
   const { asPath } = useRouter();
@@ -53,11 +51,9 @@ export const DrawerSideLinks: FC = () => {
   return (
     <List>
       {sideLinks.map(({ id, href }) => {
-        if (production && id === 'components') return null;
-
         return (
           <Link key={id} href={href} passHref>
-            <ListItem button selected={id === onPath}>
+            <ListItem button selected={id === onPath} disabled={id === 'map'}>
               <ListItemIcon>{linkIcons[id]}</ListItemIcon>
               <ListItemText>
                 <Typography sx={{ textAlign: 'left' }}>

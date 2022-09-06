@@ -5,9 +5,9 @@ export const sideLinks = [
     title: 'Warehouse',
   },
   {
-    id: 'warehouse',
-    href: '/warehouse',
-    title: 'Warehouse',
+    id: 'sorting',
+    href: '/sorting',
+    title: 'Sorting',
   },
   {
     id: 'map',

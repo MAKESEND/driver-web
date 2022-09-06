@@ -1,6 +1,6 @@
 {
   "sideNav": {
-    "warehouse": "Warehouse",
+    "makesend": "MAKESEND",
     "setting": "Setting",
     "select": {
       "hint": "Select a branch"
@@ -19,6 +19,7 @@
   "links": {
     "dashboard": "Dashboard",
     "warehouse": "Warehouse",
+    "sorting": "Sorting",
     "scanner": "Scanner",
     "settings": "Settings",
     "map": "Map",

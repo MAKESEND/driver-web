@@ -36,7 +36,7 @@ export const DrawerSideNav: FC<DrawerSideNav> = ({
       }}
     >
       <DrawerSideHead
-        placeholder={t('sideNav.warehouse')}
+        placeholder={t('sideNav.makesend')}
         // imgSrc=""
       />
       <Divider sx={{ marginTop: 0 }} />
