@@ -1,4 +1,5 @@
 import { getParcelsByOrderId } from './getParcelsByOrderId';
-export const api = { getParcelsByOrderId };
+import { getSortingList } from './getSortingList';
+export const api = { getParcelsByOrderId, getSortingList };
 
 export default api;

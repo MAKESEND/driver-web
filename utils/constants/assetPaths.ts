@@ -1,14 +1,15 @@
-import type { Dictionary } from 'types/common';
 import type { Routes } from 'types/routes';
 
-export interface IAssetPaths extends Dictionary {
-  legacy: { [route in Routes]?: string };
+type RouteDict = { [key in Routes]?: string };
+export interface IAssetPaths extends RouteDict {
+  legacy: RouteDict;
 }
 
 export const assetPaths: IAssetPaths = {
   getParcelsByOrderId: `/driver-app/parcelsbyorderid`,
   checkDropoffRounds: `/micros/hub/api/dropround/checkround`,
   checkTransferHub: `/micros/hub/api/hubtransfer/checkhub`,
+  getSortingList: '/micros/parcel/dropoff/sorting/get/EX',
   legacy: {
     getParcelsByTrackingIds: `/api/google/makesend/getShipmentByTrackingID`,
   },

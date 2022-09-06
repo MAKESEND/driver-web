@@ -1,5 +1,12 @@
 import type { Hubs } from './hubs';
-import type { DropRound, TempControl } from './parcelMeta';
+import type {
+  DropRound,
+  ParcelSize,
+  TempControl,
+  PickupRound,
+  DropRound,
+  Postal,
+} from './parcelMeta';
 
 export interface Parcel {
   branch_id: null | string;
@@ -36,4 +43,51 @@ export interface Parcel {
   transfer_hub: Hubs;
   updated_at: string;
   user_id: number;
+}
+
+export interface ParcelToSort {
+  orderID: string;
+  trackingID: string;
+  parcelSize: ParcelSize;
+  pickupRound: PickupRound;
+  dropRound: DropRound;
+  cod: number;
+  temp: number;
+  orderDate: string;
+  pickupType: string;
+  userID: string;
+  parcelChanged: string;
+  parcelCreatedAt: string;
+  parcelUpdatedAt: string;
+  parcelType: string;
+  PODStatus: string;
+  senderName: string;
+  senderNo: string;
+  pickupAddress: string;
+  pickupProvince: string;
+  pickupDistrict: string;
+  pickupPostcode: string;
+  receiverName: string;
+  receiverNo: string;
+  dropAddress: string;
+  dropProvince: string;
+  dropDistrict: string;
+  dropPostcode: string;
+  status: string;
+  plannerRound: number;
+  plannerHub: Hubs;
+  sequence: number;
+  id: string;
+  name: string;
+  nickname: string;
+  phone: string;
+  vehicle_type: string;
+  vehicle_type_id: number;
+  service_area: string[];
+  service_area_id: number[];
+  round: number;
+  hub: Hubs;
+  rack: string;
+  volume: number;
+  address_id: Postal;
 }

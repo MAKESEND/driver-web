@@ -1,5 +1,4 @@
-import type { ENVs } from 'types/common';
-import type { Routes } from 'types/routes';
+import type { ENVs, Routes } from 'types';
 import getConfig from 'next/config';
 import legacyServices from 'utils/constants/legacyServices';
 import paths from 'utils/constants/assetPaths';
@@ -20,7 +19,7 @@ export const getEndpoint = ({ ENV, route }: EndpointsArgs): string => {
 
   const isLegacy = isLegacyService(route);
   const { DOMAIN, LEGACY_DOMAIN } =
-    ENV ?? APP_ENV === 'production' ? hosts('asia') : hosts('ninja');
+    (ENV ?? APP_ENV) === 'production' ? hosts('asia') : hosts('ninja');
 
   const path = isLegacy ? paths.legacy[route] : paths[route];
   const domain = isLegacy ? LEGACY_DOMAIN : DOMAIN;

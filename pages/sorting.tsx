@@ -4,6 +4,7 @@ import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Seo from 'components/common/Seo';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
+import { useGetSortingList } from 'hooks/useQueryData';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -13,7 +14,9 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export const ScannerPage: NextPageWithLayout = () => {
+export const SortingPage: NextPageWithLayout = () => {
+  const { data: sortingList } = useGetSortingList();
+
   return (
     <>
       <Seo title="Sorting" />
@@ -21,8 +24,8 @@ export const ScannerPage: NextPageWithLayout = () => {
   );
 };
 
-ScannerPage.getLayout = (page: ReactNode) => {
+SortingPage.getLayout = (page: ReactNode) => {
   return <DrawerLayout fillContainer>{page}</DrawerLayout>;
 };
 
-export default ScannerPage;
+export default SortingPage;

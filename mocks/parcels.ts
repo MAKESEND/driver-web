@@ -1,4 +1,4 @@
-import { Parcel } from 'types/delivery/parcel';
+import type { Parcel, ParcelToSort, Hubs, ParcelSize } from 'types';
 
 export const parcels: Parcel[] = [
   {
@@ -34,8 +34,59 @@ export const parcels: Parcel[] = [
     size: 'env',
     status: 'Pending',
     temp: 0,
-    transfer_hub: 'DMK',
+    transfer_hub: 'DMK' as Hubs,
     updated_at: '2022-09-03T09:12:46.000Z',
     user_id: 5237,
+  },
+];
+
+export const parcelsToSort: ParcelToSort[] = [
+  {
+    orderID: 'MS2209051141438',
+    trackingID: 'EX2209051141578',
+    parcelSize: 's60' as ParcelSize,
+    pickupRound: 8,
+    dropRound: 0,
+    cod: 0,
+    temp: 1,
+    orderDate: '05/09/2022',
+    pickupType: 'drop_branch',
+    userID: '560',
+    parcelChanged: 'false',
+    parcelCreatedAt: '2022-09-05 11:41:38',
+    parcelUpdatedAt: '2022-09-05 11:41:38',
+    parcelType: 'food',
+    PODStatus: 'NOTHING',
+    senderName: 'สบายใจ ทานดีมีบุญ',
+    senderNo: '0824691562',
+    pickupAddress:
+      '[MAKESEND GO สาขาเมืองนนทบุรี 01 (ท่าอิฐ) (ปิดบริการรับฝากส่งที่สาขาชั่วคราว)] 79/53หมู่3ต.บางรักน้อย อ.เมือง จ.นนทบุรี  11000',
+    pickupProvince: 'นนทบุรี',
+    pickupDistrict: 'เมืองนนทบุรี',
+    pickupPostcode: '11000',
+    receiverName: 'กินซี่ สาขา จุฬาฯ',
+    receiverNo: '0656156445',
+    dropAddress:
+      'ศูนย์อาหารทวีวงศ์ถวัลยศักดิ์ รพ.จุฬาลงกรณ์ เลขที่ 1873 แขวงปทุมวัน',
+    dropProvince: 'กรุงเทพ',
+    dropDistrict: 'ปทุมวัน',
+    dropPostcode: '10330',
+    status: 'Failed delivery',
+    plannerRound: 1,
+    plannerHub: 'DMK' as Hubs,
+    sequence: 5,
+    id: '62f1e04321a22e001b002b88',
+    name: 'rachata ',
+    nickname: 'Tang01 ',
+    phone: '0934488404',
+    vehicle_type: 'Bike',
+    vehicle_type_id: 1,
+    service_area: ['สาทร', 'ปทุมวัน'],
+    service_area_id: [33, 31],
+    round: 1,
+    hub: 'DMK' as Hubs,
+    rack: 'B2',
+    volume: 0,
+    address_id: { district: 25, subdistrict: 157, postcode: 25, province: 1 },
   },
 ];

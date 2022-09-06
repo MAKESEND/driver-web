@@ -1,5 +1,4 @@
-import type { Routes } from 'types/routes';
-import type { Parcel } from 'types/delivery/parcel';
+import type { Parcel, Routes, ApiResponse } from 'types';
 import axios from 'axios';
 import getEndpoint from 'utils/services/getEndpoint';
 
@@ -11,13 +10,17 @@ export const getParcelsByOrderId = async (orderId: string) => {
       const endpoint = getEndpoint({ route: 'getParcelsByOrderId' as Routes });
 
       const {
-        data: { data },
-      } = await axios.post<{ orderId: string }, { data: { data: Parcel[] } }>(
-        endpoint,
-        { orderId }
-      );
+        data: { data, status, message },
+      } = await axios.post<
+        { orderId: string },
+        { data: ApiResponse<Parcel[]> }
+      >(endpoint, { orderId });
 
-      parcels = data;
+      if (status === 200) {
+        parcels = data;
+      } else {
+        throw new Error(message);
+      }
     }
   } catch (error: any) {
     console.log("something went wrong in 'getParcelsByOrderId'");

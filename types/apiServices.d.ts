@@ -3,4 +3,11 @@ export enum Routes {
   checkDropoffRounds = 'checkDropoffRounds',
   checkTransferHub = 'checkTransferHub',
   getParcelsByTrackingIds = 'getParcelsByTrackingIds',
+  getSortingList = 'getSortingList',
+}
+
+export interface ApiResponse<T = unknown> {
+  status: number;
+  message: string;
+  data: T;
 }

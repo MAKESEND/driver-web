@@ -5,3 +5,5 @@ export * from './scanner';
 export * from './theme';
 export * from './token';
 export * from './warehouse';
+export * from './apiServices';
+export * from './delivery';
