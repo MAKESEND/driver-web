@@ -1,0 +1,60 @@
+{
+  "sideNav": {
+    "warehouse": "Warehouse",
+    "setting": "Setting",
+    "select": {
+      "hint": "Select a branch"
+    },
+    "btn": { "signout": "Signout" }
+  },
+  "topNav": {
+    "notification": {
+      "notifications": "Notifications",
+      "read": "Read"
+    },
+    "search": {
+      "placeholder": "Search..."
+    }
+  },
+  "links": {
+    "dashboard": "Dashboard",
+    "warehouse": "Warehouse",
+    "scanner": "Scanner",
+    "settings": "Settings",
+    "map": "Map",
+    "components": "Components"
+  },
+  "branch": {
+    "dmk": "Don Mueang",
+    "bkk": "Suvarnabhumi",
+    "t21": "Terminal 21",
+    "ctw": "Central World",
+    "mbk": "MBK"
+  },
+  "hint": {
+    "loading": "Loading",
+    "starting": "Starting",
+    "offline": "App is offline",
+    "online": "App is connected to the Internet"
+  },
+  "btn": {
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "pincode": {
+    "title": {
+      "insertPincode": "Enter PIN",
+      "confirmPincode": "Confirm PIN",
+      "incorrectPin": "Incorrect PIN"
+    }
+  },
+  "imgPreview": {
+    "upload": "Drop image here",
+    "helper": "Set maximum number of images can be uploaded",
+    "btn": {
+      "browse": "Browse",
+      "cancel": "Cancel",
+      "upload": "Upload"
+    }
+  }
+}
