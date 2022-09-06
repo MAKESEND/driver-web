@@ -23,7 +23,10 @@
     "scanner": "Scanner",
     "settings": "Settings",
     "map": "Map",
-    "components": "Components"
+    "components": "Components",
+    "tasks": "Tasks",
+    "pickup": "Pickup",
+    "dropoff": "Dropoff"
   },
   "branch": {
     "dmk": "Don Mueang",

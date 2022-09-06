@@ -1,41 +1,11 @@
 import type { FC, ReactNode } from 'react';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import {
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Typography,
-} from '@mui/material';
+import { Divider, List } from '@mui/material';
 import sideLinks from 'utils/constants/sideLinks';
 import DrawerSettings from './DrawerSettings';
-import getConfig from 'next/config';
-
-import dynamic from 'next/dynamic';
-const WarehouseIcon = dynamic(
-  () => import('@mui/icons-material/WarehouseOutlined')
-);
-const QrCodeScannerIcon = dynamic(
-  () => import('@mui/icons-material/QrCodeScannerOutlined')
-);
-const AnalyticsIcon = dynamic(
-  () => import('@mui/icons-material/AnalyticsOutlined')
-);
-const MapIcon = dynamic(() => import('@mui/icons-material/MapOutlined'));
-const BugReportIcon = dynamic(() => import('@mui/icons-material/BugReport'));
-
-const linkIcons: { [key: string]: ReactNode } = {
-  dashboard: <AnalyticsIcon />,
-  warehouse: <WarehouseIcon />,
-  sorting: <WarehouseIcon />,
-  map: <MapIcon />,
-  scanner: <QrCodeScannerIcon />,
-  components: <BugReportIcon />,
-};
+import { SingleLink, NestedLink } from './links';
 
 export const DrawerSideLinks: FC = () => {
   const { t } = useTranslation('common');
@@ -50,19 +20,12 @@ export const DrawerSideLinks: FC = () => {
 
   return (
     <List>
-      {sideLinks.map(({ id, href }) => {
-        return (
-          <Link key={id} href={href} passHref>
-            <ListItem button selected={id === onPath} disabled={id === 'map'}>
-              <ListItemIcon>{linkIcons[id]}</ListItemIcon>
-              <ListItemText>
-                <Typography sx={{ textAlign: 'left' }}>
-                  {t(`links.${id}`)}
-                </Typography>
-              </ListItemText>
-            </ListItem>
-          </Link>
-        );
+      {sideLinks.map(({ links, id, ...props }) => {
+        return props.href ? (
+          <SingleLink key={id} id={id} {...props} />
+        ) : Array.isArray(links) && links.length > 0 ? (
+          <NestedLink key={id} id={id} links={links} />
+        ) : null;
       })}
       <Divider />
       <DrawerSettings

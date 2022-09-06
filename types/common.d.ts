@@ -8,3 +8,11 @@ export enum ENVs {
 export type Dictionary = {
   [key: string]: any;
 };
+
+export interface Link {
+  id: string;
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  links?: Link[];
+}

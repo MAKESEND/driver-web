@@ -1,4 +1,6 @@
-export const sideLinks = [
+import { Link } from 'types';
+
+export const sideLinks: Link[] = [
   {
     id: 'dashboard',
     href: '/dashboard',
@@ -10,9 +12,26 @@ export const sideLinks = [
     title: 'Sorting',
   },
   {
+    id: 'tasks',
+    title: 'Tasks',
+    links: [
+      {
+        id: 'pickup',
+        href: '/tasks/pickup',
+        title: 'Pickup',
+      },
+      {
+        id: 'dropoff',
+        href: '/tasks/dropoff',
+        title: 'Dropoff',
+      },
+    ],
+  },
+  {
     id: 'map',
     href: '/map',
     title: 'Map',
+    disabled: true,
   },
   {
     id: 'scanner',
