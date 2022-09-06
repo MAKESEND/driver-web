@@ -4,12 +4,12 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import type { DefaultSeoProps } from 'next-seo';
 
+import { useState } from 'react';
 import { DefaultSeoConfig } from 'next-seo.config';
 import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { theme } from 'styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
 
 import dynamic from 'next/dynamic';
 const DefaultSeo = dynamic<DefaultSeoProps>(() =>
@@ -28,6 +28,7 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) {
+  const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
