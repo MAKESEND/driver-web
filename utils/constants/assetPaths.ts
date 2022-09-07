@@ -1,4 +1,4 @@
-import type { Routes } from 'types/routes';
+import type { Routes } from 'types';
 
 type RouteDict = { [key in Routes]?: string };
 export interface IAssetPaths extends RouteDict {

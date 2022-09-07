@@ -91,3 +91,5 @@ export interface ParcelToSort {
   volume: number;
   address_id: Postal;
 }
+
+export type ParcelMixin = Partial<Parcel & ParcelToSort>;

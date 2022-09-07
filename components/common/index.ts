@@ -8,3 +8,4 @@ export * from './pincode';
 export * from './Seo';
 export * from './SearchBar';
 export * from './SessionChecker';
+export * from './mobile';
