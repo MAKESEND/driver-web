@@ -33,7 +33,7 @@ export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
         <Box sx={{ flexGrow: 1 }}>
           <ParcelCard
             {...parcel}
-            HighLight={
+            Note={
               <Typography sx={{ fontSize: '1.25rem' }}>{`${t('rack')}: ${
                 parcel.rack
               } ${parcel.nickname} ${parcel.hub} - ${

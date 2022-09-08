@@ -10,7 +10,7 @@ const SecondaryText = styled(Typography)((theme) => ({
 }));
 
 export type ParcelCardProps<T = ParcelMixin> = T & {
-  HighLight?: ReactNode;
+  Note?: ReactNode;
 };
 
 const ParcelCard: FC<ParcelCardProps> = ({
@@ -18,7 +18,7 @@ const ParcelCard: FC<ParcelCardProps> = ({
   senderName = 'No sender name',
   senderNo = 'No sender phone',
   status = 'No status',
-  HighLight,
+  Note,
 }) => {
   const { t } = useTranslation('parcel');
 
@@ -34,7 +34,7 @@ const ParcelCard: FC<ParcelCardProps> = ({
         )} ${senderNo}`}</SecondaryText>
         <SecondaryText>{`${t('status')} ${status}`}</SecondaryText>
       </CardContent>
-      {HighLight && <CardContent>{HighLight}</CardContent>}
+      {Note && <CardContent>{Note}</CardContent>}
     </MobileCard>
   );
 };
