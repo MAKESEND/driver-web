@@ -26,11 +26,12 @@ export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
         flexDirection: 'column',
         alignItems: 'center',
         height: '100%',
+        gap: '1.25rem',
       }}
     >
-      <SortingFilter setter={setParcel} />
+      <SortingFilter setSelectedParcel={setParcel} sortingList={sortingList} />
       {parcel && (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ width: '100%' }}>
           <ParcelCard
             {...parcel}
             Note={
