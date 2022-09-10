@@ -27,12 +27,22 @@ export const useGetSortingList = () => {
   );
 };
 
-export const useGetParcelByOrderId = (orderId: string) => {
-  return useQuery('parcelsByOrderId', () => api.getParcelsByOrderId(orderId), {
-    ...config,
-  });
+export const useGetParcelsByOrderId = (orderId: string) => {
+  return useQuery(
+    'parcelsByOrderId',
+    async () => {
+      const {
+        data: { data: parcels },
+      } = await axios.get(`/api/parcel/orderid/${orderId}`);
+
+      return parcels;
+    },
+    {
+      ...config,
+    }
+  );
 };
 
-export const queries = { useGetSortingList, useGetParcelByOrderId };
+export const queries = { useGetSortingList, useGetParcelsByOrderId };
 
 export default queries;
