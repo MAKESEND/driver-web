@@ -6,7 +6,7 @@ import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import MobileContainer from 'components/common/mobile/MobileContainer';
 import SortingFilter from 'components/sorting/SortingFilter';
 import ParcelCard from 'components/ParcelCard';
-import { useSortParcel } from 'hooks/useMutateData';
+import { useUpdateParcelStatus } from 'hooks/useMutateData';
 
 export interface SortingList {
   sortingList?: ParcelToSort[];
@@ -15,7 +15,7 @@ export interface SortingList {
 export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
   const { t } = useTranslation(['parcel', 'sorting']);
   const [parcel, setParcel] = useState<ParcelMixin | null>(null);
-  const { mutate, isLoading } = useSortParcel();
+  const { mutate, isLoading } = useUpdateParcelStatus();
 
   const onClick = () => {
     if (parcel?.trackingID) {
