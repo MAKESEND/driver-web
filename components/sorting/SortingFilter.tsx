@@ -47,8 +47,16 @@ export const SortingFilter: FC<SortingFilterProps> = ({
       selectedRounds.some((round) => round === parcel.round)
     );
     setParcels(filteredList);
-    setSelectedParcel(null);
-  }, [sortingList, selectedRounds, setSelectedParcel]);
+
+    // keep selection if it's in the list
+    // otherwise, remove it
+    const isInList = filteredList.some(
+      (parcel) => parcel.trackingID === selectedParcel?.trackingID
+    );
+    if (!isInList) {
+      setSelectedParcel(null);
+    }
+  }, [sortingList, selectedRounds, selectedParcel, setSelectedParcel]);
 
   useEffect(() => {
     return () => setParcels([]);
