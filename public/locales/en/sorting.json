@@ -1,5 +1,8 @@
 {
   "parcels": "Parcels",
   "round": "Round",
-  "unknown": "unknown"
+  "unknown": "unknown",
+  "btn": {
+    "sort": "Sort"
+  }
 }

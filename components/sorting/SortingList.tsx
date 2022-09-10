@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { ParcelToSort, ParcelMixin } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import MobileContainer from 'components/common/mobile/MobileContainer';
 import SortingFilter from 'components/sorting/SortingFilter';
 import ParcelCard from 'components/ParcelCard';
@@ -12,7 +12,7 @@ export interface SortingList {
 }
 
 export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
-  const { t } = useTranslation('parcel');
+  const { t } = useTranslation(['parcel', 'sorting']);
   const [parcel, setParcel] = useState<ParcelMixin | null>(null);
 
   useEffect(() => {
@@ -44,6 +44,11 @@ export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
               } ${parcel.nickname} ${parcel.hub} - ${
                 parcel.sequence
               }`}</Typography>
+            }
+            Actions={
+              <Button variant="contained" onClick={() => console.log('sort')}>
+                {t('btn.sort', { ns: 'sorting' })}
+              </Button>
             }
           />
         </Box>
