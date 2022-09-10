@@ -29,7 +29,11 @@ export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
         gap: '1.25rem',
       }}
     >
-      <SortingFilter setSelectedParcel={setParcel} sortingList={sortingList} />
+      <SortingFilter
+        selectedParcel={parcel}
+        setSelectedParcel={setParcel}
+        sortingList={sortingList}
+      />
       {parcel && (
         <Box sx={{ width: '100%' }}>
           <ParcelCard

@@ -15,6 +15,7 @@ const FilterIcon = dynamic(
 );
 
 export interface SortingFilterProps {
+  selectedParcel?: ParcelMixin | null;
   setSelectedParcel?: Dispatch<SetStateAction<ParcelMixin | null>>;
   sortingList?: ParcelMixin[];
 }
@@ -27,6 +28,7 @@ const filterOptions = createFilterOptions<ParcelMixin>({
 });
 
 export const SortingFilter: FC<SortingFilterProps> = ({
+  selectedParcel = null,
   setSelectedParcel = () => console.warn('no setter to SortingFilter'),
   sortingList = [],
 }) => {
@@ -41,10 +43,12 @@ export const SortingFilter: FC<SortingFilterProps> = ({
   const handleClose = () => setAnchorEl(null);
 
   useEffect(() => {
-    sortingList.filter((parcel) =>
+    const filteredList = sortingList.filter((parcel) =>
       selectedRounds.some((round) => round === parcel.round)
     );
-  }, [sortingList, selectedRounds]);
+    setParcels(filteredList);
+    setSelectedParcel(null);
+  }, [sortingList, selectedRounds, setSelectedParcel]);
 
   useEffect(() => {
     return () => setParcels([]);
@@ -55,7 +59,9 @@ export const SortingFilter: FC<SortingFilterProps> = ({
       <Autocomplete
         sx={{ flexGrow: 1 }}
         disablePortal
+        disableCloseOnSelect
         options={parcels}
+        value={selectedParcel}
         blurOnSelect
         filterOptions={filterOptions}
         getOptionLabel={(option) =>
