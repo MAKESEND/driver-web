@@ -15,12 +15,20 @@ const nextConfig = {
     domains: ['flagcdn.com', 'images.unsplash.com'],
   },
   publicRuntimeConfig: {
-    ENV: {
-      production: APP_ENV === 'production',
-      staging: APP_ENV === 'staging',
-      development: APP_ENV === 'development',
-      local: APP_ENV === 'local',
-      APP_ENV,
+    ENV: { APP_ENV },
+  },
+  serverRuntimeConfig: {
+    msKey: {
+      prodcution: {
+        updateParcelStatus: 'micros_status_service_4rgbb_prod',
+        sorting: '43655de15bea494dba0ba32c99115fff',
+        updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+      },
+      development: {
+        updateParcelStatus: '43655de15bea494dba0ba32c99115fff',
+        sorting: '43655de15bea494dba0ba32c99115fff',
+        updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+      },
     },
   },
   // pwa: {

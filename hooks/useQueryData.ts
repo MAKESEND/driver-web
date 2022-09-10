@@ -20,3 +20,7 @@ export const useGetParcelByOrderId = (orderId: string) => {
     ...config,
   });
 };
+
+export const queries = { useGetSortingList, useGetParcelByOrderId };
+
+export default queries;

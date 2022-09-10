@@ -36,3 +36,7 @@ export interface Postal {
   postcode: number;
   province: number;
 }
+
+export enum ParcelStatus {
+  sorted = 'Sorted',
+}

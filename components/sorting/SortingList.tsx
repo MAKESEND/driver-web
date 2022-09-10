@@ -1,11 +1,12 @@
 import type { FC } from 'react';
-import type { ParcelToSort, ParcelMixin } from 'types';
+import type { ParcelToSort, ParcelMixin, ParcelStatus } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import MobileContainer from 'components/common/mobile/MobileContainer';
 import SortingFilter from 'components/sorting/SortingFilter';
 import ParcelCard from 'components/ParcelCard';
+import { useSortParcel } from 'hooks/useMutateData';
 
 export interface SortingList {
   sortingList?: ParcelToSort[];
@@ -14,6 +15,20 @@ export interface SortingList {
 export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
   const { t } = useTranslation(['parcel', 'sorting']);
   const [parcel, setParcel] = useState<ParcelMixin | null>(null);
+  const { mutate, isLoading } = useSortParcel();
+
+  const onClick = () => {
+    if (parcel?.trackingID) {
+      mutate({
+        shipment: [
+          {
+            trackingID: parcel.trackingID,
+            status: 'Sorted' as ParcelStatus,
+          },
+        ],
+      });
+    }
+  };
 
   useEffect(() => {
     return () => setParcel(null);
@@ -46,7 +61,16 @@ export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
               }`}</Typography>
             }
             Actions={
-              <Button variant="contained" onClick={() => console.log('sort')}>
+              <Button
+                variant="contained"
+                disabled={isLoading}
+                endIcon={
+                  isLoading ? (
+                    <CircularProgress size="1rem" sx={{ color: '#fff' }} />
+                  ) : null
+                }
+                onClick={onClick}
+              >
                 {t('btn.sort', { ns: 'sorting' })}
               </Button>
             }
