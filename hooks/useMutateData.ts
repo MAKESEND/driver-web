@@ -1,11 +1,13 @@
-import type { SortParcelRequest } from 'utils/services/sortParcel';
+import type { ParcelStatusRequest } from 'types';
 import { useMutation } from 'react-query';
 import { api } from 'utils/services';
 
-export const useSortParcel = () => {
-  return useMutation((payload: SortParcelRequest) => api.sortParcel(payload));
+export const useUpdateParcelStatus = () => {
+  return useMutation((payload: ParcelStatusRequest) =>
+    api.updateParcelStatus(payload)
+  );
 };
 
-export const mutations = { useSortParcel };
+export const mutations = { useUpdateParcelStatus };
 
 export default mutations;
