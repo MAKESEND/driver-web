@@ -4,14 +4,25 @@ import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { sortingRoundState } from 'states';
 import { useTranslation } from 'next-i18next';
-import { Autocomplete, Box, IconButton, TextField, Menu } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Menu,
+} from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { rounds } from 'utils/constants/delivery';
 import FilterOptions from 'components/sorting/SortingFilterOptions';
+import Link from 'next/link';
 
 import dynamic from 'next/dynamic';
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
+);
+const QrCodeScannerIcon = dynamic(
+  () => import('@mui/icons-material/QrCodeScanner')
 );
 
 export interface SortingFilterProps {
@@ -70,6 +81,7 @@ export const SortingFilter: FC<SortingFilterProps> = ({
         disableCloseOnSelect
         options={parcels}
         value={selectedParcel}
+        size="small"
         blurOnSelect
         filterOptions={filterOptions}
         getOptionLabel={(option) =>
@@ -81,14 +93,24 @@ export const SortingFilter: FC<SortingFilterProps> = ({
         renderInput={(params) => <TextField {...params} label={t('Parcels')} />}
         onChange={(_event, value) => setSelectedParcel(value)}
       />
-      <IconButton onClick={handleClick}>
+      <Button
+        onClick={handleClick}
+        variant="outlined"
+        size="small"
+        sx={{ minWidth: '1rem' }}
+      >
         <FilterIcon />
-      </IconButton>
+      </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {rounds.map((round) => (
           <FilterOptions.Round key={round} option={round} />
         ))}
       </Menu>
+      <Link href="/scanner?type=sorting" passHref>
+        <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
+          <QrCodeScannerIcon />
+        </Button>
+      </Link>
     </Box>
   );
 };
