@@ -5,6 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
 import Seo from 'components/common/Seo';
 import Settings from 'components/settings/Settings';
+import { MobileContainer } from 'components/common';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -19,7 +20,9 @@ export const SettingsPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Settings" />
-      <Settings />
+      <MobileContainer>
+        <Settings />
+      </MobileContainer>
     </>
   );
 };
