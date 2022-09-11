@@ -3,7 +3,7 @@ import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Seo from 'components/common/Seo';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
+import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
@@ -40,7 +40,7 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
 };
 
 PickupOrderPage.getLayout = (page: ReactNode) => {
-  return <DrawerLayout fillContainer>{page}</DrawerLayout>;
+  return <MobileLayout>{page}</MobileLayout>;
 };
 
 export default PickupOrderPage;

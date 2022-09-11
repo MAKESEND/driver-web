@@ -1,3 +1,2 @@
 export * from './drawerLayout';
-export * from './Layout';
-export * from './MobileLayout';
+export * from './mobileLayout';
