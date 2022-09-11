@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { sortingRoundState } from 'states';
 import { useTranslation } from 'next-i18next';
-import {
-  Autocomplete,
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Menu,
-} from '@mui/material';
+import { Autocomplete, Box, Button, TextField, Menu } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { rounds } from 'utils/constants/delivery';
 import FilterOptions from 'components/sorting/SortingFilterOptions';

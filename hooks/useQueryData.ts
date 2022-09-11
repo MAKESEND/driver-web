@@ -1,7 +1,6 @@
-import type { ParcelToSort } from 'types';
+import type { Parcel, ParcelToSort } from 'types';
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import api from 'utils/services/apiServices';
 
 const retry = 3;
 const staleTime = 5 * 60 * 1000; // 5 mins
@@ -33,7 +32,7 @@ export const useGetParcelsByOrderId = (orderId: string) => {
     async () => {
       const {
         data: { data: parcels },
-      } = await axios.get(`/api/parcel/orderid/${orderId}`);
+      } = await axios.get<{ data: Parcel[] }>(`/api/parcel/orderid/${orderId}`);
 
       return parcels;
     },

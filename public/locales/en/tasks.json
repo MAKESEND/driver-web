@@ -1,0 +1,8 @@
+{
+  "pickup": {},
+  "dropoff": {},
+  "btn": {
+    "scanner": "Scanner",
+    "confirm": "Confirm"
+  }
+}

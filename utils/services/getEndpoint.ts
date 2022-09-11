@@ -14,7 +14,9 @@ export const isLegacyService = (route: Routes): boolean =>
 
 export const getEndpoint = ({ ENV, route }: EndpointsArgs): string => {
   const {
-    publicRuntimeConfig: { APP_ENV },
+    publicRuntimeConfig: {
+      ENV: { APP_ENV },
+    },
   } = getConfig();
 
   const isLegacy = isLegacyService(route);

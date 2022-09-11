@@ -5,6 +5,12 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Seo from 'components/common/Seo';
 import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 
+import dynamic from 'next/dynamic';
+const PickupOrderId = dynamic(
+  () => import('components/tasks/pickup/PickupOrderId'),
+  { ssr: false }
+);
+
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
   query,
@@ -15,7 +21,8 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       orderId: orderid,
-      ...(locale && (await serverSideTranslations(locale, ['common']))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ['common', 'parcel', 'tasks']))),
     },
     ...(invalidId && {
       redirect: {
@@ -35,12 +42,13 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
   return (
     <>
       <Seo title={`Pickup ${orderId.toUpperCase()}`} />
+      <PickupOrderId orderId={orderId} />
     </>
   );
 };
 
 PickupOrderPage.getLayout = (page: ReactNode) => {
-  return <MobileLayout>{page}</MobileLayout>;
+  return <MobileLayout fillContainer>{page}</MobileLayout>;
 };
 
 export default PickupOrderPage;
