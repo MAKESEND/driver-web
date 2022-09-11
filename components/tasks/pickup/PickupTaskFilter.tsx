@@ -1,7 +1,7 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { PickupTask } from 'types';
-import { useState } from 'react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupRoundState } from 'states';
@@ -30,6 +30,14 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   const [selectedRounds, setSelectedRounds] = useRecoilState(pickupRoundState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const filteredTasks = pickupTasks.filter((task) =>
+      selectedRounds.some((round) => round === +task.round)
+    );
+
+    setter(filteredTasks);
+  }, [pickupTasks, selectedRounds, setter]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);

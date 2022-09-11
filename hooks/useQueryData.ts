@@ -1,6 +1,7 @@
 import type { Parcel, ParcelToSort, PickupTask } from 'types';
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { rounds } from 'utils/constants/delivery';
 
 const retry = 3;
 const staleTime = 5 * 60 * 1000; // 5 mins
@@ -47,10 +48,14 @@ export const useGetPickupTasks = (driverId?: string) => {
     'pickupTasks',
     async () => {
       const {
-        data: { data: pickupTasks },
+        data: { data: rawPickupTasks },
       } = await axios.post<{ data: PickupTask[] }>('/api/tasks/pickup', {
         driverId,
       });
+
+      const pickupTasks = rawPickupTasks.filter((task) =>
+        rounds.some((round) => round === +task.round)
+      );
 
       if (driverId) {
         return pickupTasks.filter((task) => task.driver_id === driverId);

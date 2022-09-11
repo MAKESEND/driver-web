@@ -39,7 +39,6 @@ export const SortingFilter: FC<SortingFilterProps> = ({
   const { t } = useTranslation('sorting');
   const [parcels, setParcels] = useState(sortingList);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const [selectedRounds, setSelectedRounds] = useState<number[]>([1]);
   const open = Boolean(anchorEl);
   const [selectedRounds, setSelectedRounds] = useRecoilState(sortingRoundState);
 
@@ -73,7 +72,7 @@ export const SortingFilter: FC<SortingFilterProps> = ({
         sx={{ flexGrow: 1 }}
         disablePortal
         disableCloseOnSelect
-        options={parcels}
+        options={parcels.sort((a, b) => +(a?.round ?? 0) - +(b?.round ?? 0))}
         value={selectedParcel}
         size="small"
         blurOnSelect

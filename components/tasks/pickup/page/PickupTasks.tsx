@@ -17,8 +17,6 @@ export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
 
   useEffect(() => {
     setFilteredTasks(pickupTasks);
-
-    return () => setFilteredTasks([]);
   }, [pickupTasks]);
 
   if (!pickupTasks.length) {
@@ -28,7 +26,7 @@ export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
   return (
     <>
       <Typography variant="h2" sx={{ marginBottom: '1rem' }}>
-        {t('label.pickup')} {pickupTasks.length}{' '}
+        {t('label.pickup')} {filteredTasks.length}{' '}
         {pickupTasks.length > 1 ? t('label.orders') : t('label.order')}
       </Typography>
       <PickupTaskFilter pickupTasks={pickupTasks} setter={setFilteredTasks} />
