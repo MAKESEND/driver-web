@@ -27,7 +27,7 @@ const OnlineIndicator = dynamic(
   () => import('components/common/OnlineIndicator')
 );
 
-export type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout<T = unknown> = NextPage<T> & {
   getLayout?: (page: ReactElement) => ReactElement;
 };
 

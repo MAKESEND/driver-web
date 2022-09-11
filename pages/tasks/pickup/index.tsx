@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { GetStaticProps } from 'next';
-import type { NextPageWithLayout } from '../_app';
+import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Seo from 'components/common/Seo';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
