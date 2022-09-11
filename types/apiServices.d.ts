@@ -5,6 +5,7 @@ export enum Routes {
   getParcelsByTrackingIds = 'getParcelsByTrackingIds',
   getSortingList = 'getSortingList',
   sortParcel = 'sortParcel',
+  getPickupTasks = 'getPickupTasks',
 }
 
 export interface ApiResponse<T = unknown> {

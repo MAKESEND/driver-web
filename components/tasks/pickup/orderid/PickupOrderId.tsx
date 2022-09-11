@@ -6,7 +6,7 @@ import { pickupMediaList, defaultMedia } from 'utils/constants/taskMedia';
 import { Button, Box } from '@mui/material';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Loader } from 'components/common/loader/Loader';
-import TaskMedia from '../TaskMedia';
+import TaskMedia from '../../TaskMedia';
 import PickupParcelList from './PickupParcelList';
 
 export interface PickupOrderIdProps {

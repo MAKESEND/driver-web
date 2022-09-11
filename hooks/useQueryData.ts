@@ -1,4 +1,4 @@
-import type { Parcel, ParcelToSort } from 'types';
+import type { Parcel, ParcelToSort, PickupTask } from 'types';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 
@@ -42,6 +42,31 @@ export const useGetParcelsByOrderId = (orderId: string) => {
   );
 };
 
-export const queries = { useGetSortingList, useGetParcelsByOrderId };
+export const useGetPickupTasks = (driverId?: string) => {
+  return useQuery(
+    'pickupTasks',
+    async () => {
+      const {
+        data: { data: pickupTasks },
+      } = await axios.post<{ data: PickupTask[] }>('/api/tasks/pickup', {
+        driverId,
+      });
+
+      if (driverId) {
+        return pickupTasks.filter((task) => task.driver_id === driverId);
+      }
+
+      console.warn("no driverId is given to 'useGetPickupTasks'");
+      return pickupTasks;
+    },
+    { ...config }
+  );
+};
+
+export const queries = {
+  useGetSortingList,
+  useGetParcelsByOrderId,
+  useGetPickupTasks,
+};
 
 export default queries;

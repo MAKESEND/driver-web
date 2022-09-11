@@ -7,7 +7,7 @@ import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 
 import dynamic from 'next/dynamic';
 const PickupOrderId = dynamic(
-  () => import('components/tasks/pickup/PickupOrderId'),
+  () => import('components/tasks/pickup/orderid/PickupOrderId'),
   { ssr: false }
 );
 

@@ -1,7 +1,7 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { Parcel, ParcelMixin } from 'types';
 import { useState, memo } from 'react';
-import { TaskFilter } from '../TaskFilter';
+import { TaskFilter } from '../../TaskFilter';
 
 export interface PickupParcelListProps {
   parcels?: Parcel[];
