@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';

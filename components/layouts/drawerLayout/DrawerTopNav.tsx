@@ -5,7 +5,6 @@ import { useTranslation } from 'next-i18next';
 import FlexSpacer from 'components/common/FlexSpacer';
 import SearchBar from 'components/common/SearchBar';
 import Notifications from './DrawerTopNav/Notifications';
-
 import {
   styled,
   AppBar as MuiAppBar,
@@ -50,16 +49,16 @@ export const DrawerTopNav: FC<DrawerTopNavProps> = ({
   isMobile = true,
   onClick = () => console.warn('no callback giving to DrawerTopNav'),
 }) => {
-  const { asPath } = useRouter();
+  const router = useRouter();
   const { t } = useTranslation('common');
   const [onPath, setOnPath] = useState<string>('');
 
   useEffect(() => {
-    const paths = asPath.split('/');
-    setOnPath(paths[1]);
+    const paths = router.pathname.split('/').join('.');
+    setOnPath(paths);
 
     return () => setOnPath('');
-  }, [asPath]);
+  }, [router.pathname]);
 
   return (
     <AppBar open={open} position="fixed" isMobile={isMobile} elevation={0}>
@@ -75,7 +74,7 @@ export const DrawerTopNav: FC<DrawerTopNavProps> = ({
           <MenuIcon />
         </IconButton>
         <Typography fontSize="2rem" fontWeight={600}>
-          {t(`links.${onPath}`)}
+          {t(`links${onPath}`)}
         </Typography>
         <FlexSpacer />
         <SearchBar isMobile={isMobile} />

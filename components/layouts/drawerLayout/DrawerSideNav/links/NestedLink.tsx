@@ -22,16 +22,18 @@ export interface NestedLinkProps {
   links?: Link[];
 }
 
-export const NestedLink: FC<NestedLinkProps> = ({ links, id }) => {
+export const NestedLink: FC<NestedLinkProps> = ({ links, id: group }) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <ListItemButton onClick={() => setOpen((val) => !val)}>
-        <ListItemIcon>{LinkIcons[id]}</ListItemIcon>
+        <ListItemIcon>{LinkIcons[group]}</ListItemIcon>
         <ListItemText>
-          <Typography sx={{ textAlign: 'left' }}>{t(`links.${id}`)}</Typography>
+          <Typography sx={{ textAlign: 'left' }}>
+            {t(`links.${group}.id`)}
+          </Typography>
         </ListItemText>
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
@@ -39,7 +41,7 @@ export const NestedLink: FC<NestedLinkProps> = ({ links, id }) => {
         <List>
           {links?.map(({ id, links, ...props }) => {
             if (links) return <NestedLink key={id} links={links} id={id} />;
-            return <SingleLink key={id} id={id} {...props} />;
+            return <SingleLink key={id} id={id} group={group} {...props} />;
           })}
         </List>
       </Collapse>
