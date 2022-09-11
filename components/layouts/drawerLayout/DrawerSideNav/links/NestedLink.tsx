@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { SingleLink } from './SingleLink';
 import { LinkIcons } from './LinkIcons';
 import {
+  Box,
   Collapse,
   List,
   ListItemButton,
@@ -38,7 +39,7 @@ export const NestedLink: FC<NestedLinkProps> = ({ links, id: group }) => {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto">
-        <List>
+        <List sx={{ paddingLeft: '0.5rem' }}>
           {links?.map(({ id, links, ...props }) => {
             if (links) return <NestedLink key={id} links={links} id={id} />;
             return <SingleLink key={id} id={id} group={group} {...props} />;
