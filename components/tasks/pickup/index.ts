@@ -1,2 +1,2 @@
 export * from './orderid';
-export * from './PickupTasks';
+export * from './page';

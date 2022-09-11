@@ -1,16 +1,16 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { ParcelMixin } from 'types';
 import { useState, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import { sortingRoundState } from 'states';
 import { useTranslation } from 'next-i18next';
 import { Autocomplete, Box, Button, TextField, Menu } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { rounds } from 'utils/constants/delivery';
-import FilterOptions from 'components/sorting/SortingFilterOptions';
+import FilterOptions from 'components/FilterOptions';
 import Link from 'next/link';
 
 import dynamic from 'next/dynamic';
+import { useRecoilState } from 'recoil';
+import { sortingRoundState } from 'states';
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
 );
@@ -37,10 +37,11 @@ export const SortingFilter: FC<SortingFilterProps> = ({
   sortingList = [],
 }) => {
   const { t } = useTranslation('sorting');
-  const selectedRounds = useRecoilValue(sortingRoundState);
   const [parcels, setParcels] = useState(sortingList);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const [selectedRounds, setSelectedRounds] = useState<number[]>([1]);
   const open = Boolean(anchorEl);
+  const [selectedRounds, setSelectedRounds] = useRecoilState(sortingRoundState);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -96,7 +97,12 @@ export const SortingFilter: FC<SortingFilterProps> = ({
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {rounds.map((round) => (
-          <FilterOptions.Round key={round} option={round} />
+          <FilterOptions.Round
+            key={round}
+            option={round}
+            selectedRounds={selectedRounds}
+            setSelectedRounds={setSelectedRounds}
+          />
         ))}
       </Menu>
       <Link href="/scanner?type=sorting" passHref>

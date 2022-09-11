@@ -1,9 +1,8 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { Parcel } from 'types';
 
 export interface TaskFilterProps {
-  tasks?: Parcel[];
-  setter?: Dispatch<SetStateAction<Parcel[]>>;
+  tasks?: any[];
+  setter?: Dispatch<SetStateAction<any[]>>;
 }
 
 export const TaskFilter: FC<TaskFilterProps> = ({

@@ -1,18 +1,21 @@
-import type { FC, MouseEvent } from 'react';
+import type { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { useRecoilState } from 'recoil';
-import { sortingRoundState } from 'states';
 import { Checkbox, MenuItem, Typography } from '@mui/material';
 
-export interface FilterOptionsProps<T = unknown> {
+export interface RoundFilterProps<T = number> {
   option?: T;
+  selectedRounds?: T[];
+  setSelectedRounds?: Dispatch<SetStateAction<T[]>>;
 }
 
-export const RoundFilter: FC<FilterOptionsProps<number>> = ({ option }) => {
+export const RoundFilter: FC<RoundFilterProps<number>> = ({
+  option,
+  selectedRounds = [],
+  setSelectedRounds = () => console.warn('no setter given in RoundsFilter'),
+}) => {
   const { t } = useTranslation('sorting');
   const [checked, setChecked] = useState(false);
-  const [selectedRounds, setSelectedRounds] = useRecoilState(sortingRoundState);
 
   useEffect(() => {
     const index = selectedRounds.findIndex((round) => round === option);

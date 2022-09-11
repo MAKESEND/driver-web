@@ -1,6 +1,18 @@
 {
   "pickup": {},
   "dropoff": {},
+  "title": {
+    "noTask": "There's no assignment yet",
+    "pickup": "Pickup",
+    "dropoff": "Dropoff",
+    "orders": "orders"
+  },
+  "label": {
+    "searchParcel": "Search parcel",
+    "pickup": "Pick up",
+    "orders": "orders",
+    "order": "order"
+  },
   "btn": {
     "scanner": "Scanner",
     "confirm": "Confirm"

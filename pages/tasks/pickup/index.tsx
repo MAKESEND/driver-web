@@ -6,13 +6,15 @@ import { useGetPickupTasks } from 'hooks/useQueryData';
 import Seo from 'components/common/Seo';
 import { Box } from '@mui/material';
 import { Loader } from 'components/common/loader/Loader';
+import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { PickupTasks } from 'components/tasks/pickup/PickupTasks';
+import { PickupTasks } from 'components/tasks/pickup/page/PickupTasks';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ['common']))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ['common', 'tasks']))),
     },
   };
 };
@@ -36,7 +38,9 @@ export const PickupPage: NextPageWithLayout = () => {
           <Loader />
         </Box>
       ) : (
-        <PickupTasks pickupTasks={pickupTasks} />
+        <MobileContainer>
+          <PickupTasks pickupTasks={pickupTasks} />
+        </MobileContainer>
       )}
     </>
   );
