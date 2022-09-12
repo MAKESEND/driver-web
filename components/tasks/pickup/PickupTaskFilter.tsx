@@ -1,4 +1,4 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import type { PickupTask } from 'types';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -8,6 +8,8 @@ import { pickupRoundState } from 'states';
 import { rounds } from 'utils/constants/delivery';
 import { Box, Button, TextField, Menu } from '@mui/material';
 import FilterOptions from 'components/FilterOptions';
+import { pickupTaskProps } from 'utils/constants/delivery';
+import Fuse from 'fuse.js';
 
 import dynamic from 'next/dynamic';
 const FilterIcon = dynamic(
@@ -30,14 +32,28 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   const [selectedRounds, setSelectedRounds] = useRecoilState(pickupRoundState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const fuse = new Fuse(pickupTasks, { keys: pickupTaskProps });
+  const [fusedParcels, setFusedParcels] = useState<PickupTask[]>([]);
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const search = event.target.value;
+    if (!search) return setFusedParcels(pickupTasks);
+    const result = fuse.search(search);
+    const parcels = result.map(({ item }) => item);
+    setFusedParcels(parcels);
+  };
 
   useEffect(() => {
-    const filteredTasks = pickupTasks.filter((task) =>
+    setFusedParcels(pickupTasks);
+  }, [pickupTasks]);
+
+  useEffect(() => {
+    const filteredTasks = fusedParcels.filter((task) =>
       selectedRounds.some((round) => round === +task.round)
     );
 
     setter(filteredTasks);
-  }, [pickupTasks, selectedRounds, setter]);
+  }, [fusedParcels, selectedRounds, setter]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -51,6 +67,7 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
         variant="outlined"
         size="small"
         sx={{ flexGrow: 1 }}
+        onChange={onChange}
       />
       <Button
         onClick={handleClick}
