@@ -60,7 +60,15 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <Box sx={{ display: 'flex', gap: '1rem', width: '100%' }}>
+    <Box
+      sx={{
+        // position: 'sticky',
+        // top: 0,
+        display: 'flex',
+        gap: '1rem',
+        width: '100%',
+      }}
+    >
       <TextField
         id="parcel-filter"
         label={t('label.searchParcel')}

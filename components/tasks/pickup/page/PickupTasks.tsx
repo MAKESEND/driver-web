@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import type { PickupTask } from 'types';
 import { useState } from 'react';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import PickupTaskFilter from 'components/tasks/pickup/PickupTaskFilter';
 import NoPickupTask from './NoPickupTask';
 import PickupTaskList from './PickupTaskList';
@@ -30,6 +30,7 @@ export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
         {pickupTasks.length > 1 ? t('label.orders') : t('label.order')}
       </Typography>
       <PickupTaskFilter pickupTasks={pickupTasks} setter={setFilteredTasks} />
+      <Divider />
       <PickupTaskList pickupTasks={filteredTasks} />
     </>
   );

@@ -11,10 +11,20 @@
     "searchParcel": "Search parcel",
     "pickup": "Pick up",
     "orders": "orders",
-    "order": "order"
+    "order": "order",
+    "senderPhone": "Sender phone",
+    "phone": "Phone",
+    "parcelCount": "No. of parcels",
+    "orderId": "Order ID",
+    "pickupAddress": "Pickup address",
+    "address": "address",
+    "pc": "pc",
+    "pcs": "pcs"
   },
   "btn": {
     "scanner": "Scanner",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "skip": "Skip",
+    "details": "Details"
   }
 }
