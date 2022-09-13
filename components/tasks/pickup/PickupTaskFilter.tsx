@@ -1,15 +1,15 @@
 import type { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import type { PickupTask } from 'types';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupRoundState } from 'states';
 import { rounds } from 'utils/constants/delivery';
-import { Box, Button, TextField, Menu } from '@mui/material';
 import FilterOptions from 'components/FilterOptions';
 import { pickupTaskProps } from 'utils/constants/delivery';
 import Fuse from 'fuse.js';
+import { Box, Button, TextField, Menu, IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const FilterIcon = dynamic(
@@ -18,6 +18,7 @@ const FilterIcon = dynamic(
 const QrCodeScannerIcon = dynamic(
   () => import('@mui/icons-material/QrCodeScanner')
 );
+const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
 interface PickupTaskFilterProps {
   pickupTasks?: PickupTask[];
@@ -29,19 +30,30 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   setter = () => console.warn('no setter given to PickupTaskFilter'),
 }) => {
   const { t } = useTranslation('tasks');
-  const [selectedRounds, setSelectedRounds] = useRecoilState(pickupRoundState);
+  const [searchVal, setSearchVal] = useState<string>('');
+  const [fusedParcels, setFusedParcels] = useState<PickupTask[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const fuse = new Fuse(pickupTasks, { keys: pickupTaskProps });
-  const [fusedParcels, setFusedParcels] = useState<PickupTask[]>([]);
+  const [selectedRounds, setSelectedRounds] = useRecoilState(pickupRoundState);
+  const fuse = useMemo(
+    () => new Fuse(pickupTasks, { keys: pickupTaskProps }),
+    [pickupTasks]
+  );
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const search = event.target.value;
-    if (!search) return setFusedParcels(pickupTasks);
-    const result = fuse.search(search);
+    setSearchVal(search);
+  };
+
+  const onClear = () => setSearchVal('');
+
+  useEffect(() => {
+    if (!searchVal) return setFusedParcels(pickupTasks);
+
+    const result = fuse.search(searchVal);
     const parcels = result.map(({ item }) => item);
     setFusedParcels(parcels);
-  };
+  }, [fuse, pickupTasks, searchVal]);
 
   useEffect(() => {
     setFusedParcels(pickupTasks);
@@ -55,18 +67,21 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
     setter(filteredTasks);
   }, [fusedParcels, selectedRounds, setter]);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) =>
+  const openFilterMenu = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const closeFilterMenu = () => setAnchorEl(null);
 
   return (
     <Box
       sx={{
-        // position: 'sticky',
-        // top: 0,
+        position: 'sticky',
+        top: 0,
         display: 'flex',
         gap: '1rem',
         width: '100%',
+        backgroundColor: (theme) => theme.palette.white.main,
+        zIndex: (theme) => theme.zIndex.drawer,
+        paddingY: '0.425rem',
       }}
     >
       <TextField
@@ -75,17 +90,29 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
         variant="outlined"
         size="small"
         sx={{ flexGrow: 1 }}
+        value={searchVal}
         onChange={onChange}
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              aria-label="clear search input"
+              edge="end"
+              onClick={onClear}
+            >
+              <ClearIcon />
+            </IconButton>
+          ),
+        }}
       />
       <Button
-        onClick={handleClick}
+        onClick={openFilterMenu}
         variant="outlined"
         size="small"
         sx={{ minWidth: '1rem' }}
       >
         <FilterIcon />
       </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu anchorEl={anchorEl} open={open} onClose={closeFilterMenu}>
         {rounds.map((round) => (
           <FilterOptions.Round
             key={round}
