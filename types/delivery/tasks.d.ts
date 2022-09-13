@@ -4,7 +4,6 @@ export interface MediaList {
 }
 
 export interface PickupTask {
-  order: string;
   order_id: string;
   sender_name: string;
   sender_phone: string;
@@ -12,7 +11,8 @@ export interface PickupTask {
   sender_address: string;
   driver_id: string;
   round: string;
-  seq: string;
+  order?: string; // order and seq are duplicates
+  seq?: string;
 }
 
 export interface GooglePickupResponse {

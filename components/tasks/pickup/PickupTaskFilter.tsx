@@ -81,7 +81,7 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
         width: '100%',
         backgroundColor: (theme) => theme.palette.white.main,
         zIndex: (theme) => theme.zIndex.drawer,
-        paddingY: '0.425rem',
+        paddingY: '0.875rem',
       }}
     >
       <TextField

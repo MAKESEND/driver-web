@@ -25,7 +25,7 @@ export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
 
   return (
     <>
-      <Typography variant="h2" sx={{ marginBottom: '1rem' }}>
+      <Typography variant="h2" sx={{ marginTop: '1rem' }}>
         {t('label.pickup')} {filteredTasks.length}{' '}
         {pickupTasks.length > 1 ? t('label.orders') : t('label.order')}
       </Typography>

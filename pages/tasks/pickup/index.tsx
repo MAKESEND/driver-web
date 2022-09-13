@@ -47,7 +47,11 @@ export const PickupPage: NextPageWithLayout = () => {
 };
 
 PickupPage.getLayout = (page: ReactNode) => {
-  return <DrawerLayout fillContainer>{page}</DrawerLayout>;
+  return (
+    <DrawerLayout fillContainer sxMain={{ paddingTop: 0 }}>
+      {page}
+    </DrawerLayout>
+  );
 };
 
 export default PickupPage;
