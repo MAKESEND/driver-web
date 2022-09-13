@@ -1,7 +1,7 @@
 import type { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import type { PickupTask } from 'types';
 import Link from 'next/link';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupRoundState } from 'states';
@@ -9,9 +9,10 @@ import { rounds } from 'utils/constants/delivery';
 import FilterOptions from 'components/FilterOptions';
 import { pickupTaskProps } from 'utils/constants/delivery';
 import Fuse from 'fuse.js';
-import { Box, Button, TextField, Menu, IconButton } from '@mui/material';
+import { Box, Button, Menu, IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
+const TextField = dynamic(() => import('@mui/material/TextField'));
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
 );
@@ -20,7 +21,7 @@ const QrCodeScannerIcon = dynamic(
 );
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
-interface PickupTaskFilterProps {
+export interface PickupTaskFilterProps {
   pickupTasks?: PickupTask[];
   setter?: Dispatch<SetStateAction<PickupTask[]>>;
 }
@@ -30,6 +31,7 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   setter = () => console.warn('no setter given to PickupTaskFilter'),
 }) => {
   const { t } = useTranslation('tasks');
+  const timeoutRef = useRef<NodeJS.Timeout>();
   const [searchVal, setSearchVal] = useState<string>('');
   const [fusedParcels, setFusedParcels] = useState<PickupTask[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -41,8 +43,7 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   );
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const search = event.target.value;
-    setSearchVal(search);
+    setSearchVal(event.target.value);
   };
 
   const onClear = () => setSearchVal('');
@@ -50,9 +51,15 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   useEffect(() => {
     if (!searchVal) return setFusedParcels(pickupTasks);
 
-    const result = fuse.search(searchVal);
-    const parcels = result.map(({ item }) => item);
-    setFusedParcels(parcels);
+    clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      const result = fuse.search(searchVal);
+      const parcels = result.map(({ item }) => item);
+      setFusedParcels(parcels);
+    }, 300);
+
+    return () => clearTimeout(timeoutRef.current);
   }, [fuse, pickupTasks, searchVal]);
 
   useEffect(() => {
