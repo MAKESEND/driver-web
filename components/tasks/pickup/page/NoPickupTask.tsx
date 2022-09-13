@@ -12,7 +12,7 @@ export const NoPickupTask: FC = () => {
         height: '100%',
         display: 'inline-flex',
         flexDirection: 'column',
-        justifyContent: { xs: 'start', sm: 'center' },
+        justifyContent: 'center',
         alignItems: { sm: 'center' },
       }}
     >
