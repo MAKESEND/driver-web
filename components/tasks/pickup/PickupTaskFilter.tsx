@@ -93,15 +93,17 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
         value={searchVal}
         onChange={onChange}
         InputProps={{
-          endAdornment: (
-            <IconButton
-              aria-label="clear search input"
-              edge="end"
-              onClick={onClear}
-            >
-              <ClearIcon />
-            </IconButton>
-          ),
+          ...(searchVal && {
+            endAdornment: (
+              <IconButton
+                aria-label="clear search input"
+                edge="end"
+                onClick={onClear}
+              >
+                <ClearIcon />
+              </IconButton>
+            ),
+          }),
         }}
       />
       <Button

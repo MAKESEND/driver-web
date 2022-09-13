@@ -3,7 +3,7 @@ import type { PickupTasksProps } from './PickupTasks';
 import { Box } from '@mui/material';
 import { PickupTaskCard } from './PickupTaskCard';
 
-export const PickupTaskList: FC<PickupTasksProps> = ({ pickupTasks }) => {
+export const PickupTaskList: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
   if (!pickupTasks || !pickupTasks.length) return null;
 
   return (
