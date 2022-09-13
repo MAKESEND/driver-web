@@ -38,7 +38,7 @@ export const PickupPage: NextPageWithLayout = () => {
           <Loader />
         </Box>
       ) : (
-        <MobileContainer sx={{ height: '100%' }}>
+        <MobileContainer>
           <PickupTasks pickupTasks={pickupTasks} />
         </MobileContainer>
       )}
