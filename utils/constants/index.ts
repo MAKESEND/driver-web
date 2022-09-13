@@ -1,4 +1,5 @@
 export * from './assetPaths';
+export * from './delivery';
 export * from './hosts';
 export * from './languages';
 export * from './legacyServices';
