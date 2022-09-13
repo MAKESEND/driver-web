@@ -1,7 +1,13 @@
 {
+  "parcel": "Parcel",
   "parcels": "Parcels",
   "round": "Round",
   "unknown": "unknown",
+  "pc": "pc",
+  "pcs": "pcs",
+  "title": {
+    "parcelsToSort": "Parcels to sort"
+  },
   "btn": {
     "sort": "Sort"
   }

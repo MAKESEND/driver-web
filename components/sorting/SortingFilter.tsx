@@ -1,5 +1,5 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
-import type { ParcelMixin } from 'types';
+import type { ParcelMixin, Parcel, ParcelToSort } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Autocomplete, Box, Button, TextField, Menu } from '@mui/material';
@@ -46,6 +46,15 @@ export const SortingFilter: FC<SortingFilterProps> = ({
     setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
+  const groupBy = (option: Partial<Parcel & ParcelToSort>) => {
+    const parcelCount = parcels.filter(
+      (parcel) => parcel.round === option?.round
+    ).length;
+    return `${t('round')} ${option?.round?.toString()}: ${parcelCount} ${
+      parcelCount > 1 ? t('parcels') : t('parcel')
+    }`;
+  };
+
   useEffect(() => {
     const filteredList = sortingList.filter((parcel) =>
       selectedRounds.some((round) => round === parcel.round)
@@ -78,11 +87,11 @@ export const SortingFilter: FC<SortingFilterProps> = ({
         blurOnSelect
         filterOptions={filterOptions}
         getOptionLabel={(option) =>
-          `${option?.trackingID ?? ''} ${option?.receiverName ?? ''}`
+          `${option?.trackingID?.trim() ?? ''} ${
+            option?.receiverName?.trim() ?? ''
+          }`
         }
-        groupBy={(option) =>
-          t('round') + option?.round?.toString() ?? t('unknown')
-        }
+        groupBy={groupBy}
         renderInput={(params) => <TextField {...params} label={t('Parcels')} />}
         onChange={(_event, value) => setSelectedParcel(value)}
       />
