@@ -2,8 +2,11 @@ import type { ReactNode } from 'react';
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useGetParcelsByOrderId } from 'hooks/useQueryData';
 import Seo from 'components/common/Seo';
+import { PickupLoader } from 'components/tasks/pickup/orderid/PickupLoader';
 import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
+import { MobileContainer } from 'components/common/mobile/MobileContainer';
 
 import dynamic from 'next/dynamic';
 const PickupOrderId = dynamic(
@@ -39,10 +42,26 @@ export interface PickupOrderPageProps {
 export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
   orderId,
 }) => {
+  const bottomPadding = '1rem';
+  const { data: parcels, isLoading } = useGetParcelsByOrderId(orderId);
+
   return (
     <>
-      <Seo title={`Pickup ${orderId.toUpperCase()}`} />
-      <PickupOrderId orderId={orderId} />
+      <Seo title={`${orderId.toUpperCase()}`} />
+      <MobileContainer
+        sx={{
+          position: 'relative',
+          margin: '0 auto',
+          padding: (t) => t.spacing(3),
+          paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
+        }}
+      >
+        {isLoading ? (
+          <PickupLoader />
+        ) : (
+          <PickupOrderId parcels={parcels} float />
+        )}
+      </MobileContainer>
     </>
   );
 };
