@@ -1,7 +1,7 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
-import type { Parcel, ParcelMixin } from 'types';
+import type { Parcel } from 'types';
 import { useState, memo } from 'react';
-import { TaskFilter } from '../../TaskFilter';
+import { PickupParcelFilter } from './PickupParcelFilter';
 
 export interface PickupParcelListProps {
   parcels?: Parcel[];
@@ -19,7 +19,7 @@ export const PickupParcelList: FC<PickupParcelListProps> = ({
 
   return (
     <>
-      <TaskFilter tasks={parcels} setter={setFilteredParcels} />
+      <PickupParcelFilter parcels={parcels} setter={setFilteredParcels} />
     </>
   );
 };

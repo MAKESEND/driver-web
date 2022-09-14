@@ -28,7 +28,7 @@ export interface Parcel {
   pickup_id: number;
   pickup_postcode: string;
   pickup_province: string;
-  pickup_round: string;
+  pickup_round: string | number;
   pickup_type: string;
   receiver_name: string;
   receiver_no: string;

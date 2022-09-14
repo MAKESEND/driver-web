@@ -5,9 +5,8 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupRoundState } from 'states';
-import { rounds } from 'utils/constants/delivery';
 import FilterOptions from 'components/FilterOptions';
-import { pickupTaskProps } from 'utils/constants/delivery';
+import { pickupTaskProps, rounds } from 'utils/constants/delivery';
 import Fuse from 'fuse.js';
 import { Box, Button, Menu, IconButton } from '@mui/material';
 
@@ -24,11 +23,13 @@ const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 export interface PickupTaskFilterProps {
   pickupTasks?: PickupTask[];
   setter?: Dispatch<SetStateAction<PickupTask[]>>;
+  scan?: boolean;
 }
 
 export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
   pickupTasks = [],
   setter = () => console.warn('no setter given to PickupTaskFilter'),
+  scan = false,
 }) => {
   const { t } = useTranslation('tasks');
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -42,11 +43,10 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
     [pickupTasks]
   );
 
+  const onClear = () => setSearchVal('');
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchVal(event.target.value);
   };
-
-  const onClear = () => setSearchVal('');
 
   useEffect(() => {
     if (!searchVal) return setFusedParcels(pickupTasks);
@@ -131,11 +131,13 @@ export const PickupTaskFilter: FC<PickupTaskFilterProps> = ({
           />
         ))}
       </Menu>
-      <Link href="/scanner?type=pickup" passHref>
-        <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
-          <QrCodeScannerIcon />
-        </Button>
-      </Link>
+      {scan && (
+        <Link href="/scanner?type=pickup" passHref>
+          <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
+            <QrCodeScannerIcon />
+          </Button>
+        </Link>
+      )}
     </Box>
   );
 };
