@@ -36,12 +36,12 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
 
   return (
     <>
+      <TaskMedia media={media} setter={setMedia} mediaList={pickupMediaList} />
       <PickupParcelList
         parcels={parcels}
         selectedParcels={selectedParcels}
         setSelectedParcels={setSelectedParcels}
       />
-      <TaskMedia media={media} setter={setMedia} mediaList={pickupMediaList} />
       <MobileContainer
         sx={{
           paddingY: bottomPadding,
