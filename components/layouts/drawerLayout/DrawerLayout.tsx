@@ -1,12 +1,14 @@
-import type { FC, ReactNode } from 'react';
+import { FC, ReactNode, useLayoutEffect } from 'react';
 import type { SxProps } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useWindowSize } from 'react-use';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import DrawerMain from './DrawerMain';
+import DrawerHeader from './DrawerHeader';
 
 import dynamic from 'next/dynamic';
 const DrawerTopNav = dynamic(() => import('./DrawerTopNav'));
-const DrawerHeader = dynamic(() => import('./DrawerHeader'));
+// const DrawerHeader = dynamic(() => import('./DrawerHeader'));
 const DrawerSideNav = dynamic(() => import('./DrawerSideNav/DrawerSideNav'), {
   ssr: false,
 });
@@ -15,6 +17,7 @@ export interface DrawerLayout {
   children: ReactNode;
   fillContainer?: boolean;
   sxMain?: SxProps;
+  hideOnScroll?: boolean;
 }
 
 const drawerWidth = '16rem';
@@ -24,13 +27,20 @@ export const DrawerLayout: FC<DrawerLayout> = ({
   children,
   fillContainer = false,
   sxMain = {},
+  hideOnScroll = false,
 }) => {
   const { width } = useWindowSize();
   const [isMobile, setIsMobile] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const toggleDrawer = useCallback(() => {
-    setOpenDrawer((oldVal) => !oldVal);
+  const mainRef = useRef();
+  const [container, setContainer] = useState<HTMLElement>();
+  const trigger = useScrollTrigger({ target: container });
+
+  const toggleDrawer = () => setOpenDrawer((oldVal) => !oldVal);
+
+  useLayoutEffect(() => {
+    setContainer(mainRef.current);
   }, []);
 
   useEffect(() => {
@@ -51,7 +61,10 @@ export const DrawerLayout: FC<DrawerLayout> = ({
         open={openDrawer}
         isMobile={isMobile}
         onClick={toggleDrawer}
+        hideOnScroll={hideOnScroll}
+        isScrolling={trigger}
       />
+      <DrawerHeader />
       <DrawerSideNav
         open={openDrawer}
         drawerWidth={drawerWidth}
@@ -59,7 +72,6 @@ export const DrawerLayout: FC<DrawerLayout> = ({
         onClose={() => setOpenDrawer(false)}
         screenWidth={width}
       />
-      <DrawerHeader />
       <DrawerMain
         component="main"
         open={openDrawer}
@@ -67,6 +79,7 @@ export const DrawerLayout: FC<DrawerLayout> = ({
         isMobile={isMobile}
         fillContainer={fillContainer}
         sx={sxMain}
+        ref={mainRef}
       >
         {children}
       </DrawerMain>

@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import type { PickupTasksProps } from './PickupTasks';
+import { memo } from 'react';
 import { Box } from '@mui/material';
 import { PickupTaskCard } from './PickupTaskCard';
 
@@ -24,4 +25,6 @@ export const PickupTaskList: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
   );
 };
 
-export default PickupTaskList;
+export const MemoizedPickupTaskList = memo(PickupTaskList);
+
+export default MemoizedPickupTaskList;

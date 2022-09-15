@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import type { AppBarProps } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -12,6 +13,7 @@ import {
   Toolbar,
   IconButton,
   Typography,
+  Slide,
 } from '@mui/material';
 
 import dynamic from 'next/dynamic';
@@ -21,7 +23,9 @@ export interface DrawerTopNavProps {
   open?: boolean;
   drawerWidth?: string;
   isMobile?: boolean;
+  hideOnScroll?: boolean;
   position?: string;
+  isScrolling?: boolean;
   onClick?: () => void;
 }
 
@@ -47,6 +51,9 @@ const AppBar = styled(MuiAppBar, {
 export const DrawerTopNav: FC<DrawerTopNavProps> = ({
   open = false,
   isMobile = true,
+  hideOnScroll = false,
+  position = 'fixed',
+  isScrolling = false,
   onClick = () => console.warn('no callback giving to DrawerTopNav'),
 }) => {
   const router = useRouter();
@@ -61,28 +68,35 @@ export const DrawerTopNav: FC<DrawerTopNavProps> = ({
   }, [router.pathname]);
 
   return (
-    <AppBar open={open} position="fixed" isMobile={isMobile} elevation={0}>
-      <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-          onClick={onClick}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography fontSize="2rem" fontWeight={600}>
-          {t(`links${onPath}`)}
-        </Typography>
-        <FlexSpacer />
-        <SearchBar isMobile={isMobile} />
-        <Box sx={{ display: 'flex' }}>
-          <Notifications />
-        </Box>
-      </Toolbar>
-    </AppBar>
+    <Slide in={!(hideOnScroll && isScrolling)}>
+      <AppBar
+        open={open}
+        position={position as AppBarProps['position']}
+        isMobile={isMobile}
+        elevation={0}
+      >
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={onClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography fontSize="2rem" fontWeight={600}>
+            {t(`links${onPath}`)}
+          </Typography>
+          <FlexSpacer />
+          <SearchBar isMobile={isMobile} />
+          <Box sx={{ display: 'flex' }}>
+            <Notifications />
+          </Box>
+        </Toolbar>
+      </AppBar>
+    </Slide>
   );
 };
 

@@ -2,7 +2,7 @@ import type { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import type { SxProps } from '@mui/material';
 import type { Parcel } from 'types';
 import Fuse from 'fuse.js';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, forwardRef } from 'react';
 import { pickupParcelProps } from 'utils/constants/delivery';
 import { Box, IconButton } from '@mui/material';
 
@@ -18,76 +18,83 @@ export interface PickupParcelFilterProps {
   inputSx?: SxProps;
 }
 
-export const PickupParcelFilter: FC<PickupParcelFilterProps> = ({
-  parcels = [],
-  setter = () => console.warn('no setter passing to PickupParcelFilter'),
-  wrapperSx,
-  inputSx,
-}) => {
-  const { t } = useTranslation('tasks');
-  const timeoutRef = useRef<NodeJS.Timeout>();
-  const [searchVal, setSearchVal] = useState<string>('');
-  const [fusedParcels, setFusedParcels] = useState<Parcel[]>([]);
-  const fuse = useMemo(
-    () => new Fuse(parcels, { keys: pickupParcelProps }),
-    [parcels]
-  );
+export const PickupParcelFilter = forwardRef(
+  (
+    {
+      parcels = [],
+      setter = () => console.warn('no setter passing to PickupParcelFilter'),
+      wrapperSx,
+      inputSx,
+    }: PickupParcelFilterProps,
+    ref
+  ) => {
+    const { t } = useTranslation('tasks');
+    const timeoutRef = useRef<NodeJS.Timeout>();
+    const [searchVal, setSearchVal] = useState<string>('');
+    const [fusedParcels, setFusedParcels] = useState<Parcel[]>([]);
+    const fuse = useMemo(
+      () => new Fuse(parcels, { keys: pickupParcelProps }),
+      [parcels]
+    );
 
-  const onClear = () => setSearchVal('');
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchVal(event.target.value);
-  };
+    const onClear = () => setSearchVal('');
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchVal(event.target.value);
+    };
 
-  useEffect(() => {
-    setFusedParcels(parcels);
-    return () => setFusedParcels([]);
-  }, [parcels]);
-
-  useEffect(() => {
-    // extra filter hook
-    setter(fusedParcels);
-  }, [fusedParcels, setter]);
-
-  useEffect(() => {
-    if (!searchVal) return setFusedParcels(parcels);
-
-    clearTimeout(timeoutRef.current);
-
-    timeoutRef.current = setTimeout(() => {
-      const result = fuse.search(searchVal);
-      const parcels = result.map(({ item }) => item);
+    useEffect(() => {
       setFusedParcels(parcels);
-    }, 300);
+      return () => setFusedParcels([]);
+    }, [parcels]);
 
-    return () => clearTimeout(timeoutRef.current);
-  }, [fuse, parcels, searchVal]);
+    useEffect(() => {
+      // extra filter hook
+      setter(fusedParcels);
+    }, [fusedParcels, setter]);
 
-  return (
-    <Box sx={{ width: '100%', display: 'flex', ...wrapperSx }}>
-      <TextField
-        id="parcel-filter"
-        label={t('label.searchParcel')}
-        variant="outlined"
-        size="small"
-        sx={{ flexGrow: 1, ...inputSx }}
-        value={searchVal}
-        onChange={onChange}
-        InputProps={{
-          ...(searchVal && {
-            endAdornment: (
-              <IconButton
-                aria-label="clear search input"
-                edge="end"
-                onClick={onClear}
-              >
-                <ClearIcon />
-              </IconButton>
-            ),
-          }),
-        }}
-      />
-    </Box>
-  );
-};
+    useEffect(() => {
+      if (!searchVal) return setFusedParcels(parcels);
+
+      clearTimeout(timeoutRef.current);
+
+      timeoutRef.current = setTimeout(() => {
+        const result = fuse.search(searchVal);
+        const parcels = result.map(({ item }) => item);
+        setFusedParcels(parcels);
+      }, 300);
+
+      return () => clearTimeout(timeoutRef.current);
+    }, [fuse, parcels, searchVal]);
+
+    return (
+      <Box sx={{ width: '100%', display: 'flex', ...wrapperSx }} ref={ref}>
+        <TextField
+          id="parcel-filter"
+          label={t('label.searchParcel')}
+          variant="outlined"
+          size="small"
+          sx={{ flexGrow: 1, ...inputSx }}
+          value={searchVal}
+          onChange={onChange}
+          InputProps={{
+            ...(searchVal && {
+              endAdornment: (
+                <IconButton
+                  aria-label="clear search input"
+                  edge="end"
+                  onClick={onClear}
+                >
+                  <ClearIcon />
+                </IconButton>
+              ),
+            }),
+          }}
+        />
+      </Box>
+    );
+  }
+);
+
+PickupParcelFilter.displayName = 'PickupParcelFilter';
 
 export default PickupParcelFilter;

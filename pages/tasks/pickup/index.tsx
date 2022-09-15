@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -48,7 +48,7 @@ export const PickupPage: NextPageWithLayout = () => {
 
 PickupPage.getLayout = (page: ReactNode) => {
   return (
-    <DrawerLayout fillContainer sxMain={{ paddingTop: 0 }}>
+    <DrawerLayout sxMain={{ paddingTop: 0 }} fillContainer>
       {page}
     </DrawerLayout>
   );
