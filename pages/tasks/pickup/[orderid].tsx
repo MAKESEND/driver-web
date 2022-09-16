@@ -67,7 +67,11 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
 };
 
 PickupOrderPage.getLayout = (page: ReactNode) => {
-  return <MobileLayout fillContainer>{page}</MobileLayout>;
+  return (
+    <MobileLayout fillContainer hideOnScroll>
+      {page}
+    </MobileLayout>
+  );
 };
 
 export default PickupOrderPage;

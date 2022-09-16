@@ -1,13 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import type { SxProps } from '@mui/material';
-import { useRouter } from 'next/router';
-import { AppBar, Box, Toolbar, IconButton, styled } from '@mui/material';
-import { DrawerHeader } from '../drawerLayout/DrawerHeader';
-
-import dynamic from 'next/dynamic';
-const ChevronLeftIcon = dynamic(
-  () => import('@mui/icons-material/ChevronLeft')
-);
+import { Box, styled } from '@mui/material';
+import MobileTopNav from './MobileTopNav';
 
 const MainContent = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'fillContainer',
@@ -25,6 +19,7 @@ const MainContent = styled(Box, {
 interface MobileLayoutProps {
   children?: ReactNode;
   fillContainer?: boolean;
+  hideOnScroll?: boolean;
   redirectPath?: string;
   sxProps?: SxProps;
 }
@@ -32,32 +27,17 @@ interface MobileLayoutProps {
 export const Layout: FC<MobileLayoutProps> = ({
   children,
   fillContainer = false,
+  hideOnScroll = false,
   redirectPath,
   sxProps,
 }) => {
-  const router = useRouter();
-
   return (
     <>
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{ backgroundColor: '#fff', ...sxProps }}
-      >
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            aria-label="back"
-            onClick={() => {
-              redirectPath ? router.push(redirectPath) : router.back();
-            }}
-          >
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <DrawerHeader />
+      <MobileTopNav
+        hideOnScroll={hideOnScroll}
+        redirectPath={redirectPath}
+        sxProps={sxProps}
+      />
       <MainContent component="main" fillContainer={fillContainer}>
         {children}
       </MainContent>

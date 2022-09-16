@@ -1,15 +1,19 @@
-import type { FC, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import type { SxProps } from '@mui/material';
 import type { Parcel } from 'types';
+import Link from 'next/link';
 import Fuse from 'fuse.js';
 import { useState, useEffect, useMemo, useRef, forwardRef } from 'react';
 import { pickupParcelProps } from 'utils/constants/delivery';
-import { Box, IconButton } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
+const QrCodeScannerIcon = dynamic(
+  () => import('@mui/icons-material/QrCodeScanner')
+);
 
 export interface PickupParcelFilterProps {
   parcels: Parcel[];
@@ -67,7 +71,15 @@ export const PickupParcelFilter = forwardRef(
     }, [fuse, parcels, searchVal]);
 
     return (
-      <Box sx={{ width: '100%', display: 'flex', ...wrapperSx }} ref={ref}>
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          gap: (t) => t.spacing(2),
+          ...wrapperSx,
+        }}
+        ref={ref}
+      >
         <TextField
           id="parcel-filter"
           label={t('label.searchParcel')}
@@ -90,6 +102,11 @@ export const PickupParcelFilter = forwardRef(
             }),
           }}
         />
+        <Link href="/scanner?type=pickup" passHref>
+          <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
+            <QrCodeScannerIcon />
+          </Button>
+        </Link>
       </Box>
     );
   }
