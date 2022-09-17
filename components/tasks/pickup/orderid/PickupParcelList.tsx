@@ -42,7 +42,18 @@ export const PickupParcelList: FC<PickupParcelListProps> = ({
 
   return (
     <>
-      <Box sx={{ display: 'flex', gap: (t) => t.spacing(2) }}>
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          display: 'flex',
+          gap: (t) => t.spacing(2),
+          backgroundColor: (t) => t.palette.white.main,
+          zIndex: (t) => t.zIndex.drawer,
+          paddingTop: (t) => t.spacing(3),
+          paddingBottom: (t) => t.spacing(1),
+        }}
+      >
         <Checkbox
           checked={selectAll}
           onChange={changeSelectAll}

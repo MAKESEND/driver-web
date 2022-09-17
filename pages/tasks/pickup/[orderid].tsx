@@ -52,7 +52,7 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
         sx={{
           position: 'relative',
           margin: '0 auto',
-          padding: (t) => t.spacing(3),
+          paddingX: (t) => t.spacing(2),
           paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
         }}
       >
