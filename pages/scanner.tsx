@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useState, useEffect } from 'react';
 import Seo from 'components/common/Seo';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
 import ScannerPanel from 'components/scanner/ScannerPanel';
@@ -18,6 +19,15 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 
 export const ScannerPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const [mode, setMode] = useState('');
+
+  useEffect(() => {
+    setMode((router.query?.type as string) ?? '');
+
+    return () => {
+      setMode('');
+    };
+  }, [router.query]);
 
   return (
     <>
