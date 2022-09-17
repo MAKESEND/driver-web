@@ -50,12 +50,16 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
             bottom: 0,
             left: '50%',
             transform: 'translate(-50%)',
+            paddingX: (t) => t.spacing(2),
           }),
         }}
       >
         <Button
           variant="contained"
-          sx={{ width: '100%', maxWidth: '20rem' }}
+          sx={{
+            width: '100%',
+            maxWidth: (t) => t.spacing(40),
+          }}
           onClick={onConfirm}
         >
           {t('btn.confirm')}

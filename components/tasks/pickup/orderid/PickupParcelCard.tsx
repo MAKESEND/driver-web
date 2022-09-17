@@ -1,13 +1,8 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { Parcel } from 'types';
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Checkbox,
-  ListItem,
-  ListItemButton,
-  Typography,
-} from '@mui/material';
+import { Box, Checkbox, ListItem, ListItemButton, styled } from '@mui/material';
+import PickupCardContent from './PickupCardContent';
 
 export interface PickupParcelCardProps {
   parcel: Parcel;
@@ -16,18 +11,11 @@ export interface PickupParcelCardProps {
 }
 
 export const PickupParcelCard: FC<PickupParcelCardProps> = ({
-  parcel: {
-    shipmentID,
-    temp,
-    status,
-    receiver_name,
-    receiver_no,
-    dropoff_district,
-    dropoff_postcode,
-  },
+  parcel,
   selectedParcels = [],
   setter = () => console.warn('no setter given to PickupParcelCard'),
 }) => {
+  const { shipmentID } = parcel;
   const [checked, setChecked] = useState(false);
 
   const onClick = () => {
@@ -52,18 +40,13 @@ export const PickupParcelCard: FC<PickupParcelCardProps> = ({
         onClick={onClick}
         sx={{
           display: 'flex',
-          gap: (t) => t.spacing(2),
+          gap: (t) => t.spacing(1),
           border: '#ccc solid 1px',
           borderRadius: '12px',
         }}
       >
         <Checkbox checked={checked} sx={{ height: (t) => t.spacing(5) }} />
-        <Box sx={{ padding: (t) => t.spacing(1) }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui provident
-          saepe delectus pariatur hic aspernatur modi culpa libero minus, earum
-          quia quaerat, quod temporibus explicabo obcaecati illum quas
-          repellendus eaque?
-        </Box>
+        <PickupCardContent parcel={parcel} />
       </ListItemButton>
     </ListItem>
   );
