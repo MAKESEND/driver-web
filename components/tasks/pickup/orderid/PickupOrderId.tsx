@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 import type { Parcel } from 'types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { pickupMediaList, defaultMedia } from 'utils/constants/taskMedia';
+import { useRecoilState } from 'recoil';
+import { pickupParcelState } from 'states';
 import { Button } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
 import PickupParcelList from './PickupParcelList';
@@ -19,15 +21,25 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
 }) => {
   const bottomPadding = '1rem';
   const { t } = useTranslation('tasks');
+  const syncedRef = useRef(false);
   const [media, setMedia] = useState(defaultMedia);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
+  const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
 
   useEffect(() => {
     return () => {
       setMedia(defaultMedia);
-      setSelectedParcels([]);
     };
   }, []);
+
+  useEffect(() => {
+    if (!syncedRef.current) {
+      setSelectedParcels(pickupParcels);
+      syncedRef.current = true;
+    } else {
+      setPickupParcels(selectedParcels);
+    }
+  }, [pickupParcels, selectedParcels, setPickupParcels]);
 
   const onConfirm = () => {
     console.log('confirm');

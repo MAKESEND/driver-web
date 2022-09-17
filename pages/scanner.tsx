@@ -5,6 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Seo from 'components/common/Seo';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
 import ScannerPanel from 'components/scanner/ScannerPanel';
+import { useRouter } from 'next/router';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -16,6 +17,8 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 export const ScannerPage: NextPageWithLayout = () => {
+  const router = useRouter();
+
   return (
     <>
       <Seo title="Scanner" />

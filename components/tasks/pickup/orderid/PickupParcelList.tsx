@@ -40,6 +40,12 @@ export const PickupParcelList: FC<PickupParcelListProps> = ({
     [filteredParcels, selectedParcels, setSelectedParcels]
   );
 
+  useEffect(() => {
+    if (!selectedParcels.length) {
+      setSelectAll(false);
+    }
+  }, [selectedParcels]);
+
   return (
     <>
       <Box

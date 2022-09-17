@@ -5,6 +5,7 @@ const { persistAtom } = recoilPersist();
 export const pickupParcelState = atom<string[]>({
   key: 'pickupParcelIds',
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const pickupRoundState = atom<number[]>({
