@@ -15,7 +15,7 @@ const config = {
 
 export const useGetSortingList = () => {
   return useQuery(
-    'sorting',
+    ['sorting'],
     async () => {
       const {
         data: { data: parcels },
@@ -29,7 +29,7 @@ export const useGetSortingList = () => {
 
 export const useGetParcelsByOrderId = (orderId: string) => {
   return useQuery(
-    'parcelsByOrderId',
+    ['parcelsByOrderId', orderId],
     async () => {
       const {
         data: { data: parcels },
@@ -45,7 +45,7 @@ export const useGetParcelsByOrderId = (orderId: string) => {
 
 export const useGetPickupTasks = (driverId?: string) => {
   return useQuery(
-    'pickupTasks',
+    ['pickupTasks', driverId],
     async () => {
       const {
         data: { data: rawPickupTasks },
