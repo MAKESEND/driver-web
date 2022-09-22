@@ -11,11 +11,13 @@ import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import PickupParcelSearch from './orderid/PickupParcelSearch';
 
 export interface PickupOrderIdProps {
+  orderId: string;
   parcels?: Parcel[];
   float?: boolean;
 }
 
 export const PickupOrderId: FC<PickupOrderIdProps> = ({
+  orderId,
   parcels = [],
   float = false,
 }) => {
@@ -24,11 +26,15 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   const syncedRef = useRef(false);
   const [media, setMedia] = useState<string[]>([]);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
-  const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
   const [filteredParcels, setFilteredParcels] = useState<Parcel[]>([]);
+  const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
 
   useEffect(() => {
-    return () => setMedia([]);
+    return () => {
+      syncedRef.current = false;
+      setMedia([]);
+      setSelectedParcels([]);
+    };
   }, []);
 
   useEffect(() => {
@@ -37,13 +43,21 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   }, [parcels]);
 
   useEffect(() => {
-    if (!syncedRef.current) {
-      setSelectedParcels(pickupParcels);
-      syncedRef.current = true;
-    } else {
-      setPickupParcels(selectedParcels);
+    if (syncedRef.current) {
+      setPickupParcels((val) => ({ ...val, selectedParcels }));
     }
-  }, [pickupParcels, selectedParcels, setPickupParcels]);
+  }, [selectedParcels, setPickupParcels]);
+
+  useEffect(() => {
+    if (!syncedRef.current) {
+      if (orderId === pickupParcels.orderId) {
+        setSelectedParcels(pickupParcels.selectedParcels);
+      } else {
+        setPickupParcels({ orderId, selectedParcels });
+      }
+      syncedRef.current = true;
+    }
+  }, [pickupParcels, selectedParcels, setPickupParcels, orderId]);
 
   const onConfirm = () => {
     console.log('confirm');

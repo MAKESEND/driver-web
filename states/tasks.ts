@@ -2,9 +2,17 @@ import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
 
-export const pickupParcelState = atom<string[]>({
+interface IpickupParcelState {
+  orderId: string;
+  selectedParcels: string[];
+}
+
+export const pickupParcelState = atom<IpickupParcelState>({
   key: 'pickupParcelIds',
-  default: [],
+  default: {
+    orderId: '',
+    selectedParcels: [],
+  },
   effects_UNSTABLE: [persistAtom],
 });
 
