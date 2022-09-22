@@ -14,12 +14,14 @@ export interface PickupOrderIdProps {
   orderId: string;
   parcels?: Parcel[];
   float?: boolean;
+  sticky?: boolean;
 }
 
 export const PickupOrderId: FC<PickupOrderIdProps> = ({
   orderId,
   parcels = [],
   float = false,
+  sticky = false,
 }) => {
   const bottomPadding = '1rem';
   const { t } = useTranslation('tasks');
@@ -68,14 +70,16 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
     <>
       <Box
         sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: (t) => t.zIndex.drawer,
-          backgroundColor: (t) => t.palette.white.main,
           display: 'flex',
           flexDirection: 'column',
           gap: (t) => t.spacing(2),
           paddingY: (t) => t.spacing(1),
+          ...(sticky && {
+            position: 'sticky',
+            top: 0,
+            zIndex: (t) => t.zIndex.drawer,
+            backgroundColor: (t) => t.palette.white.main,
+          }),
         }}
       >
         <TaskMedia media={media} setter={setMedia} />
@@ -113,7 +117,8 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
           }}
           onClick={() => onConfirm()}
         >
-          {t('btn.confirm')}
+          {t('btn.confirm')}&nbsp;
+          {`(${selectedParcels.length}/${parcels.length})`}
         </Button>
       </MobileContainer>
     </>

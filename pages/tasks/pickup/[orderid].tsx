@@ -59,7 +59,7 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
         {isLoading ? (
           <PickupLoader />
         ) : (
-          <PickupOrderId orderId={orderId} parcels={parcels} float />
+          <PickupOrderId orderId={orderId} parcels={parcels} float sticky />
         )}
       </MobileContainer>
     </>

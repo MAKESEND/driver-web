@@ -44,6 +44,7 @@ export const PickupParcelSearch: React.FC<PickupParcelSearchProps> = ({
 
   useEffect(() => {
     setSelectAll(selectedParcels.length === parcels.length);
+    return () => setSelectAll(false);
   }, [parcels, selectedParcels]);
 
   return (
