@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { PickupTasksProps } from './PickupTasks';
+import type { PickupTasksProps } from '../PickupTasks';
 import { memo } from 'react';
 import { Box } from '@mui/material';
 import { PickupTaskCard } from './PickupTaskCard';

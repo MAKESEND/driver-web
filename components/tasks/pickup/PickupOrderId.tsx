@@ -2,13 +2,13 @@ import type { FC } from 'react';
 import type { Parcel } from 'types';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
-import { pickupMediaList, defaultMedia } from 'utils/constants/taskMedia';
 import { useRecoilState } from 'recoil';
 import { pickupParcelState } from 'states';
-import { Button } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
-import PickupParcelList from './PickupParcelList';
+import PickupParcelList from './orderid/PickupParcelList';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import PickupParcelSearch from './orderid/PickupParcelSearch';
 
 export interface PickupOrderIdProps {
   parcels?: Parcel[];
@@ -22,13 +22,13 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   const bottomPadding = '1rem';
   const { t } = useTranslation('tasks');
   const syncedRef = useRef(false);
-  const [media, setMedia] = useState(defaultMedia);
+  const [media, setMedia] = useState<string[]>([]);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
 
   useEffect(() => {
     return () => {
-      setMedia(defaultMedia);
+      setMedia([]);
     };
   }, []);
 
@@ -48,7 +48,26 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
 
   return (
     <>
-      <TaskMedia media={media} setter={setMedia} mediaList={pickupMediaList} />
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          zIndex: (t) => t.zIndex.drawer,
+          backgroundColor: (t) => t.palette.white.main,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: (t) => t.spacing(2),
+          paddingY: (t) => t.spacing(1),
+        }}
+      >
+        <TaskMedia media={media} setter={setMedia} />
+        <PickupParcelSearch
+          parcels={parcels}
+          selectedParcels={selectedParcels}
+          setSelectedParcels={setSelectedParcels}
+        />
+      </Box>
+      <Divider />
       <PickupParcelList
         parcels={parcels}
         selectedParcels={selectedParcels}
@@ -72,7 +91,7 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
             width: '100%',
             maxWidth: (t) => t.spacing(40),
           }}
-          onClick={onConfirm}
+          onClick={() => onConfirm()}
         >
           {t('btn.confirm')}
         </Button>

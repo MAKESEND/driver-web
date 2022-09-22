@@ -30,7 +30,7 @@ export const MobileTopNav: FC<MobileTopNavProps> = ({
         <AppBar
           position="fixed"
           elevation={0}
-          sx={{ backgroundColor: '#fff', ...sxProps }}
+          sx={{ backgroundColor: 'transparent', ...sxProps }}
         >
           <Toolbar>
             <IconButton

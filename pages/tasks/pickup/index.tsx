@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import { Loader } from 'components/common/loader/Loader';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { PickupTasks } from 'components/tasks/pickup/page/PickupTasks';
+import { PickupTasks } from 'components/tasks/pickup/PickupTasks';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

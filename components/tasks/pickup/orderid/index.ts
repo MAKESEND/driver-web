@@ -1,4 +1,5 @@
+export * from './parcel-search';
 export * from './PickupLoader';
-export * from './PickupOrderId';
-export * from './PickupParcelFilter';
+export * from './PickupParcelCard';
+export * from './PickupCardContent';
 export * from './PickupParcelList';
