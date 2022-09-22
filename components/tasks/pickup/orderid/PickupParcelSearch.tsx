@@ -6,6 +6,8 @@ import { PickupParcelFilter } from './parcel-search/PickupParcelFilter';
 
 export interface PickupParcelSearchProps extends PickupParcelListProps {
   sticky?: boolean;
+  filteredParcels?: Parcel[];
+  setFilteredParcels?: React.Dispatch<React.SetStateAction<Parcel[]>>;
 }
 
 export const PickupParcelSearch: React.FC<PickupParcelSearchProps> = ({
@@ -13,10 +15,12 @@ export const PickupParcelSearch: React.FC<PickupParcelSearchProps> = ({
   parcels = [],
   selectedParcels = [],
   setSelectedParcels = () =>
-    console.warn('no setter given to PickupParcelSearch'),
+    console.warn('no setSelectedParcels given to PickupParcelSearch'),
+  filteredParcels = [],
+  setFilteredParcels = () =>
+    console.warn('no setFilteredParcels given to PickupParcelSearch'),
 }) => {
   const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [filteredParcels, setFilteredParcels] = useState<Parcel[]>([]);
 
   const changeSelectAll = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

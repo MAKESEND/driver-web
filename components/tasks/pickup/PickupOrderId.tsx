@@ -25,12 +25,16 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   const [media, setMedia] = useState<string[]>([]);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
+  const [filteredParcels, setFilteredParcels] = useState<Parcel[]>([]);
 
   useEffect(() => {
-    return () => {
-      setMedia([]);
-    };
+    return () => setMedia([]);
   }, []);
+
+  useEffect(() => {
+    setFilteredParcels(parcels);
+    return () => setFilteredParcels([]);
+  }, [parcels]);
 
   useEffect(() => {
     if (!syncedRef.current) {
@@ -65,11 +69,13 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
           parcels={parcels}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
+          filteredParcels={filteredParcels}
+          setFilteredParcels={setFilteredParcels}
         />
       </Box>
       <Divider />
       <PickupParcelList
-        parcels={parcels}
+        parcels={filteredParcels}
         selectedParcels={selectedParcels}
         setSelectedParcels={setSelectedParcels}
       />
