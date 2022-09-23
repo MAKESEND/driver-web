@@ -19,7 +19,7 @@ const nextConfig = {
   },
   serverRuntimeConfig: {
     msKey: {
-      prodcution: {
+      production: {
         updateParcelStatus: 'micros_status_service_4rgbb_prod',
         sorting: '43655de15bea494dba0ba32c99115fff',
         updateParcelSize: '43655de15bea494dba0ba32c99115fff',

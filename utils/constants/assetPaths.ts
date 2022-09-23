@@ -11,6 +11,7 @@ export const assetPaths: IAssetPaths = {
   checkDropoffRounds: `/micros/hub/api/dropround/checkround`,
   checkTransferHub: `/micros/hub/api/hubtransfer/checkhub`,
   getSortingList: '/micros/parcel/dropoff/sorting/get/EX',
+  uploadImg: '/apiold/api/delivery/uploadPOD',
   legacy: {
     getParcelsByTrackingIds: `/api/google/makesend/getShipmentByTrackingID`,
   },
