@@ -5,6 +5,9 @@ const white = '#FFF';
 const black = '#000';
 const lightGrey = '#ccc';
 const darkGrey = '#777';
+const grey40 = '#BFC2C9';
+const grey80 = '#343840';
+const pink = '#EDEFF2';
 
 // size
 const maxWidth = '34rem';
@@ -25,6 +28,15 @@ export const theme = createTheme({
     },
     darkGrey: {
       main: darkGrey,
+    },
+    common: {
+      white,
+      black,
+      lightGrey,
+      darkGrey,
+      grey40,
+      grey80,
+      pink,
     },
   },
   typography: {
@@ -62,6 +74,18 @@ export const theme = createTheme({
     MuiDivider: {
       defaultProps: {
         sx: { margin: '1rem 0' },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        outlinedSecondary: {
+          color: grey80,
+          border: grey40,
+          '&:hover': {
+            color: grey40,
+            border: grey40,
+          },
+        },
       },
     },
   },

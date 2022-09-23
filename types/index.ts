@@ -2,7 +2,7 @@ export * from './common';
 export * from './map';
 export * from './notifications';
 export * from './scanner';
-export * from './theme';
+export * from './material-ui';
 export * from './token';
 export * from './warehouse';
 export * from './apiServices';

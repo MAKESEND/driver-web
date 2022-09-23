@@ -7,10 +7,21 @@ declare module '@mui/material/styles/createPalette' {
     lightGrey?: PaletteColorOptions;
     darkGrey?: PaletteColorOptions;
   }
+
   interface Palette {
     white: PaletteColor;
     black: PaletteColor;
     lightGrey: PaletteColor;
     darkGrey: PaletteColor;
+  }
+
+  interface CommonColors {
+    white: string;
+    black: string;
+    lightGrey: string;
+    darkGrey: string;
+    grey40: string;
+    grey80: string;
+    pink: string;
   }
 }

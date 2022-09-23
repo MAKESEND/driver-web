@@ -9,7 +9,7 @@ const CloseIcon = dynamic(() => import('@mui/icons-material/Close'));
 const Image = styled('img')(() => ({
   width: '100%',
   height: '100%',
-  objectFit: 'fill',
+  objectFit: 'contain',
 }));
 
 export const SquareBox = styled(Box)(() => ({
