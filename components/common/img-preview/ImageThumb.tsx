@@ -1,5 +1,6 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
+import { blobToBase64 } from 'utils/common/blobToBase64';
 import { styled, Box, Card, CircularProgress, IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
@@ -31,12 +32,12 @@ export const ImageThumb: FC<IImageThumbProps> = ({
   const [imgSrc, setImgSrc] = useState<string>('');
 
   useEffect(() => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const data = event.target?.result;
-      setImgSrc(data as string);
+    const readAsBase64 = async (image: File) => {
+      const serializedImg = await blobToBase64(image);
+      setImgSrc(serializedImg);
     };
-    reader.readAsDataURL(image);
+
+    readAsBase64(image);
 
     return () => {
       setIsLoading(false);

@@ -1,6 +1,9 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { useState, useEffect, memo } from 'react';
+import { memo } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { Placeholder } from 'components/common/img-preview/Placeholder';
+import { ImageThumb } from 'components/common/img-preview/ImageThumb';
+import { AddImage } from 'components/common/img-preview/AddImage';
 import {
   Accordion,
   AccordionSummary,
@@ -8,29 +11,25 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { Placeholder } from 'components/common/img-preview/Placeholder';
-import { ImageThumb } from 'components/common/img-preview/ImageThumb';
-import { AddImage } from 'components/common/img-preview/AddImage';
 
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 const ExpandMoreIcon = dynamic(() => import('@mui/icons-material/ExpandMore'));
 
 export interface TaskMediaProps {
-  media: string[];
-  setter: Dispatch<SetStateAction<string[]>>;
+  images: File[];
+  setImages: Dispatch<SetStateAction<File[]>>;
   maxImgs?: number;
   sticky?: boolean;
 }
 
 export const TaskMedia: FC<TaskMediaProps> = ({
-  media = [],
-  setter = () => console.warn('no setter given to TaskMedia'),
+  images = [],
+  setImages = () => console.warn('no setImages given to TaskMedia'),
   maxImgs = 3,
   sticky = false,
 }) => {
   const { t } = useTranslation('tasks');
-  const [images, setImages] = useState<File[]>([]);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     accept: { 'image/*': ['.png', '.jpeg'] },
@@ -44,14 +43,16 @@ export const TaskMedia: FC<TaskMediaProps> = ({
     },
   });
 
-  useEffect(() => {
-    return () => {
-      setImages([]);
-    };
-  }, []);
-
   return (
-    <Accordion>
+    <Accordion
+      sx={{
+        ...(sticky && {
+          position: 'sticky',
+          top: 0,
+          zIndex: (t) => t.zIndex.drawer,
+        }),
+      }}
+    >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>
           {t('title.uploadPhotos')}&nbsp;

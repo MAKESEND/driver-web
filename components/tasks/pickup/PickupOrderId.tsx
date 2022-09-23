@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupParcelState } from 'states';
+import imageCompression from 'browser-image-compression';
+import { blobToBase64 } from 'utils/common/blobToBase64';
 import { Box, Button, Divider } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
 import PickupParcelList from './orderid/PickupParcelList';
@@ -24,17 +26,33 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   sticky = false,
 }) => {
   const bottomPadding = '1rem';
+  const imgZipOptions = {
+    maxSizeMB: 1,
+    // maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
   const { t } = useTranslation('tasks');
   const syncedRef = useRef(false);
-  const [media, setMedia] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [filteredParcels, setFilteredParcels] = useState<Parcel[]>([]);
   const [pickupParcels, setPickupParcels] = useRecoilState(pickupParcelState);
 
+  const onConfirm = async () => {
+    try {
+      const serializedImg = await imgProcesser(images, imgZipOptions);
+      console.log(serializedImg);
+    } catch (error: any) {
+      console.log('something went wrong when confirm pickup parcels');
+      console.warn(error?.message ?? error);
+    }
+  };
+
   useEffect(() => {
     return () => {
       syncedRef.current = false;
-      setMedia([]);
+      setImages([]);
       setSelectedParcels([]);
     };
   }, []);
@@ -61,11 +79,6 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
     }
   }, [pickupParcels, selectedParcels, setPickupParcels, orderId]);
 
-  const onConfirm = () => {
-    console.log('confirm');
-    console.log(selectedParcels, media);
-  };
-
   return (
     <>
       <Box
@@ -82,7 +95,7 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
           }),
         }}
       >
-        <TaskMedia media={media} setter={setMedia} />
+        <TaskMedia images={images} setImages={setImages} />
         <PickupParcelSearch
           parcels={parcels}
           selectedParcels={selectedParcels}
@@ -126,3 +139,20 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
 };
 
 export default PickupOrderId;
+
+type compressionArgs = Parameters<typeof imageCompression>;
+
+const imgProcesser = async (
+  images: File[],
+  imgZipOptions: compressionArgs[1]
+) => {
+  const imgCompression = images.map((img) =>
+    imageCompression(img, imgZipOptions)
+  );
+  const compressedImgs = await Promise.all(imgCompression);
+  const imgSerializing = compressedImgs.map((img) =>
+    blobToBase64(img, img.type)
+  );
+  const serializedImg = await Promise.all(imgSerializing);
+  return serializedImg;
+};
