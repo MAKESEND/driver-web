@@ -1,15 +1,15 @@
-import type { FC } from 'react';
-import type { Parcel } from 'types';
+import type { Parcel, ImageType } from 'types';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupParcelState } from 'states';
 import imageCompression from 'browser-image-compression';
 import { blobToBase64 } from 'utils/common/blobToBase64';
+import { useUploadImage } from 'hooks/useMutateData';
 import { Box, Button, Divider } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
-import PickupParcelList from './orderid/PickupParcelList';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import PickupParcelList from './orderid/PickupParcelList';
 import PickupParcelSearch from './orderid/PickupParcelSearch';
 
 export interface PickupOrderIdProps {
@@ -19,20 +19,21 @@ export interface PickupOrderIdProps {
   sticky?: boolean;
 }
 
-export const PickupOrderId: FC<PickupOrderIdProps> = ({
+const bottomPadding = '1rem';
+const imgZipOptions = {
+  maxSizeMB: 1,
+  // maxWidthOrHeight: 1920,
+  useWebWorker: true,
+};
+
+export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
   orderId,
   parcels = [],
   float = false,
   sticky = false,
 }) => {
-  const bottomPadding = '1rem';
-  const imgZipOptions = {
-    maxSizeMB: 1,
-    // maxWidthOrHeight: 1920,
-    useWebWorker: true,
-  };
-
   const { t } = useTranslation('tasks');
+  const { mutate, isLoading } = useUploadImage();
   const syncedRef = useRef(false);
   const [images, setImages] = useState<File[]>([]);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
@@ -42,14 +43,20 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   const onConfirm = async () => {
     try {
       const serializedImg = await imgProcesser(images, imgZipOptions);
-      console.log(serializedImg);
+
+      mutate({
+        orderID: orderId,
+        type: 'pickupPOD' as ImageType,
+        PODImage: serializedImg,
+      });
     } catch (error: any) {
-      console.log('something went wrong when confirm pickup parcels');
+      console.log("something went wrong 'onConfirm' pickup parcels");
       console.warn(error?.message ?? error);
     }
   };
 
   useEffect(() => {
+    // reset local states
     return () => {
       syncedRef.current = false;
       setImages([]);
@@ -63,18 +70,19 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
   }, [parcels]);
 
   useEffect(() => {
+    // sync local state to recoil
     if (syncedRef.current) {
       setPickupParcels((val) => ({ ...val, selectedParcels }));
     }
   }, [selectedParcels, setPickupParcels]);
 
   useEffect(() => {
+    // sync recoil to local state
     if (!syncedRef.current) {
-      if (orderId === pickupParcels.orderId) {
-        setSelectedParcels(pickupParcels.selectedParcels);
-      } else {
-        setPickupParcels({ orderId, selectedParcels });
-      }
+      orderId === pickupParcels.orderId
+        ? setSelectedParcels(pickupParcels.selectedParcels)
+        : setPickupParcels({ orderId, selectedParcels });
+
       syncedRef.current = true;
     }
   }, [pickupParcels, selectedParcels, setPickupParcels, orderId]);
@@ -124,11 +132,12 @@ export const PickupOrderId: FC<PickupOrderIdProps> = ({
       >
         <Button
           variant="contained"
+          disabled={isLoading}
+          onClick={() => onConfirm()}
           sx={{
             width: '100%',
             maxWidth: (t) => t.spacing(40),
           }}
-          onClick={() => onConfirm()}
         >
           {t('btn.confirm')}&nbsp;
           {`(${selectedParcels.length}/${parcels.length})`}
@@ -142,6 +151,12 @@ export default PickupOrderId;
 
 type compressionArgs = Parameters<typeof imageCompression>;
 
+/**
+ * Compress and encode with Base64
+ * @param images
+ * @param imgZipOptions
+ * @returns
+ */
 const imgProcesser = async (
   images: File[],
   imgZipOptions: compressionArgs[1]
