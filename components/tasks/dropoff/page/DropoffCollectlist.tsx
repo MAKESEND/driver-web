@@ -1,12 +1,12 @@
-import type { DropoffTask } from 'types';
+import type { DropoffTask, ScannerTypes } from 'types';
 import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
 import { Box, Divider } from '@mui/material';
 import { CollectlistSummary } from './collectlist/CollectlistSummary';
-import { CollectlistFilter } from './collectlist/CollectlistFilter';
 import { Collectlist } from './collectlist/Collectlist';
 import { CollectlistBottomNav } from './collectlist/CollectlistBottomNav';
+import { ChecklistSearch } from 'components/tasks/ChecklistSearch';
 
 export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
@@ -16,9 +16,9 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
   const syncedRef = useRef(false);
-
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
-  const [filteredParcels, setFilteredParcels] = useState<DropoffTask[]>([]);
+  const [filteredParcels, setFilteredParcels] =
+    useState<DropoffTask[]>(dropoffTasks);
   const [dropoffParcels, setDropoffParcels] =
     useRecoilState(dropoffParcelState);
 
@@ -27,24 +27,24 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
     return () => {
       syncedRef.current = false;
       setSelectedParcels([]);
+      setFilteredParcels([]);
     };
   }, []);
 
   useEffect(() => {
-    setFilteredParcels(dropoffTasks);
-    return () => setFilteredParcels([]);
-  }, [dropoffTasks]);
+    if (syncedRef.current) {
+      // sync local state to recoil
+      setDropoffParcels(selectedParcels);
+    }
+  }, [selectedParcels, setDropoffParcels]);
 
   useEffect(() => {
     if (!syncedRef.current) {
       // sync recoil to local state
       setSelectedParcels(dropoffParcels);
       syncedRef.current = true;
-    } else {
-      // sync local state to recoil
-      setDropoffParcels(selectedParcels);
     }
-  }, [dropoffParcels, selectedParcels, setDropoffParcels]);
+  }, [dropoffParcels, setDropoffParcels]);
 
   const onConfirm = () => {
     console.log('confirm');
@@ -59,12 +59,14 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
         }}
       >
         <CollectlistSummary />
-        <CollectlistFilter
-          dropoffTasks={dropoffTasks}
+        <ChecklistSearch
+          sticky
+          parcels={dropoffTasks}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
           filteredParcels={filteredParcels}
           setFilteredParcels={setFilteredParcels}
+          type={'dropoff' as ScannerTypes}
         />
         <Divider />
         <Collectlist dropoffTasks={filteredParcels} />

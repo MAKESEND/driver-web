@@ -5,6 +5,11 @@ export enum ENVs {
   local = 'local',
 }
 
+export enum ScannerTypes {
+  pickup = 'pickup',
+  dropoff = 'dropoff',
+}
+
 export enum DropoffModes {
   collectlist = 'collectlist',
   tasklist = 'tasklist',
