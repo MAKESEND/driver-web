@@ -1,13 +1,9 @@
-import type { DropoffTask } from 'types';
+import { DropoffChecklist } from './page/DropoffChecklist';
+import { DropoffTasklist } from './page/DropoffTasklist';
 
-export interface DropoffTasksProps {
-  dropoffTasks?: DropoffTask[];
-}
-
-export const DropoffTasks: React.FC<DropoffTasksProps> = ({
-  dropoffTasks = [],
-}) => {
-  return <></>;
+export const DropoffTasks = {
+  checklist: DropoffChecklist,
+  tasklist: DropoffTasklist,
 };
 
 export default DropoffTasks;

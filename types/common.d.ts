@@ -5,6 +5,11 @@ export enum ENVs {
   local = 'local',
 }
 
+export enum DropoffModes {
+  checklist = 'checklist',
+  tasklist = 'tasklist',
+}
+
 export type Dictionary = {
   [key: string]: any;
 };
