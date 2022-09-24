@@ -4,6 +4,8 @@ import type {
   ImageUploadRequest,
   ParcelStatusRequest,
   MSApiResponse,
+  ApiResponse,
+  GooglePickupResponse,
 } from 'types';
 import axios from 'axios';
 import getConfig from 'next/config';
@@ -15,9 +17,12 @@ import { getPickupTasks } from './getPickupTasks';
 export const api = {
   getParcelsByOrderId,
   getSortingList,
-  getPickupTasks,
+  getPickupTasks: () =>
+    axios.post<ApiResponse<GooglePickupResponse>>(
+      getEndpoint({ route: 'getPickupTasks' as Routes })
+    ),
   updateParcelStatus: (payload: ParcelStatusRequest) =>
-    axios.post(
+    axios.post<ApiResponse>(
       getEndpoint({ route: 'updateParcelStatus' as Routes }),
       payload,
       getConfigKey('sorting')

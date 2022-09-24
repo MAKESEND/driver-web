@@ -11,14 +11,15 @@ export default async function handler(
 
   try {
     if (req.method === 'POST') {
-      const pickupTasks = await api.getPickupTasks();
-      if (req.body?.driverId) {
-        data = pickupTasks.filter(
-          (task) => task.driver_id === req.body.driverId
-        );
-      } else {
-        data = pickupTasks;
-      }
+      const response = await api.getPickupTasks();
+      const pickupTasks = response.data?.data?.parcelsToPick;
+
+      data = req.body?.driverId
+        ? pickupTasks.filter((task) => task.driver_id === req.body.driverId)
+        : pickupTasks;
+
+      response?.data?.status && (status = response.data.status);
+      response?.data?.message && (message = response.data.message);
     } else {
       status = 401;
       message = 'Bad request';
@@ -26,7 +27,7 @@ export default async function handler(
   } catch (error: any) {
     status = 500;
     message = error?.message ?? 'error';
-    console.log("something went wrong in '/api/sortinglist");
+    console.log("something went wrong in '/api/tasks/pickup");
     console.log(message);
   }
 

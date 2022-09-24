@@ -9,15 +9,18 @@ import getEndpoint from 'utils/services/getEndpoint';
 
 export const getPickupTasks = async (): Promise<PickupTask[]> => {
   const endpoint = getEndpoint({ route: 'getPickupTasks' as Routes });
-  let parcels: PickupTask[] = [];
 
   try {
+    if (window || typeof window !== 'undefined') {
+      throw new Error('getPickupTasks is server-side only');
+    }
+
     const {
       data: { data, status, message },
     } = await axios.post<ApiResponse<GooglePickupResponse>>(endpoint);
 
     if (status === 200) {
-      parcels = data?.parcelsToPick ?? parcels;
+      return data?.parcelsToPick ?? [];
     } else {
       throw new Error(message);
     }
@@ -26,7 +29,7 @@ export const getPickupTasks = async (): Promise<PickupTask[]> => {
     console.log(error?.message ?? error);
   }
 
-  return parcels;
+  return [];
 };
 
 export default getPickupTasks;
