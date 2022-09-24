@@ -10,6 +10,7 @@ import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Loader } from 'components/common/loader/Loader';
 import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
+import { Button } from '@mui/material';
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
@@ -38,6 +39,10 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
 
   const Worklist = DropoffTasks[mode];
 
+  const onConfirm = () => {
+    console.log('confirm');
+  };
+
   return (
     <>
       <Seo title="Dropoff" />
@@ -46,9 +51,11 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
           <Loader />
         </FlexCenterBox>
       ) : (
-        <MobileContainer>
-          <Worklist dropoffTasks={dropoffTasks} />
-        </MobileContainer>
+        <>
+          <MobileContainer>
+            <Worklist dropoffTasks={dropoffTasks} />
+          </MobileContainer>
+        </>
       )}
     </>
   );

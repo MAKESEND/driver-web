@@ -21,3 +21,9 @@ export const pickupRoundState = atom<number[]>({
   default: [1],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const dropoffParcelState = atom<string[]>({
+  key: 'dropoffParcelIds',
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
