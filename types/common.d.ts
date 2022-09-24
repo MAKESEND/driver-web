@@ -6,7 +6,7 @@ export enum ENVs {
 }
 
 export enum DropoffModes {
-  checklist = 'checklist',
+  collectlist = 'collectlist',
   tasklist = 'tasklist',
 }
 

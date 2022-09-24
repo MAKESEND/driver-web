@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Button } from '@mui/material';
 
-export interface ChecklistBottomNavProps {
+export interface CollectlistBottomNavProps {
   onConfirm?: () => void;
   countSelected?: number;
   countTotal?: number;
@@ -11,8 +11,8 @@ export interface ChecklistBottomNavProps {
   btnSx?: SxProps;
 }
 
-export const ChecklistBottomNav: React.FC<ChecklistBottomNavProps> = ({
-  onConfirm = () => console.warn('no function given to ChecklistBottomNav'),
+export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
+  onConfirm = () => console.warn('no function given to CollectlistBottomNav'),
   countSelected = 0,
   countTotal = 0,
   sx,
@@ -44,4 +44,4 @@ export const ChecklistBottomNav: React.FC<ChecklistBottomNavProps> = ({
   );
 };
 
-export default ChecklistBottomNav;
+export default CollectlistBottomNav;

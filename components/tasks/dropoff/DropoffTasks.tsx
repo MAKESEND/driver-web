@@ -1,8 +1,8 @@
-import DropoffChecklist from './page/DropoffChecklist';
+import DropoffCollectlist from './page/DropoffCollectlist';
 import DropoffTasklist from './page/DropoffTasklist';
 
 export const DropoffTasks = {
-  checklist: DropoffChecklist,
+  collectlist: DropoffCollectlist,
   tasklist: DropoffTasklist,
 };
 

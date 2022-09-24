@@ -3,16 +3,16 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
 import { Box, Divider } from '@mui/material';
-import { ChecklistSummary } from './checklist/ChecklistSummary';
-import { ChecklistFilter } from './checklist/ChecklistFilter';
-import { CheckTaskList } from './checklist/CheckTaskList';
-import { ChecklistBottomNav } from './checklist/ChecklistBottomNav';
+import { CollectlistSummary } from './collectlist/CollectlistSummary';
+import { CollectlistFilter } from './collectlist/CollectlistFilter';
+import { Collectlist } from './collectlist/Collectlist';
+import { CollectlistBottomNav } from './collectlist/CollectlistBottomNav';
 
-export interface DropoffChecklistProps {
+export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
 }
 
-export const DropoffChecklist: React.FC<DropoffChecklistProps> = ({
+export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
   const syncedRef = useRef(false);
@@ -58,8 +58,8 @@ export const DropoffChecklist: React.FC<DropoffChecklistProps> = ({
           paddingBottom: 'calc(36.5px + 24px)',
         }}
       >
-        <ChecklistSummary />
-        <ChecklistFilter
+        <CollectlistSummary />
+        <CollectlistFilter
           dropoffTasks={dropoffTasks}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
@@ -67,9 +67,9 @@ export const DropoffChecklist: React.FC<DropoffChecklistProps> = ({
           setFilteredParcels={setFilteredParcels}
         />
         <Divider />
-        <CheckTaskList dropoffTasks={filteredParcels} />
+        <Collectlist dropoffTasks={filteredParcels} />
       </Box>
-      <ChecklistBottomNav
+      <CollectlistBottomNav
         onConfirm={onConfirm}
         countSelected={selectedParcels.length}
         countTotal={dropoffTasks.length}
@@ -78,6 +78,6 @@ export const DropoffChecklist: React.FC<DropoffChecklistProps> = ({
   );
 };
 
-const MemoizedDropoffChecklist = memo(DropoffChecklist);
+const MemoizedDropoffCollectlist = memo(DropoffCollectlist);
 
-export default MemoizedDropoffChecklist;
+export default MemoizedDropoffCollectlist;

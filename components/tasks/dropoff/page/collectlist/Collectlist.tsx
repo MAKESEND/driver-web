@@ -1,15 +1,15 @@
 import type { DropoffTask } from 'types';
 
-export interface CheckTaskListProps {
+export interface CollectlistProps {
   dropoffTasks?: DropoffTask[];
   selectedParcels?: string[];
   setSelectedParcels?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const CheckTaskList: React.FC<CheckTaskListProps> = ({
+export const Collectlist: React.FC<CollectlistProps> = ({
   dropoffTasks = [],
 }) => {
   return <></>;
 };
 
-export default CheckTaskList;
+export default Collectlist;

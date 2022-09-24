@@ -1,4 +1,4 @@
-export * from './checklist';
+export * from './collectlist';
 export * from './tasklist';
-export * from './DropoffChecklist';
+export * from './DropoffCollectlist';
 export * from './DropoffTasklist';

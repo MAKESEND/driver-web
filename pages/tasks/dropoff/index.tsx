@@ -11,8 +11,6 @@ import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Loader } from 'components/common/loader/Loader';
 import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
 
-import { Button } from '@mui/material';
-
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {
@@ -27,7 +25,7 @@ export interface DropoffPageProps {
 }
 
 export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
-  defaultMode = 'checklist' as DropoffModes,
+  defaultMode = 'collectlist' as DropoffModes,
 }) => {
   const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
     '60e18027d1e7a00013affbb6' // testing id, should be removed
@@ -38,11 +36,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
     return () => setMode(defaultMode);
   }, [defaultMode]);
 
-  const Worklist = DropoffTasks[mode];
-
-  const onConfirm = () => {
-    console.log('confirm');
-  };
+  const Worklist = DropoffTasks[mode] ?? DropoffTasks.collectlist;
 
   return (
     <>
