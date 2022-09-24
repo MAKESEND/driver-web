@@ -1,4 +1,10 @@
-import type { Parcel, ParcelToSort, PickupTask } from 'types';
+import type {
+  MSApiResponse,
+  Parcel,
+  ParcelToSort,
+  PickupTask,
+  DropoffTask,
+} from 'types';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { rounds } from 'utils/constants/delivery';
@@ -19,7 +25,7 @@ export const useGetSortingList = () => {
     async () => {
       const {
         data: { data: parcels },
-      } = await axios.get<{ data: ParcelToSort[] }>('/api/sortinglist');
+      } = await axios.get<MSApiResponse<ParcelToSort[]>>('/api/sortinglist');
 
       return parcels;
     },
@@ -33,7 +39,9 @@ export const useGetParcelsByOrderId = (orderId: string) => {
     async () => {
       const {
         data: { data: parcels },
-      } = await axios.get<{ data: Parcel[] }>(`/api/parcel/orderid/${orderId}`);
+      } = await axios.get<MSApiResponse<Parcel[]>>(
+        `/api/parcel/orderid/${orderId}`
+      );
 
       return parcels;
     },
@@ -49,13 +57,18 @@ export const useGetPickupTasks = (driverId?: string) => {
     async () => {
       const {
         data: { data: rawPickupTasks },
-      } = await axios.post<{ data: PickupTask[] }>('/api/tasks/pickup', {
+      } = await axios.post<MSApiResponse<PickupTask[]>>('/api/tasks/pickup', {
         driverId,
       });
 
-      const pickupTasks = rawPickupTasks.filter((task) =>
-        rounds.some((round) => round === +task.round)
-      );
+      if (!rawPickupTasks) {
+        return [];
+      }
+
+      const pickupTasks =
+        rawPickupTasks.filter((task) =>
+          rounds.some((round) => round === +task.round)
+        ) ?? [];
 
       if (driverId) {
         return pickupTasks.filter((task) => task.driver_id === driverId);
@@ -68,10 +81,27 @@ export const useGetPickupTasks = (driverId?: string) => {
   );
 };
 
+export const useGetDropoffTasks = (driverId: string) => {
+  return useQuery(
+    ['dropoffTasks', driverId],
+    async () => {
+      const {
+        data: { data: dropoffTasks },
+      } = await axios.get<MSApiResponse<DropoffTask[]>>(
+        `/api/tasks/dropoff/${driverId}`
+      );
+
+      return dropoffTasks;
+    },
+    { ...config }
+  );
+};
+
 export const queries = {
   useGetSortingList,
   useGetParcelsByOrderId,
   useGetPickupTasks,
+  useGetDropoffTasks,
 };
 
 export default queries;

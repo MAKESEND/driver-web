@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { api } from 'utils/services';
 
+// testing driverid 60e18027d1e7a00013affbb6
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -10,16 +11,12 @@ export default async function handler(
   let data = null;
 
   try {
-    if (req.method === 'POST') {
-      const response = await api.getPickupTasks();
-      const pickupTasks = response.data?.data?.parcelsToPick;
-
-      data = req.body?.driverId
-        ? pickupTasks.filter((task) => task.driver_id === req.body.driverId)
-        : pickupTasks;
+    if (req.method === 'GET' && req.query?.driverid) {
+      const response = await api.getDropoffTasks(req.query.driverid as string);
 
       response?.data?.status && (status = response.data.status);
       response?.data?.message && (message = response.data.message);
+      response?.data?.data && (data = response.data.data);
     } else {
       status = 401;
       message = 'Bad request';
@@ -27,7 +24,7 @@ export default async function handler(
   } catch (error: any) {
     status = error?.response?.status ?? 500;
     message = error?.response?.data?.message ?? error?.message ?? 'error';
-    console.log("something went wrong in '/api/tasks/pickup");
+    console.log("something went wrong in '/api/tasks/dropoff/[driverid]'");
     console.log(message);
   }
 

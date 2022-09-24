@@ -1,14 +1,14 @@
-import { ReactNode, useRef } from 'react';
+import type { ReactNode } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useGetPickupTasks } from 'hooks/useQueryData';
+import { useGetDropoffTasks } from 'hooks';
 import Seo from 'components/common/Seo';
-import { Loader } from 'components/common/loader/Loader';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
-import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { PickupTasks } from 'components/tasks/pickup/PickupTasks';
+import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
+import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import { Loader } from 'components/common/loader/Loader';
+import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -19,27 +19,28 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export const PickupPage: NextPageWithLayout = () => {
-  // this should filter by driver id with authentication
-  const { data: pickupTasks, isLoading } = useGetPickupTasks();
+export const DropoffPage: NextPageWithLayout = () => {
+  const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
+    '60e18027d1e7a00013affbb6' // testing id, should be removed
+  );
 
   return (
     <>
-      <Seo title="Pickup" />
+      <Seo title="Dropoff" />
       {isLoading ? (
         <FlexCenterBox>
           <Loader />
         </FlexCenterBox>
       ) : (
         <MobileContainer>
-          <PickupTasks pickupTasks={pickupTasks} />
+          <DropoffTasks dropoffTasks={dropoffTasks} />
         </MobileContainer>
       )}
     </>
   );
 };
 
-PickupPage.getLayout = (page: ReactNode) => {
+DropoffPage.getLayout = (page: ReactNode) => {
   return (
     <DrawerLayout sxMain={{ paddingTop: 0 }} fillContainer>
       {page}
@@ -47,4 +48,4 @@ PickupPage.getLayout = (page: ReactNode) => {
   );
 };
 
-export default PickupPage;
+export default DropoffPage;

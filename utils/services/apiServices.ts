@@ -9,6 +9,7 @@ import type {
   MSApiResponse,
   ApiResponse,
   GooglePickupResponse,
+  DropoffTask,
 } from 'types';
 import axios from 'axios';
 import getConfig from 'next/config';
@@ -27,6 +28,10 @@ export const api = {
   getPickupTasks: () =>
     axios.post<ApiResponse<GooglePickupResponse>>(
       getEndpoint({ route: 'getPickupTasks' as Routes })
+    ),
+  getDropoffTasks: (driverId = '') =>
+    axios.get<ApiResponse<DropoffTask[]>>(
+      `${getEndpoint({ route: 'getDropoffTasks' as Routes })}/${driverId}`
     ),
   updateParcelStatus: (payload: ParcelStatusRequest) =>
     axios.post<ApiResponse<ParcelStatusResponse>>(

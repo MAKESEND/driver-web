@@ -10,6 +10,11 @@ export enum PickupRound {
   '8' = 8,
 }
 
+export enum PlannerRound {
+  '1' = 1,
+  '2' = 2,
+}
+
 export enum DropRound {
   '1' = 1,
   '2' = 2,
@@ -39,4 +44,5 @@ export interface Postal {
 
 export enum ParcelStatus {
   sorted = 'Sorted',
+  pending = 'Pending',
 }

@@ -2,6 +2,7 @@ export enum Routes {
   checkDropoffRounds = 'checkDropoffRounds',
   checkTransferHub = 'checkTransferHub',
   getPickupTasks = 'getPickupTasks',
+  getDropoffTasks = 'getDropoffTasks',
   getParcelsByOrderId = 'getParcelsByOrderId',
   getParcelsByTrackingIds = 'getParcelsByTrackingIds',
   getSortingList = 'getSortingList',

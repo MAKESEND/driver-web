@@ -8,6 +8,7 @@ export interface IAssetPaths extends RouteDict {
 export const assetPaths: IAssetPaths = {
   getParcelsByOrderId: `/driver-app/parcelsbyorderid`,
   getPickupTasks: '/driver-app/pickuptasks/all', // google sheets
+  getDropoffTasks: '/micros/parcel/dropoff/dispatching/get', // Parcel Planner, /micros/parcel/dropoff/dispatching/get/[driver_id]
   checkDropoffRounds: `/micros/hub/api/dropround/checkround`,
   checkTransferHub: `/micros/hub/api/hubtransfer/checkhub`,
   getSortingList: '/micros/parcel/dropoff/sorting/get/EX',
