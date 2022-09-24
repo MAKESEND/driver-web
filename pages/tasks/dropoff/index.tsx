@@ -10,6 +10,7 @@ import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Loader } from 'components/common/loader/Loader';
 import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
+
 import { Button } from '@mui/material';
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
@@ -63,7 +64,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
 
 DropoffPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout sxMain={{ paddingTop: 0 }} fillContainer>
+    <DrawerLayout sxMain={{ padding: 0 }} fillContainer>
       {page}
     </DrawerLayout>
   );
