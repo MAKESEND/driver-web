@@ -2,6 +2,7 @@ import type { AxiosRequestConfig } from 'axios';
 import type {
   Routes,
   ImageUploadRequest,
+  ParcelToSort,
   ParcelStatusRequest,
   MSApiResponse,
   ApiResponse,
@@ -11,12 +12,13 @@ import axios from 'axios';
 import getConfig from 'next/config';
 import { getEndpoint } from './getEndpoint';
 import { getParcelsByOrderId } from './getParcelsByOrderId';
-import { getSortingList } from './getSortingList';
-import { getPickupTasks } from './getPickupTasks';
 
 export const api = {
   getParcelsByOrderId,
-  getSortingList,
+  getSortingList: () =>
+    axios.get<ApiResponse<ParcelToSort[]>>(
+      getEndpoint({ route: 'getSortingList' as Routes })
+    ),
   getPickupTasks: () =>
     axios.post<ApiResponse<GooglePickupResponse>>(
       getEndpoint({ route: 'getPickupTasks' as Routes })

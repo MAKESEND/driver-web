@@ -8,14 +8,14 @@ const staleTime = 5 * 60 * 1000; // 5 mins
 const config = {
   retry,
   staleTime,
-  // refetchInterval: staleTime,
+  refetchInterval: staleTime,
   cacheTime: staleTime,
   refetchOnWindowFocus: true,
 };
 
 export const useGetSortingList = () => {
   return useQuery(
-    ['sorting'],
+    ['sortinglist'],
     async () => {
       const {
         data: { data: parcels },

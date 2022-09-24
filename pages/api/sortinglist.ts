@@ -11,15 +11,17 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const parcelsToSort = await api.getSortingList();
-      data = parcelsToSort;
+      const response = await api.getSortingList();
+      response.data?.data && (data = response.data.data);
+      response.data?.status && (status = response.data.status);
+      response.data?.message && (message = response.data.message);
     } else {
       status = 401;
       message = 'Bad request';
     }
   } catch (error: any) {
-    status = 500;
-    message = error?.message ?? 'error';
+    status = error?.response?.status ?? 500;
+    message = error?.response?.data?.message ?? error?.message ?? 'error';
     console.log("something went wrong in '/api/sortinglist");
     console.log(message);
   }
