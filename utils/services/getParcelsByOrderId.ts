@@ -6,21 +6,27 @@ export const getParcelsByOrderId = async (orderId: string) => {
   let parcels: Parcel[] = [];
 
   try {
-    if (orderId) {
-      const endpoint = getEndpoint({ route: 'getParcelsByOrderId' as Routes });
+    if (window || typeof window !== 'undefined') {
+      throw new Error('getParcelsByOrderId is server-side only');
+    }
 
-      const {
-        data: { data, status, message },
-      } = await axios.post<
-        { orderId: string },
-        { data: ApiResponse<Parcel[]> }
-      >(endpoint, { orderId });
+    if (!orderId) {
+      throw new Error('no orderId passing to getParcelsByOrderId');
+    }
 
-      if (status === 200) {
-        parcels = data;
-      } else {
-        throw new Error(message);
-      }
+    const endpoint = getEndpoint({ route: 'getParcelsByOrderId' as Routes });
+
+    const {
+      data: { data, status, message },
+    } = await axios.post<{ orderId: string }, { data: ApiResponse<Parcel[]> }>(
+      endpoint,
+      { orderId }
+    );
+
+    if (status === 200) {
+      parcels = data;
+    } else {
+      throw new Error(message);
     }
   } catch (error: any) {
     console.log("something went wrong in 'getParcelsByOrderId'");

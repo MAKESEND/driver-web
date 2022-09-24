@@ -11,17 +11,19 @@ export default async function handler(
 
   try {
     if (req.method === 'GET' && req.query?.orderid) {
-      const parcels = await api.getParcelsByOrderId(
+      const response = await api.getParcelsByOrderId(
         req.query.orderid as string
       );
-      data = parcels;
+      response?.data?.status && (status = response.data.status);
+      response?.data?.message && (message = response.data.message);
+      response?.data?.data && (data = response.data.data);
     } else {
       status = 401;
       message = 'Bad request';
     }
   } catch (error: any) {
-    status = 500;
-    message = error?.message ?? 'error';
+    status = error?.response?.status ?? 500;
+    message = error?.response?.data?.message ?? error?.message ?? 'error';
     console.log("something went wrong in '/api/parcel/orderid/:orderid");
     console.log(message);
   }
