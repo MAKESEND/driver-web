@@ -34,7 +34,7 @@ export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
         onClick={() => onConfirm()}
         sx={{
           width: '100%',
-          maxWidth: (t) => t.spacing(40),
+          maxWidth: { xs: '80vw', sm: '20rem' },
           ...btnSx,
         }}
       >

@@ -82,6 +82,10 @@ export const ChecklistSearch = <T extends ParcelMixin>({
     >
       <Checkbox
         checked={selectAll}
+        indeterminate={
+          selectedParcels.length > 0 &&
+          selectedParcels.length !== parcels.length
+        }
         onChange={changeSelectAll}
         sx={{ height: (t) => t.spacing(5) }}
       />

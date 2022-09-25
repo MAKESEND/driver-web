@@ -4,6 +4,7 @@ import type {
   PickupRound,
   PlannerRound,
   ParcelStatus,
+  TempControl,
 } from 'types';
 
 export interface MediaList {

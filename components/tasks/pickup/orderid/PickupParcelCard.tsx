@@ -1,7 +1,7 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { Parcel } from 'types';
 import { useState, useEffect } from 'react';
-import { Box, Checkbox, ListItem, ListItemButton, styled } from '@mui/material';
+import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import PickupCardContent from './PickupCardContent';
 
 export interface PickupParcelCardProps {

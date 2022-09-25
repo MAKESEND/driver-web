@@ -7,7 +7,9 @@ const lightGrey = '#ccc';
 const darkGrey = '#777';
 const grey40 = '#BFC2C9';
 const grey80 = '#343840';
+const blue50 = '#488FEF';
 const pink = '#EDEFF2';
+const secondary = 'rgba(0,0,0,0.6)';
 
 // size
 const maxWidth = '34rem';
@@ -32,11 +34,13 @@ export const theme = createTheme({
     common: {
       white,
       black,
+      blue50,
       lightGrey,
       darkGrey,
       grey40,
       grey80,
       pink,
+      secondary,
     },
   },
   typography: {
@@ -60,6 +64,10 @@ export const theme = createTheme({
     },
     body2: {
       textAlign: 'center',
+    },
+    secondary: {
+      color: secondary,
+      fontSize: '0.875rem',
     },
   },
   components: {

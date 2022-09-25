@@ -69,7 +69,11 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
           type={'dropoff' as ScannerTypes}
         />
         <Divider />
-        <Collectlist dropoffTasks={filteredParcels} />
+        <Collectlist
+          dropoffTasks={filteredParcels}
+          selectedParcels={selectedParcels}
+          setSelectedParcels={setSelectedParcels}
+        />
       </Box>
       <CollectlistBottomNav
         onConfirm={onConfirm}

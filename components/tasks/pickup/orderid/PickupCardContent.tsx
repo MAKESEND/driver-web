@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import type { Parcel } from 'types';
+import { useTranslation } from 'next-i18next';
 import { Box, Chip, Typography, styled } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-import { useTranslation } from 'next-i18next';
-const SnowFlake = dynamic(() => import('@mui/icons-material/AcUnit'), {
-  ssr: false,
-});
+const SnowFlakeIcon = dynamic(
+  () => import('components/common/icons/SnowFlakeIcon'),
+  { ssr: false }
+);
 const InventoryIcon = dynamic(
-  () => import('@mui/icons-material/Inventory2Outlined'),
+  () => import('components/common/icons/InventoryIcon'),
   { ssr: false }
 );
 
@@ -17,11 +18,6 @@ const Row = styled(Box)(() => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-}));
-
-const Secondary = styled(Typography)(() => ({
-  color: 'rgba(0,0,0,0.6)',
-  fontSize: '0.875rem',
 }));
 
 export interface PickupCardContentProps {
@@ -55,24 +51,20 @@ export const PickupCardContent: FC<PickupCardContentProps> = ({
         <Typography>{shipmentID}</Typography>
         <Chip label={status} />
       </Row>
-      <Secondary sx={{ textAlign: 'start' }}>
+      <Typography variant="secondary" sx={{ textAlign: 'start' }}>
         {t('label.name')}: {receiver_name}
-      </Secondary>
+      </Typography>
       <Row>
-        <Secondary>
+        <Typography variant="secondary">
           {t('label.phone')}: {receiver_no}
-        </Secondary>
-        {temp === 1 ? (
-          <SnowFlake sx={{ color: '#488FEF' }} />
-        ) : (
-          <InventoryIcon sx={{ color: '#777' }} />
-        )}
+        </Typography>
+        {temp === 1 ? <SnowFlakeIcon /> : <InventoryIcon />}
       </Row>
       <Row>
-        <Secondary>
+        <Typography variant="secondary">
           {t('label.district')}: {dropoff_district}
-        </Secondary>
-        <Secondary>{dropoff_postcode}</Secondary>
+        </Typography>
+        <Typography variant="secondary">{dropoff_postcode}</Typography>
       </Row>
     </Box>
   );

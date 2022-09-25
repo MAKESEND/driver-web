@@ -22,6 +22,24 @@ declare module '@mui/material/styles/createPalette' {
     darkGrey: string;
     grey40: string;
     grey80: string;
+    blue50: string;
     pink: string;
+    secondary: string;
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    secondary: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    secondary: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    secondary: true;
   }
 }
