@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { sortingRoundState } from 'states';
 import { Autocomplete, TextField, Box, Button, Menu } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import FilterOptions from 'components/FilterOptions';
+import { FilterOption } from 'components/FilterOptions';
 import { rounds } from 'utils/constants/delivery';
 
 import dynamic from 'next/dynamic';
@@ -105,11 +105,12 @@ export const SortingFilter: FC<SortingFilterProps> = ({
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {rounds.map((round) => (
-          <FilterOptions.Round
+          <FilterOption
             key={round}
             option={round}
-            selectedRounds={selectedRounds}
-            setSelectedRounds={setSelectedRounds}
+            selectedOption={selectedRounds}
+            setSelectedOption={setSelectedRounds}
+            label={`${t('round')} ${round}`}
           />
         ))}
       </Menu>

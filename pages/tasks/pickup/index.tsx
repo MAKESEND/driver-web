@@ -1,4 +1,3 @@
-import { ReactNode, useRef } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -14,7 +13,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
       ...(locale &&
-        (await serverSideTranslations(locale, ['common', 'tasks']))),
+        (await serverSideTranslations(locale, ['common', 'tasks', 'sorting']))),
     },
   };
 };
@@ -39,7 +38,7 @@ export const PickupPage: NextPageWithLayout = () => {
   );
 };
 
-PickupPage.getLayout = (page: ReactNode) => {
+PickupPage.getLayout = (page: React.ReactNode) => {
   return (
     <DrawerLayout sxMain={{ paddingTop: 0 }} fillContainer>
       {page}

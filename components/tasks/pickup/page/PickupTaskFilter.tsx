@@ -8,7 +8,7 @@ import { pickupRoundState } from 'states';
 import { pickupTaskProps, rounds } from 'utils/constants/delivery';
 import Fuse from 'fuse.js';
 import { Button, Menu, IconButton } from '@mui/material';
-import FilterOptions from 'components/FilterOptions';
+import { FilterOption } from 'components/FilterOptions';
 import MobileContainer from 'components/common/mobile/MobileContainer';
 
 import dynamic from 'next/dynamic';
@@ -38,7 +38,7 @@ export const PickupTaskFilter = forwardRef(
     }: PickupTaskFilterProps,
     ref
   ) => {
-    const { t } = useTranslation('tasks');
+    const { t } = useTranslation(['tasks', 'sorting']);
     const timeoutRef = useRef<NodeJS.Timeout>();
     const [searchVal, setSearchVal] = useState<string>('');
     const [fusedParcels, setFusedParcels] = useState<PickupTask[]>([]);
@@ -133,11 +133,12 @@ export const PickupTaskFilter = forwardRef(
           </Button>
           <Menu anchorEl={anchorEl} open={open} onClose={closeFilterMenu}>
             {rounds.map((round) => (
-              <FilterOptions.Round
+              <FilterOption
                 key={round}
                 option={round}
                 selectedOption={selectedRounds}
                 setSelectedOption={setSelectedRounds}
+                label={`${t('round', { ns: 'sorting' })} ${round}`}
               />
             ))}
           </Menu>
