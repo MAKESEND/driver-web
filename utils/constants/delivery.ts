@@ -1,19 +1,9 @@
-import type { DropRound, Parcel, ParcelStatus, PickupTask } from 'types';
+import type { DropRound, Parcel, PickupTask } from 'types';
 import { ParcelSize } from 'types/delivery';
 
 export const rounds: DropRound[] = [1, 2];
 
 export const parcelSizes = Object.values(ParcelSize);
-
-export const statusToConfirm: ParcelStatus[] = [
-  'Pending' as ParcelStatus,
-  'Picked up' as ParcelStatus,
-  'Drop at branch' as ParcelStatus,
-  'Ready to pick' as ParcelStatus,
-  'In hub' as ParcelStatus,
-  'Sorted' as ParcelStatus,
-  'Rotating' as ParcelStatus,
-];
 
 export const pickupTaskProps: (keyof PickupTask)[] = [
   'order',
