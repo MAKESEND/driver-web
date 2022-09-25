@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import type { ParcelToSort, ParcelMixin, ParcelStatus } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +11,7 @@ export interface SortingList {
   sortingList?: ParcelToSort[];
 }
 
-export const SortingList: FC<SortingList> = ({ sortingList = [] }) => {
+export const SortingList: React.FC<SortingList> = ({ sortingList = [] }) => {
   const { t } = useTranslation(['parcel', 'sorting']);
   const [parcel, setParcel] = useState<ParcelMixin | null>(null);
   const { mutate, isLoading } = useUpdateParcelStatus();

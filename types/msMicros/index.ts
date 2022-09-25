@@ -1,2 +1,2 @@
-export * from './common';
-export * from './parcelStatus';
+export * from './common.d';
+export * from './parcelStatus.d';

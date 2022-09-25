@@ -33,6 +33,8 @@ export enum ParcelSize {
   s120 = 's120',
   s140 = 's140',
   s160 = 's160',
+  s180 = 's180',
+  s200 = 's200',
 }
 
 export interface Postal {

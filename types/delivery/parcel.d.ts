@@ -4,7 +4,6 @@ import type {
   ParcelSize,
   TempControl,
   PickupRound,
-  DropRound,
   Postal,
 } from './parcelMeta';
 
