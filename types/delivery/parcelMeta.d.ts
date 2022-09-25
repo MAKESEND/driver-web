@@ -45,4 +45,5 @@ export interface Postal {
 export enum ParcelStatus {
   sorted = 'Sorted',
   pending = 'Pending',
+  delivering = 'Delivering',
 }

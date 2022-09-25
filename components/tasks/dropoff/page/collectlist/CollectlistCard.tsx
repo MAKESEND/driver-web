@@ -17,7 +17,7 @@ export const CollectlistCard: React.FC<CollectlistCardProps> = ({
   setSelectedParcels = () =>
     console.warn('no setSelectedParcels given to CollectlistCard'),
 }) => {
-  const { trackingID } = parcel;
+  const { trackingID, status } = parcel;
   const [checked, setChecked] = useState(false);
 
   const onClick = () => {

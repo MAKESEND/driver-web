@@ -1,6 +1,6 @@
 import type { DropoffTask } from 'types';
 import { memo } from 'react';
-import { Box, Grid, Stack, Typography, styled } from '@mui/material';
+import { Box, Chip, Grid, Stack, Typography, styled } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const SnowFlakeIcon = dynamic(
@@ -28,6 +28,7 @@ export const CollectlistCardContent: React.FC<CollectlistCardContentProps> = ({
   parcel,
 }) => {
   const {
+    status,
     temp,
     trackingID,
     dropAddress,
@@ -40,7 +41,7 @@ export const CollectlistCardContent: React.FC<CollectlistCardContentProps> = ({
     <Stack sx={{ width: '100%', overflow: 'auto', gap: (t) => t.spacing(0.5) }}>
       <Row>
         <Typography>{trackingID}</Typography>
-        {+temp === 1 ? <SnowFlakeIcon /> : <InventoryIcon />}
+        <Chip label={status} />
       </Row>
       <Grid
         container
@@ -59,7 +60,10 @@ export const CollectlistCardContent: React.FC<CollectlistCardContentProps> = ({
           <Typography>{dropPostcode}</Typography>
         </Grid>
       </Grid>
-      <Typography variant="secondary">{dropAddress}</Typography>
+      <Row sx={{ gap: (t) => t.spacing(1) }}>
+        <Typography variant="secondary">{dropAddress}</Typography>
+        {+temp === 1 ? <SnowFlakeIcon /> : <InventoryIcon />}
+      </Row>
     </Stack>
   );
 };

@@ -1,4 +1,4 @@
-import type { DropoffTask, ScannerTypes } from 'types';
+import type { DropoffTask, ParcelStatus, ScannerTypes } from 'types';
 import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
@@ -7,6 +7,7 @@ import ChecklistSearch from 'components/tasks/ChecklistSearch';
 import CollectlistSummary from './collectlist/CollectlistSummary';
 import Collectlist from './collectlist/Collectlist';
 import CollectlistBottomNav from './collectlist/CollectlistBottomNav';
+import { useUpdateParcelStatus } from 'hooks/useMutateData';
 
 export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
@@ -15,7 +16,8 @@ export interface DropoffCollectlistProps {
 export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
-  const isLoading = false;
+  // const { isLoading, data, mutate } = useUpdateParcelStatus();
+  const [isLoading, setIsLoading] = useState(false);
   const syncedRef = useRef(false);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [filteredParcels, setFilteredParcels] =
@@ -48,7 +50,16 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   }, [dropoffParcels, setDropoffParcels]);
 
   const onConfirm = () => {
-    console.log('confirm');
+    // mutate({
+    //   shipment: selectedParcels.map((trackingID) => ({
+    //     trackingID,
+    //     status: 'Delivering' as ParcelStatus,
+    //   })),
+    // });
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   };
 
   return (
@@ -79,7 +90,7 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
         />
       </Box>
       <CollectlistBottomNav
-        disabled={!selectedParcels.length}
+        disabled={!selectedParcels.length || isLoading}
         isLoading={isLoading}
         onConfirm={onConfirm}
         countSelected={selectedParcels.length}
