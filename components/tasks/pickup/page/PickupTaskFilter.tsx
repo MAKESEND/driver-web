@@ -1,6 +1,5 @@
-import type { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import type { PickupTask } from 'types';
-import type { SxProps } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef, forwardRef } from 'react';
 import { useTranslation } from 'next-i18next';
@@ -24,9 +23,9 @@ const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
 export interface PickupTaskFilterProps {
   pickupTasks?: PickupTask[];
-  setter?: Dispatch<SetStateAction<PickupTask[]>>;
+  setter?: React.Dispatch<React.SetStateAction<PickupTask[]>>;
   scan?: boolean;
-  wrapperSx?: SxProps;
+  wrapperSx?: SxProps<Theme>;
 }
 
 export const PickupTaskFilter = forwardRef(
@@ -52,8 +51,11 @@ export const PickupTaskFilter = forwardRef(
       [pickupTasks]
     );
 
+    const openFilterMenu = (event: React.MouseEvent<HTMLElement>) =>
+      setAnchorEl(event.currentTarget);
+    const closeFilterMenu = () => setAnchorEl(null);
     const onClear = () => setSearchVal('');
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchVal(event.target.value);
     };
 
@@ -82,10 +84,6 @@ export const PickupTaskFilter = forwardRef(
 
       setter(filteredTasks);
     }, [fusedParcels, selectedRounds, setter]);
-
-    const openFilterMenu = (event: React.MouseEvent<HTMLElement>) =>
-      setAnchorEl(event.currentTarget);
-    const closeFilterMenu = () => setAnchorEl(null);
 
     return (
       <>
@@ -138,8 +136,8 @@ export const PickupTaskFilter = forwardRef(
               <FilterOptions.Round
                 key={round}
                 option={round}
-                selectedRounds={selectedRounds}
-                setSelectedRounds={setSelectedRounds}
+                selectedOption={selectedRounds}
+                setSelectedOption={setSelectedRounds}
               />
             ))}
           </Menu>

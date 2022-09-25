@@ -32,5 +32,9 @@
     "confirm": "Confirm",
     "skip": "Skip",
     "details": "Details"
+  },
+  "status": {
+    "Delivering": "Delivering",
+    "Delivered": "Delivered"
   }
 }

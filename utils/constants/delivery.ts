@@ -1,9 +1,54 @@
-import type { DropRound, Parcel, PickupTask } from 'types';
+import type {
+  DropRound,
+  DropoffTask,
+  Parcel,
+  ParcelStatus,
+  PickupTask,
+} from 'types';
 import { ParcelSize } from 'types/delivery';
 
 export const rounds: DropRound[] = [1, 2];
 
 export const parcelSizes = Object.values(ParcelSize);
+
+export const dropoffTaskStatusFilters: ParcelStatus[] = [
+  'Delivering' as ParcelStatus,
+  'Delivered' as ParcelStatus,
+];
+
+export const dropoffTaskProps: (keyof DropoffTask)[] = [
+  'orderID',
+  'trackingID',
+  'parcelSize',
+  'pickupRound',
+  'dropRound',
+  'cod',
+  'temp',
+  'orderDate',
+  'pickupType',
+  'userID',
+  'parcelChanged',
+  'parcelCreatedAt',
+  'parcelUpdatedAt',
+  'parcelType',
+  'PODStatus',
+  'senderName',
+  'senderNo',
+  'pickupAddress',
+  'pickupProvince',
+  'pickupDistrict',
+  'pickupPostcode',
+  'receiverName',
+  'receiverNo',
+  'dropAddress',
+  'dropProvince',
+  'dropDistrict',
+  'dropPostcode',
+  'status',
+  'plannerRound',
+  'plannerHub',
+  'sequence',
+];
 
 export const pickupTaskProps: (keyof PickupTask)[] = [
   'order',
