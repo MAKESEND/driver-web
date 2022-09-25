@@ -1,9 +1,8 @@
-import type { FC } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { Box, Typography } from '@mui/material';
 
-export const NoPickupTask: FC = () => {
+export const NoTask: React.FC = () => {
   const { t } = useTranslation('tasks');
 
   return (
@@ -29,4 +28,4 @@ export const NoPickupTask: FC = () => {
   );
 };
 
-export default NoPickupTask;
+export default NoTask;

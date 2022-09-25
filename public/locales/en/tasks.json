@@ -19,8 +19,11 @@
     "parcelCount": "No. of parcels",
     "orderId": "Order ID",
     "pickupAddress": "Pickup address",
+    "deliver": "Deliver",
     "address": "Address",
     "district": "District",
+    "parcel": "parcel",
+    "parcels": "parcels",
     "pc": "pc",
     "pcs": "pcs"
   },
