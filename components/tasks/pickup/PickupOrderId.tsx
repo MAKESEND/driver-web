@@ -1,4 +1,4 @@
-import type { Parcel, ImageType } from 'types';
+import type { Parcel, ImageType, ScannerTypes } from 'types';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
@@ -10,7 +10,7 @@ import { Box, Button, Divider } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import PickupParcelList from './orderid/PickupParcelList';
-import PickupParcelSearch from './orderid/PickupParcelSearch';
+import ChecklistSearch from '../ChecklistSearch';
 
 export interface PickupOrderIdProps {
   orderId: string;
@@ -104,7 +104,8 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
         }}
       >
         <TaskMedia images={images} setImages={setImages} />
-        <PickupParcelSearch
+        <ChecklistSearch
+          type={'pickup' as ScannerTypes}
           parcels={parcels}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
