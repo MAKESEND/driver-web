@@ -10,6 +10,7 @@ const TextField = dynamic(() => import('@mui/material/TextField'));
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
 export interface ChecklistFilterProps<T> {
+  disabled?: boolean;
   parcels: T[];
   setter?: React.Dispatch<React.SetStateAction<T[]>>;
   wrapperSx?: SxProps;
@@ -17,6 +18,7 @@ export interface ChecklistFilterProps<T> {
 }
 
 export const ChecklistFilter = <T extends ParcelMixin>({
+  disabled = false,
   parcels = [],
   setter = () => console.warn('no setter passing to ChecklistFilter'),
   inputSx,
@@ -66,6 +68,7 @@ export const ChecklistFilter = <T extends ParcelMixin>({
         label={t('label.searchParcel')}
         variant="outlined"
         size="small"
+        disabled={disabled}
         sx={{ flexGrow: 1, ...inputSx }}
         value={searchVal}
         onChange={onChange}

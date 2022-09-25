@@ -3,10 +3,10 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
 import { Box, Divider } from '@mui/material';
-import { CollectlistSummary } from './collectlist/CollectlistSummary';
-import { Collectlist } from './collectlist/Collectlist';
-import { CollectlistBottomNav } from './collectlist/CollectlistBottomNav';
-import { ChecklistSearch } from 'components/tasks/ChecklistSearch';
+import ChecklistSearch from 'components/tasks/ChecklistSearch';
+import CollectlistSummary from './collectlist/CollectlistSummary';
+import Collectlist from './collectlist/Collectlist';
+import CollectlistBottomNav from './collectlist/CollectlistBottomNav';
 
 export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
@@ -15,6 +15,7 @@ export interface DropoffCollectlistProps {
 export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
+  const isLoading = false;
   const syncedRef = useRef(false);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [filteredParcels, setFilteredParcels] =
@@ -61,6 +62,7 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
         <CollectlistSummary />
         <ChecklistSearch
           sticky
+          disabled={isLoading}
           parcels={dropoffTasks}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
@@ -70,12 +72,15 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
         />
         <Divider />
         <Collectlist
+          disabled={isLoading}
           dropoffTasks={filteredParcels}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}
         />
       </Box>
       <CollectlistBottomNav
+        disabled={!selectedParcels.length}
+        isLoading={isLoading}
         onConfirm={onConfirm}
         countSelected={selectedParcels.length}
         countTotal={dropoffTasks.length}

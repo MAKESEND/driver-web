@@ -1,9 +1,12 @@
 import type { SxProps } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Button } from '@mui/material';
 
 export interface CollectlistBottomNavProps {
+  disabled?: boolean;
+  isLoading?: boolean;
   onConfirm?: () => void;
   countSelected?: number;
   countTotal?: number;
@@ -12,6 +15,8 @@ export interface CollectlistBottomNavProps {
 }
 
 export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
+  disabled = false,
+  isLoading = false,
   onConfirm = () => console.warn('no function given to CollectlistBottomNav'),
   countSelected = 0,
   countTotal = 0,
@@ -31,6 +36,7 @@ export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
     >
       <Button
         variant="contained"
+        disabled={disabled}
         onClick={() => onConfirm()}
         sx={{
           width: '100%',
@@ -38,7 +44,12 @@ export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
           ...btnSx,
         }}
       >
-        {`${t('btn.confirm')} (${countSelected}/${countTotal})`}
+        {t('btn.confirm')}&nbsp;
+        {isLoading ? (
+          <CircularProgress color="inherit" size={14} />
+        ) : (
+          `(${countSelected}/${countTotal})`
+        )}
       </Button>
     </MobileContainer>
   );

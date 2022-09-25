@@ -11,6 +11,7 @@ const QrCodeScannerIcon = dynamic(
 
 export interface ChecklistSearchProps<T> {
   sticky?: boolean;
+  disabled?: boolean;
   type?: ScannerTypes;
   parcels?: T[];
   selectedParcels?: string[];
@@ -21,6 +22,7 @@ export interface ChecklistSearchProps<T> {
 
 export const ChecklistSearch = <T extends ParcelMixin>({
   sticky = false,
+  disabled = false,
   type,
   parcels = [],
   selectedParcels = [],
@@ -82,6 +84,7 @@ export const ChecklistSearch = <T extends ParcelMixin>({
     >
       <Checkbox
         checked={selectAll}
+        disabled={disabled}
         indeterminate={
           selectedParcels.length > 0 &&
           selectedParcels.length !== parcels.length
@@ -90,12 +93,18 @@ export const ChecklistSearch = <T extends ParcelMixin>({
         sx={{ height: (t) => t.spacing(5) }}
       />
       <ChecklistFilter
+        disabled={disabled}
         parcels={parcels}
         setter={setFilteredParcels}
         wrapperSx={{ flexGrow: 1 }}
       />
       <Link href={`/scanner${type ? `?type=${type}` : ''}`} passHref>
-        <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{ minWidth: '1rem' }}
+          disabled={disabled}
+        >
           <QrCodeScannerIcon />
         </Button>
       </Link>

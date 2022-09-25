@@ -4,12 +4,14 @@ import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import CollectlistCardContent from './CollectlistCardContent';
 
 export interface CollectlistCardProps {
+  disabled?: boolean;
   parcel: DropoffTask;
   selectedParcels?: string[];
   setSelectedParcels?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const CollectlistCard: React.FC<CollectlistCardProps> = ({
+  disabled = false,
   parcel,
   selectedParcels = [],
   setSelectedParcels = () =>
@@ -36,6 +38,7 @@ export const CollectlistCard: React.FC<CollectlistCardProps> = ({
   return (
     <ListItem disableGutters>
       <ListItemButton
+        disabled={disabled}
         onClick={onClick}
         sx={{
           display: 'flex',
