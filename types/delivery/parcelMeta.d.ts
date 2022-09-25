@@ -43,7 +43,13 @@ export interface Postal {
 }
 
 export enum ParcelStatus {
-  sorted = 'Sorted',
   pending = 'Pending',
+  readyToPick = 'Ready to pick',
+  pickedUp = 'Picked up',
+  dropAtBranch = 'Drop at branch',
+  inHub = 'In hub',
+  rotating = 'Rotating',
+  sorted = 'Sorted',
   delivering = 'Delivering',
+  delivered = 'Delivered',
 }

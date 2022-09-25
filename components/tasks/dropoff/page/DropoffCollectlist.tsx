@@ -16,8 +16,7 @@ export interface DropoffCollectlistProps {
 export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
-  // const { isLoading, data, mutate } = useUpdateParcelStatus();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, data, mutate } = useUpdateParcelStatus();
   const syncedRef = useRef(false);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [filteredParcels, setFilteredParcels] =
@@ -50,16 +49,12 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   }, [dropoffParcels, setDropoffParcels]);
 
   const onConfirm = () => {
-    // mutate({
-    //   shipment: selectedParcels.map((trackingID) => ({
-    //     trackingID,
-    //     status: 'Delivering' as ParcelStatus,
-    //   })),
-    // });
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    mutate({
+      shipment: selectedParcels.map((trackingID) => ({
+        trackingID,
+        status: 'Delivering' as ParcelStatus,
+      })),
+    });
   };
 
   return (

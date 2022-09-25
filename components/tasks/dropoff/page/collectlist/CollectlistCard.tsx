@@ -2,6 +2,7 @@ import type { DropoffTask } from 'types';
 import { useState, useEffect } from 'react';
 import { Checkbox, ListItem, ListItemButton } from '@mui/material';
 import CollectlistCardContent from './CollectlistCardContent';
+import { statusToConfirm } from 'utils/constants/tasks';
 
 export interface CollectlistCardProps {
   disabled?: boolean;
@@ -38,7 +39,7 @@ export const CollectlistCard: React.FC<CollectlistCardProps> = ({
   return (
     <ListItem disableGutters>
       <ListItemButton
-        disabled={disabled}
+        disabled={disabled || !statusToConfirm.includes(status)}
         onClick={onClick}
         sx={{
           display: 'flex',

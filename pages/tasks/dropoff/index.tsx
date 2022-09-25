@@ -3,6 +3,7 @@ import type { NextPageWithLayout } from '../../_app';
 import type { DropoffModes } from 'types';
 import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { statusToConfirm } from 'utils/constants/tasks';
 import { useGetDropoffTasks } from 'hooks';
 import Seo from 'components/common/Seo';
 import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
@@ -35,6 +36,19 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
   useEffect(() => {
     return () => setMode(defaultMode);
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (Array.isArray(dropoffTasks)) {
+      const toConfirm = dropoffTasks.some((task) =>
+        statusToConfirm.includes(task.status)
+      );
+      setMode(
+        toConfirm
+          ? ('collectlist' as DropoffModes)
+          : ('tasklist' as DropoffModes)
+      );
+    }
+  }, [dropoffTasks]);
 
   const Worklist = DropoffTasks[mode] ?? DropoffTasks.collectlist;
 
