@@ -1,4 +1,3 @@
-import type { ParcelMixin } from 'types';
 import type { InputProps, SxProps, Theme } from '@mui/material';
 import Fuse from 'fuse.js';
 import Link from 'next/link';
@@ -25,10 +24,12 @@ export interface TaskFilterProps<T, R> {
   scan?: boolean;
   href?: string;
   fuseKeys?: Fuse.FuseOptionKey<T>[];
+  filterKey?: keyof T;
   filterOptions?: R[];
+  label?: string;
 }
 
-export const TaskFilter = <T extends ParcelMixin, R extends string>({
+export const TaskFilter = <T, R>({
   tasks = [],
   setFilteredTasks = () =>
     console.warn('no setFilteredTasks given to DropoffTaskFilter'),
@@ -37,14 +38,16 @@ export const TaskFilter = <T extends ParcelMixin, R extends string>({
   scan = false,
   href = '/scanner',
   fuseKeys: keys = [],
+  filterKey = '' as keyof T,
   filterOptions = [],
+  label,
 }: TaskFilterProps<T, R>) => {
   const { t } = useTranslation('tasks');
   const timeoutRef = useRef<NodeJS.Timeout>();
   const [searchVal, setSearchVal] = useState<string>('');
   const [fusedParcels, setFusedParcels] = useState<T[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedStatus, setSelectedStatus] = useState<R[]>([]);
+  const [selectedOption, setSelectedOption] = useState<R[]>([]);
   const open = Boolean(anchorEl);
   const fuse = useMemo(() => new Fuse(tasks, { keys }), [tasks, keys]);
 
@@ -76,15 +79,17 @@ export const TaskFilter = <T extends ParcelMixin, R extends string>({
   }, [tasks]);
 
   useEffect(() => {
-    if (!selectedStatus.length) {
-      setFilteredTasks(tasks);
+    if (!selectedOption.length) {
+      setFilteredTasks(fusedParcels);
     } else {
       const filteredTasks = fusedParcels.filter((task) =>
-        selectedStatus.some((status) => status === task.status)
+        selectedOption.some(
+          (Option) => String(Option) === String(task[filterKey])
+        )
       );
       setFilteredTasks(filteredTasks);
     }
-  }, [tasks, fusedParcels, selectedStatus, setFilteredTasks]);
+  }, [tasks, filterKey, fusedParcels, selectedOption, setFilteredTasks]);
 
   return (
     <Box
@@ -124,11 +129,11 @@ export const TaskFilter = <T extends ParcelMixin, R extends string>({
       <Menu anchorEl={anchorEl} open={open} onClose={closeFilterMenu}>
         {filterOptions.map((option) => (
           <FilterOption
-            key={option}
+            key={option as string}
             option={option}
-            selectedOption={selectedStatus}
-            setSelectedOption={setSelectedStatus}
-            label={t(option)}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            label={label ? `${label} ${option}` : t(option as string)}
           />
         ))}
       </Menu>

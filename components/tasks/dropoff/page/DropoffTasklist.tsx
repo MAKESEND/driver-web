@@ -48,6 +48,7 @@ export const DropoffTasklist: React.FC<DropoffTasklistProps> = ({
         setFilteredTasks={setFilteredTasks}
         href="/scanner?type=dropoff"
         fuseKeys={dropoffTaskProps}
+        filterKey="status"
         filterOptions={dropoffTaskStatusFilters}
       />
       <DropoffTaskList dropoffTasks={filteredTasks} />
