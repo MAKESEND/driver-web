@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
 import { Box, Divider } from '@mui/material';
-import ChecklistSearch from 'components/tasks/ChecklistSearch';
+import TaskSelector from '../../TaskSelector';
 import CollectlistSummary from './collectlist/CollectlistSummary';
 import Collectlist from './collectlist/Collectlist';
 import CollectlistBottomNav from './collectlist/CollectlistBottomNav';
@@ -66,7 +66,7 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
         }}
       >
         <CollectlistSummary />
-        <ChecklistSearch
+        <TaskSelector
           sticky
           disabled={isLoading}
           parcels={dropoffTasks}

@@ -10,7 +10,7 @@ import { Box, Button, Divider } from '@mui/material';
 import { TaskMedia } from 'components/tasks/TaskMedia';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import PickupParcelList from './orderid/PickupParcelList';
-import ChecklistSearch from '../ChecklistSearch';
+import TaskSelector from '../TaskSelector';
 
 export interface PickupOrderIdProps {
   orderId: string;
@@ -104,7 +104,7 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
         }}
       >
         <TaskMedia images={images} setImages={setImages} />
-        <ChecklistSearch
+        <TaskSelector
           type={'pickup' as ScannerTypes}
           parcels={parcels}
           selectedParcels={selectedParcels}

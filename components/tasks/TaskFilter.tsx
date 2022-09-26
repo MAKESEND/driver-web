@@ -129,11 +129,13 @@ export const TaskFilter = <T, R>({
       <Menu anchorEl={anchorEl} open={open} onClose={closeFilterMenu}>
         {filterOptions.map((option) => (
           <FilterOption
-            key={option as string}
+            key={option as unknown as string}
             option={option}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
-            label={label ? `${label} ${option}` : t(option as string)}
+            label={
+              label ? `${label} ${option}` : t(option as unknown as string)
+            }
           />
         ))}
       </Menu>

@@ -9,7 +9,7 @@ const QrCodeScannerIcon = dynamic(
   () => import('@mui/icons-material/QrCodeScanner')
 );
 
-export interface ChecklistSearchProps<T> {
+export interface TaskSelectorProps<T> {
   sticky?: boolean;
   disabled?: boolean;
   type?: ScannerTypes;
@@ -20,18 +20,18 @@ export interface ChecklistSearchProps<T> {
   setFilteredParcels?: React.Dispatch<React.SetStateAction<T[]>>;
 }
 
-export const ChecklistSearch = <T extends ParcelMixin>({
+export const TaskSelector = <T extends ParcelMixin>({
   sticky = false,
   disabled = false,
   type,
   parcels = [],
   selectedParcels = [],
   setSelectedParcels = () =>
-    console.warn('no setSelectedParcels given to ChecklistSearch'),
+    console.warn('no setSelectedParcels given to TaskSelector'),
   filteredParcels = [],
   setFilteredParcels = () =>
-    console.warn('no setFilteredParcels given to ChecklistSearch'),
-}: ChecklistSearchProps<T>) => {
+    console.warn('no setFilteredParcels given to TaskSelector'),
+}: TaskSelectorProps<T>) => {
   const [selectAll, setSelectAll] = useState<boolean>(false);
 
   const changeSelectAll = useCallback(
@@ -112,4 +112,4 @@ export const ChecklistSearch = <T extends ParcelMixin>({
   );
 };
 
-export default ChecklistSearch;
+export default TaskSelector;
