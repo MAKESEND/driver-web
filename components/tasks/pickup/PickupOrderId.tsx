@@ -1,4 +1,4 @@
-import type { Parcel, ImageType, ScannerTypes } from 'types';
+import type { Parcel, ImageType } from 'types';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
@@ -105,7 +105,7 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
       >
         <TaskMedia images={images} setImages={setImages} />
         <TaskSelector
-          type={'pickup' as ScannerTypes}
+          href="/scanner?type=pickup"
           parcels={parcels}
           selectedParcels={selectedParcels}
           setSelectedParcels={setSelectedParcels}

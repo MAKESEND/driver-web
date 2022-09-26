@@ -1,4 +1,4 @@
-import type { DropoffTask, ParcelStatus, ScannerTypes } from 'types';
+import type { DropoffTask, ParcelStatus } from 'types';
 import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
@@ -74,7 +74,7 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
           setSelectedParcels={setSelectedParcels}
           filteredParcels={filteredParcels}
           setFilteredParcels={setFilteredParcels}
-          type={'dropoff' as ScannerTypes}
+          href="/scanner?type=dropoff"
         />
         <Divider />
         <Collectlist

@@ -1,4 +1,4 @@
-import type { ParcelMixin, ScannerTypes } from 'types';
+import type { ParcelMixin } from 'types';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Checkbox } from '@mui/material';
@@ -12,7 +12,7 @@ const QrCodeScannerIcon = dynamic(
 export interface TaskSelectorProps<T> {
   sticky?: boolean;
   disabled?: boolean;
-  type?: ScannerTypes;
+  href?: string;
   parcels?: T[];
   selectedParcels?: string[];
   setSelectedParcels?: React.Dispatch<React.SetStateAction<string[]>>;
@@ -23,7 +23,7 @@ export interface TaskSelectorProps<T> {
 export const TaskSelector = <T extends ParcelMixin>({
   sticky = false,
   disabled = false,
-  type,
+  href = '/scanner',
   parcels = [],
   selectedParcels = [],
   setSelectedParcels = () =>
@@ -98,7 +98,7 @@ export const TaskSelector = <T extends ParcelMixin>({
         setter={setFilteredParcels}
         wrapperSx={{ flexGrow: 1 }}
       />
-      <Link href={`/scanner${type ? `?type=${type}` : ''}`} passHref>
+      <Link href={href} passHref>
         <Button
           variant="outlined"
           size="small"
