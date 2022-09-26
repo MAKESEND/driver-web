@@ -1,15 +1,13 @@
-import type { DropoffTask, ParcelStatus } from 'types';
-import { InputProps, SxProps, Theme, Typography } from '@mui/material';
+import type { ParcelMixin } from 'types';
+import type { InputProps, SxProps, Theme } from '@mui/material';
 import Fuse from 'fuse.js';
 import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useTranslation } from 'next-i18next';
-import { dropoffTaskProps } from 'utils/constants/delivery';
-import { dropoffTaskStatusFilters } from 'utils/constants/delivery';
 import { Box, Button, IconButton, Menu } from '@mui/material';
 import { FilterOption } from 'components/FilterOptions';
 
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 const FilterIcon = dynamic(
@@ -19,33 +17,36 @@ const QrCodeScannerIcon = dynamic(
   () => import('@mui/icons-material/QrCodeScanner')
 );
 
-export interface DropoffTaskFilterProps {
-  dropoffTasks?: DropoffTask[];
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<DropoffTask[]>>;
+export interface TaskFilterProps<T, R> {
+  tasks?: T[];
+  setFilteredTasks?: React.Dispatch<React.SetStateAction<T[]>>;
   sx?: SxProps<Theme>;
   InputProps?: InputProps;
   scan?: boolean;
+  href?: string;
+  fuseKeys?: Fuse.FuseOptionKey<T>[];
+  filterOptions?: R[];
 }
 
-export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
-  dropoffTasks = [],
+export const TaskFilter = <T extends ParcelMixin, R extends string>({
+  tasks = [],
   setFilteredTasks = () =>
     console.warn('no setFilteredTasks given to DropoffTaskFilter'),
   sx,
   InputProps,
   scan = false,
-}) => {
+  href = '/scanner',
+  fuseKeys: keys = [],
+  filterOptions = [],
+}: TaskFilterProps<T, R>) => {
   const { t } = useTranslation('tasks');
   const timeoutRef = useRef<NodeJS.Timeout>();
   const [searchVal, setSearchVal] = useState<string>('');
-  const [fusedParcels, setFusedParcels] = useState<DropoffTask[]>([]);
+  const [fusedParcels, setFusedParcels] = useState<T[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedStatus, setSelectedStatus] = useState<ParcelStatus[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<R[]>([]);
   const open = Boolean(anchorEl);
-  const fuse = useMemo(
-    () => new Fuse(dropoffTasks, { keys: dropoffTaskProps }),
-    [dropoffTasks]
-  );
+  const fuse = useMemo(() => new Fuse(tasks, { keys }), [tasks, keys]);
 
   const openFilterMenu = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -56,7 +57,7 @@ export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
   };
 
   useEffect(() => {
-    if (!searchVal) return setFusedParcels(dropoffTasks);
+    if (!searchVal) return setFusedParcels(tasks);
 
     clearTimeout(timeoutRef.current);
 
@@ -67,23 +68,23 @@ export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
     }, 300);
 
     return () => clearTimeout(timeoutRef.current);
-  }, [fuse, dropoffTasks, searchVal]);
+  }, [fuse, tasks, searchVal]);
 
   useEffect(() => {
-    setFusedParcels(dropoffTasks);
+    setFusedParcels(tasks);
     return () => setFusedParcels([]);
-  }, [dropoffTasks]);
+  }, [tasks]);
 
   useEffect(() => {
     if (!selectedStatus.length) {
-      setFilteredTasks(dropoffTasks);
+      setFilteredTasks(tasks);
     } else {
       const filteredTasks = fusedParcels.filter((task) =>
         selectedStatus.some((status) => status === task.status)
       );
       setFilteredTasks(filteredTasks);
     }
-  }, [dropoffTasks, fusedParcels, selectedStatus, setFilteredTasks]);
+  }, [tasks, fusedParcels, selectedStatus, setFilteredTasks]);
 
   return (
     <Box
@@ -101,7 +102,7 @@ export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
           ...(searchVal && {
             endAdornment: (
               <IconButton
-                aria-label="clear search input"
+                aria-label="clear-search-input"
                 edge="end"
                 onClick={onClear}
               >
@@ -121,18 +122,18 @@ export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
         <FilterIcon />
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={closeFilterMenu}>
-        {dropoffTaskStatusFilters.map((status) => (
+        {filterOptions.map((option) => (
           <FilterOption
-            key={status}
-            option={status}
+            key={option}
+            option={option}
             selectedOption={selectedStatus}
             setSelectedOption={setSelectedStatus}
-            label={t(status)}
+            label={t(option)}
           />
         ))}
       </Menu>
       {scan && (
-        <Link href="/scanner?type=dropoff" passHref>
+        <Link href={href} passHref>
           <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
             <QrCodeScannerIcon />
           </Button>
@@ -142,4 +143,4 @@ export const DropoffTaskFilter: React.FC<DropoffTaskFilterProps> = ({
   );
 };
 
-export default DropoffTaskFilter;
+export default TaskFilter;

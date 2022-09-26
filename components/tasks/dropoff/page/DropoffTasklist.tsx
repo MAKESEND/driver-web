@@ -1,8 +1,10 @@
 import type { DropoffTask } from 'types';
 import { useState, useEffect } from 'react';
 import NoTask from 'components/tasks/NoTask';
+import TaskFilter from 'components/tasks/TaskFilter';
+import { dropoffTaskProps } from 'utils/constants/delivery';
+import { dropoffTaskStatusFilters } from 'utils/constants/delivery';
 import DropoffSummary from './tasklist/DropoffSummary';
-import DropoffTaskFilter from './tasklist/DropoffTaskFilter';
 import DropoffTaskList from './tasklist/DropoffTaskList';
 import { Box } from '@mui/material';
 
@@ -40,10 +42,13 @@ export const DropoffTasklist: React.FC<DropoffTasklistProps> = ({
         dropoffTasks={dropoffTasks}
         filteredTasks={filteredTasks}
       />
-      <DropoffTaskFilter
+      <TaskFilter
         scan
-        dropoffTasks={dropoffTasks}
+        tasks={dropoffTasks}
         setFilteredTasks={setFilteredTasks}
+        href="/scanner?type=dropoff"
+        fuseKeys={dropoffTaskProps}
+        filterOptions={dropoffTaskStatusFilters}
       />
       <DropoffTaskList dropoffTasks={filteredTasks} />
     </Box>
