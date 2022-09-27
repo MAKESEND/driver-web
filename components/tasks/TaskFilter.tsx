@@ -17,6 +17,7 @@ const QrCodeScannerIcon = dynamic(
 );
 
 export interface TaskFilterProps<T, R> {
+  sticky?: boolean;
   tasks?: T[];
   setFilteredTasks?: React.Dispatch<React.SetStateAction<T[]>>;
   sx?: SxProps<Theme>;
@@ -30,6 +31,7 @@ export interface TaskFilterProps<T, R> {
 }
 
 export const TaskFilter = <T, R>({
+  sticky = false,
   tasks = [],
   setFilteredTasks = () =>
     console.warn('no setFilteredTasks given to DropoffTaskFilter'),
@@ -93,7 +95,19 @@ export const TaskFilter = <T, R>({
 
   return (
     <Box
-      sx={{ width: '100%', display: 'flex', gap: (t) => t.spacing(1), ...sx }}
+      sx={{
+        width: '100%',
+        display: 'flex',
+        gap: (t) => t.spacing(1),
+        ...sx,
+        ...(sticky && {
+          position: 'sticky',
+          top: 0,
+          paddingY: (t) => t.spacing(1),
+          backgroundColor: (t) => t.palette.white.main,
+          zIndex: (t) => t.zIndex.drawer,
+        }),
+      }}
     >
       <TextField
         id="parcel-filter"

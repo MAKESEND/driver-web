@@ -44,6 +44,7 @@ export const DropoffTasklist: React.FC<DropoffTasklistProps> = ({
       />
       <TaskFilter
         scan
+        sticky
         tasks={dropoffTasks}
         setFilteredTasks={setFilteredTasks}
         href="/scanner?type=dropoff"

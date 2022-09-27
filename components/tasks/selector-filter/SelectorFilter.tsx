@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
-export interface ChecklistFilterProps<T> {
+export interface SelectorFilterProps<T> {
   disabled?: boolean;
   parcels: T[];
   setter?: React.Dispatch<React.SetStateAction<T[]>>;
@@ -17,12 +17,12 @@ export interface ChecklistFilterProps<T> {
   inputSx?: SxProps;
 }
 
-export const ChecklistFilter = <T extends ParcelMixin>({
+export const SelectorFilter = <T extends ParcelMixin>({
   disabled = false,
   parcels = [],
-  setter = () => console.warn('no setter passing to ChecklistFilter'),
+  setter = () => console.warn('no setter passing to SelectorFilter'),
   inputSx,
-}: ChecklistFilterProps<T>) => {
+}: SelectorFilterProps<T>) => {
   const { t } = useTranslation('tasks');
   const timeoutRef = useRef<NodeJS.Timeout>();
   const [searchVal, setSearchVal] = useState<string>('');
@@ -90,6 +90,6 @@ export const ChecklistFilter = <T extends ParcelMixin>({
   );
 };
 
-ChecklistFilter.displayName = 'ChecklistFilter';
+SelectorFilter.displayName = 'SelectorFilter';
 
-export default ChecklistFilter;
+export default SelectorFilter;

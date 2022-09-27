@@ -2,7 +2,7 @@ import type { ParcelMixin } from 'types';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Checkbox } from '@mui/material';
-import ChecklistFilter from './checklist-search/ChecklistFilter';
+import SelectorFilter from './selector-filter/SelectorFilter';
 
 import dynamic from 'next/dynamic';
 const QrCodeScannerIcon = dynamic(
@@ -92,7 +92,7 @@ export const TaskSelector = <T extends ParcelMixin>({
         onChange={changeSelectAll}
         sx={{ height: (t) => t.spacing(5) }}
       />
-      <ChecklistFilter
+      <SelectorFilter
         disabled={disabled}
         parcels={parcels}
         setter={setFilteredParcels}

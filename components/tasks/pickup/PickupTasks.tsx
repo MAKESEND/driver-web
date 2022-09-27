@@ -32,6 +32,7 @@ export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
       </Typography>
       <TaskFilter
         scan
+        sticky
         tasks={pickupTasks}
         setFilteredTasks={setFilteredTasks}
         href="/scanner?type=pickup"
