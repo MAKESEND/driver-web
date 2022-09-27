@@ -1,3 +1,4 @@
+import type { UseQueryOptions } from 'react-query';
 import type {
   MSApiResponse,
   Parcel,
@@ -9,7 +10,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { rounds } from 'utils/constants/delivery';
 
-const retry = 3;
+const retry = 2;
 const staleTime = 5 * 60 * 1000; // 5 mins
 const config = {
   retry,
@@ -19,7 +20,17 @@ const config = {
   refetchOnWindowFocus: true,
 };
 
-export const useGetSortingList = () => {
+export const useGetSortingList = (
+  customConfig?: Omit<
+    UseQueryOptions<
+      ParcelToSort[] | undefined,
+      unknown,
+      ParcelToSort[] | undefined,
+      string[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
   return useQuery(
     ['sortinglist'],
     async () => {
@@ -29,11 +40,22 @@ export const useGetSortingList = () => {
 
       return parcels;
     },
-    { ...config }
+    { ...config, ...customConfig }
   );
 };
 
-export const useGetParcelsByOrderId = (orderId: string) => {
+export const useGetParcelsByOrderId = (
+  orderId: string,
+  customConfig?: Omit<
+    UseQueryOptions<
+      Parcel[] | undefined,
+      unknown,
+      Parcel[] | undefined,
+      string[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
   return useQuery(
     ['parcelsByOrderId', orderId],
     async () => {
@@ -47,11 +69,23 @@ export const useGetParcelsByOrderId = (orderId: string) => {
     },
     {
       ...config,
+      ...customConfig,
     }
   );
 };
 
-export const useGetPickupTasks = (driverId?: string) => {
+export const useGetPickupTasks = (
+  driverId?: string,
+  customConfig?: Omit<
+    UseQueryOptions<
+      PickupTask[] | undefined,
+      unknown,
+      PickupTask[] | undefined,
+      (string | undefined)[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
   return useQuery(
     ['pickupTasks', driverId],
     async () => {
@@ -77,11 +111,22 @@ export const useGetPickupTasks = (driverId?: string) => {
       console.warn("no driverId is given to 'useGetPickupTasks'");
       return pickupTasks;
     },
-    { ...config }
+    { ...config, ...customConfig }
   );
 };
 
-export const useGetDropoffTasks = (driverId: string) => {
+export const useGetDropoffTasks = (
+  driverId: string,
+  customConfig?: Omit<
+    UseQueryOptions<
+      DropoffTask[] | undefined,
+      unknown,
+      DropoffTask[] | undefined,
+      string[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
   return useQuery(
     ['dropoffTasks', driverId],
     async () => {
@@ -93,7 +138,7 @@ export const useGetDropoffTasks = (driverId: string) => {
 
       return dropoffTasks;
     },
-    { ...config }
+    { ...config, ...customConfig }
   );
 };
 

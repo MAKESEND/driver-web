@@ -10,12 +10,12 @@ export const getServerSideProps: GetServerSideProps = async ({
   locale,
   query,
 }) => {
-  const { orderid } = query;
-  const invalidId = !/ms\d{13}/i.test(orderid as string);
+  const { trackingid } = query;
+  const invalidId = !/ex\d{13}/i.test(trackingid as string);
 
   return {
     props: {
-      orderId: orderid,
+      trackingId: trackingid,
       ...(locale &&
         (await serverSideTranslations(locale, ['common', 'parcel', 'tasks']))),
     },
@@ -28,17 +28,17 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 export interface DropoffTaskPageProps {
-  orderId: string;
+  trackingId: string;
 }
 
 export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
-  orderId,
+  trackingId,
 }) => {
   const bottomPadding = '1rem';
 
   return (
     <>
-      <Seo title={`${orderId.toUpperCase()}`} />
+      <Seo title={`${trackingId.toUpperCase()}`} />
       <MobileContainer
         sx={{
           position: 'relative',

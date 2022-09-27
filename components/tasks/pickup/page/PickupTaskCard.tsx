@@ -1,7 +1,7 @@
-import type { FC } from 'react';
 import type { PickupTask } from 'types';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
+import { FlexSpacer } from 'components/common/FlexSpacer';
 import {
   Box,
   Button,
@@ -9,21 +9,15 @@ import {
   CardContent,
   CardActions,
   Typography,
-  styled,
 } from '@mui/material';
-import { FlexSpacer } from 'components/common/FlexSpacer';
 
 export interface PickupTaskCardProps {
   pickupTask?: PickupTask;
 }
 
-const TaskContent = styled(Typography)(() => ({
-  fontSize: '0.875rem',
-  textAlign: 'start',
-  color: 'rgba(0,0,0,0.6)',
-}));
-
-export const PickupTaskCard: FC<PickupTaskCardProps> = ({ pickupTask }) => {
+export const PickupTaskCard: React.FC<PickupTaskCardProps> = ({
+  pickupTask,
+}) => {
   const { t } = useTranslation('tasks');
 
   if (!pickupTask) return null;
@@ -47,9 +41,9 @@ export const PickupTaskCard: FC<PickupTaskCardProps> = ({ pickupTask }) => {
           width: '100%',
         }}
       >
-        <TaskContent variant="h3">
+        <Typography variant="h3">
           {seq ? `${seq}.` : ''} {sender_name}
-        </TaskContent>
+        </Typography>
         <Button variant="outlined">{t('btn.skip')}</Button>
       </CardContent>
       <CardContent
@@ -68,19 +62,19 @@ export const PickupTaskCard: FC<PickupTaskCardProps> = ({ pickupTask }) => {
             width: '100%',
           }}
         >
-          <TaskContent>
+          <Typography variant="secondary" textAlign="start">
             {t('label.phone')} &nbsp;
             <a href={`tel:${sender_phone}`}>{sender_phone}</a>
-          </TaskContent>
-          <TaskContent>
+          </Typography>
+          <Typography variant="secondary" textAlign="start">
             {parcel_count}&nbsp;
             {+parcel_count > 1 ? t('label.pcs') : t('label.pc')}
-          </TaskContent>
+          </Typography>
         </Box>
-        <TaskContent>
+        <Typography variant="secondary" textAlign="start">
           {t('label.orderId')}: {order_id}
-        </TaskContent>
-        <TaskContent>
+        </Typography>
+        <Typography variant="secondary" textAlign="start">
           {t('label.address')}:&nbsp;
           <a
             href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(
@@ -91,7 +85,7 @@ export const PickupTaskCard: FC<PickupTaskCardProps> = ({ pickupTask }) => {
           >
             {sender_address}
           </a>
-        </TaskContent>
+        </Typography>
       </CardContent>
       <CardActions>
         <FlexSpacer />

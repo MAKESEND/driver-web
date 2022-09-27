@@ -8,6 +8,7 @@ import CollectlistSummary from './collectlist/CollectlistSummary';
 import Collectlist from './collectlist/Collectlist';
 import CollectlistBottomNav from './collectlist/CollectlistBottomNav';
 import { useUpdateParcelStatus } from 'hooks/useMutateData';
+import NoTask from '../../NoTask';
 
 export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
@@ -56,6 +57,10 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
       })),
     });
   };
+
+  if (!dropoffTasks.length) {
+    return <NoTask />;
+  }
 
   return (
     <>

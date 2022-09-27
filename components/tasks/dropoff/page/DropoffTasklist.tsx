@@ -29,7 +29,7 @@ export const DropoffTasklist: React.FC<DropoffTasklistProps> = ({
   return (
     <Box
       sx={{
-        padding: (t) => t.spacing(3),
+        padding: (t) => t.spacing(2),
         paddingTop: 0,
         display: 'flex',
         gap: (t) => t.spacing(1),

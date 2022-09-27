@@ -11,6 +11,7 @@ import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import { Loader } from 'components/common/loader/Loader';
 import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
+// import { dropoffTasks as dropoffMocks } from 'mocks/tasks';
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
@@ -30,6 +31,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
 }) => {
   const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
     '60e18027d1e7a00013affbb6' // testing id, should be removed
+    // { initialData: dropoffMocks }
   );
   const [mode, setMode] = useState<DropoffModes>(defaultMode);
 
@@ -43,7 +45,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
         statusToConfirm.includes(task.status)
       );
       setMode(
-        toConfirm
+        !toConfirm
           ? ('collectlist' as DropoffModes)
           : ('tasklist' as DropoffModes)
       );
@@ -63,6 +65,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
         <>
           <MobileContainer>
             <Worklist dropoffTasks={dropoffTasks} />
+            {/* <Worklist dropoffTasks={dropoffMocks} /> */}
           </MobileContainer>
         </>
       )}

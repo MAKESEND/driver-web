@@ -38,8 +38,13 @@ export const SelectorFilter = <T extends ParcelMixin>({
   };
 
   useEffect(() => {
-    setFusedParcels(parcels);
     return () => setFusedParcels([]);
+  }, []);
+
+  useEffect(() => {
+    if (parcels.length) {
+      setFusedParcels(parcels);
+    }
   }, [parcels]);
 
   useEffect(() => {
@@ -48,7 +53,7 @@ export const SelectorFilter = <T extends ParcelMixin>({
   }, [fusedParcels, setter]);
 
   useEffect(() => {
-    if (!searchVal) return setFusedParcels(parcels);
+    if (!searchVal && parcels.length) return setFusedParcels(parcels);
 
     clearTimeout(timeoutRef.current);
 
