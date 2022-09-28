@@ -1,33 +1,21 @@
 import type { DropoffTask } from 'types';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
+import ReceiverParcel from './dropofftask-card/ReceiverParcel';
+import ReceiverPhone from './dropofftask-card/ReceiverPhone';
+import ReceiverPostal from './dropofftask-card/ReceiverPostal';
+import ReceiverAddress from './dropofftask-card/ReceiverAddress';
 import {
   Box,
-  IconButton,
   Button,
   Card,
   CardContent,
   CardActions,
   Typography,
-  Chip,
   styled,
 } from '@mui/material';
 
-import dynamic from 'next/dynamic';
-const LocationOnIcon = dynamic(
-  () => import('@mui/icons-material/LocationOnOutlined'),
-  { ssr: false }
-);
-const ContentCopyIcon = dynamic(
-  () => import('@mui/icons-material/ContentCopyOutlined'),
-  { ssr: false }
-);
-const LocalPhoneIcon = dynamic(
-  () => import('@mui/icons-material/LocalPhoneOutlined'),
-  { ssr: false }
-);
-
-const Row = styled(Box)(() => ({
+export const Row = styled(Box)(() => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -62,47 +50,19 @@ export const DropoffTaskCard: React.FC<DropoffTaskCardProps> = ({
           gap: (t) => t.spacing(1),
         }}
       >
-        <Row>
-          <Typography variant="h3" sx={{ textAlign: 'start' }}>
-            {sequence ? `${sequence}.` : ''} {trackingID}
-          </Typography>
-          <Chip label={status} />
-        </Row>
+        <ReceiverParcel
+          sequence={sequence}
+          trackingID={trackingID}
+          status={status}
+        />
         <Typography sx={{ textAlign: 'start' }}>{receiverName}</Typography>
-        <Row>
-          <Typography sx={{ textAlign: 'start' }}>{receiverNo}</Typography>
-          <a href={`tel:${receiverNo}`}>
-            <IconButton>
-              <LocalPhoneIcon />
-            </IconButton>
-          </a>
-        </Row>
-        <Row sx={{ flexDirection: 'row' }}>
-          <Typography variant="secondary">{dropDistrict}</Typography>
-          <Typography variant="secondary">{dropProvince}</Typography>
-          <Typography variant="secondary">{dropPostcode}</Typography>
-        </Row>
-        <Row>
-          <Typography variant="secondary" sx={{ textAlign: 'start' }}>
-            {dropAddress}
-          </Typography>
-          <Box>
-            <IconButton>
-              <ContentCopyIcon />
-            </IconButton>
-            <a
-              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(
-                dropAddress
-              )}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <IconButton>
-                <LocationOnIcon />
-              </IconButton>
-            </a>
-          </Box>
-        </Row>
+        <ReceiverPhone receiverPhone={receiverNo} />
+        <ReceiverPostal
+          dropDistrict={dropDistrict}
+          dropProvince={dropProvince}
+          dropPostcode={dropPostcode}
+        />
+        <ReceiverAddress dropAddress={dropAddress} />
       </CardContent>
       <CardActions sx={{ justifyContent: 'end' }}>
         <Link href={`/tasks/dropoff/${trackingID}`} passHref>
