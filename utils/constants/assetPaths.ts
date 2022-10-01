@@ -2,6 +2,7 @@ import type { Routes } from 'types';
 
 type RouteDict = { [key in Routes]?: string };
 export interface IAssetPaths extends RouteDict {
+  merchant: RouteDict;
   legacy: RouteDict;
 }
 
@@ -13,9 +14,10 @@ export const assetPaths: IAssetPaths = {
   checkTransferHub: `/micros/hub/api/hubtransfer/checkhub`,
   getSortingList: '/micros/parcel/dropoff/sorting/get/EX',
   uploadImg: '/apiold/api/delivery/uploadPOD',
-  legacy: {
+  merchant: {
     getParcelsByTrackingIds: `/api/google/makesend/getShipmentByTrackingID`,
   },
+  legacy: {},
 };
 
 export default assetPaths;

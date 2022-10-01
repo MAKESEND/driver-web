@@ -1,6 +1,7 @@
 import type { ENVs, Routes } from 'types';
+import type { TNameService } from 'utils/constants/namedServices';
 import getConfig from 'next/config';
-import legacyServices from 'utils/constants/legacyServices';
+import namedServices from 'utils/constants/namedServices';
 import paths from 'utils/constants/assetPaths';
 import hosts from 'utils/constants/hosts';
 
@@ -9,8 +10,10 @@ export interface EndpointsArgs {
   ENV?: ENVs;
 }
 
-export const isLegacyService = (route: Routes): boolean =>
-  legacyServices?.hasOwnProperty(route) ?? !!legacyServices[route];
+export const isNamedService = (
+  route: Routes,
+  services: TNameService
+): boolean => services?.hasOwnProperty(route) ?? Boolean(services[route]);
 
 export const getEndpoint = ({ ENV, route }: EndpointsArgs): string => {
   const {
@@ -19,12 +22,21 @@ export const getEndpoint = ({ ENV, route }: EndpointsArgs): string => {
     },
   } = getConfig();
 
-  const isLegacy = isLegacyService(route);
-  const { DOMAIN, LEGACY_DOMAIN } =
+  const isLegacy = isNamedService(route, namedServices.legacyServices);
+  const isMerchant = isNamedService(route, namedServices.merchantServices);
+  const { DOMAIN, LEGACY_DOMAIN, MERCHANT_DOMAIN } =
     (ENV ?? APP_ENV) === 'production' ? hosts('asia') : hosts('ninja');
 
-  const path = isLegacy ? paths.legacy[route] : paths[route];
-  const domain = isLegacy ? LEGACY_DOMAIN : DOMAIN;
+  const path = isLegacy
+    ? paths.legacy[route]
+    : isMerchant
+    ? paths.merchant[route]
+    : paths[route];
+  const domain = isLegacy
+    ? LEGACY_DOMAIN
+    : isMerchant
+    ? MERCHANT_DOMAIN
+    : DOMAIN;
 
   return `${domain}${path}`;
 };

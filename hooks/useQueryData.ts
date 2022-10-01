@@ -5,6 +5,7 @@ import type {
   ParcelToSort,
   PickupTask,
   DropoffTask,
+  ParcelByTrackingId,
 } from 'types';
 import axios from 'axios';
 import { useQuery } from 'react-query';
@@ -137,6 +138,37 @@ export const useGetDropoffTasks = (
       );
 
       return dropoffTasks;
+    },
+    { ...config, ...customConfig }
+  );
+};
+
+export const useGetParcelsByTrackingId = (
+  trackingId: string,
+  customConfig?: Omit<
+    UseQueryOptions<
+      ParcelByTrackingId | undefined,
+      unknown,
+      ParcelByTrackingId | undefined,
+      string[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery(
+    ['parcel', trackingId],
+    async () => {
+      const {
+        data: { data: parcels },
+      } = await axios.get<MSApiResponse<ParcelByTrackingId[]>>(
+        `/api/parcel/trackingid/${trackingId}`
+      );
+
+      if (Array.isArray(parcels)) {
+        return parcels[0];
+      }
+
+      return;
     },
     { ...config, ...customConfig }
   );

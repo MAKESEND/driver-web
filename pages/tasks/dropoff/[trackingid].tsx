@@ -2,9 +2,11 @@ import type { ReactNode } from 'react';
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useGetParcelsByTrackingId } from 'hooks/useQueryData';
 import Seo from 'components/common/Seo';
 import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import TaskLoader from 'components/tasks/TaskLoader';
 
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
@@ -35,6 +37,7 @@ export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
   trackingId,
 }) => {
   const bottomPadding = '1rem';
+  const { data: parcel, isLoading } = useGetParcelsByTrackingId(trackingId);
 
   return (
     <>
@@ -46,7 +49,9 @@ export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
           paddingX: (t) => t.spacing(2),
           paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
         }}
-      ></MobileContainer>
+      >
+        {isLoading ? <TaskLoader /> : null}
+      </MobileContainer>
     </>
   );
 };

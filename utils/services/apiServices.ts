@@ -10,12 +10,24 @@ import type {
   ApiResponse,
   GooglePickupResponse,
   DropoffTask,
+  ParcelByTrackingId,
 } from 'types';
 import axios from 'axios';
 import getConfig from 'next/config';
 import { getEndpoint } from './getEndpoint';
 
 export const api = {
+  getParcelByTrackingId: (trackingID: string[]) =>
+    axios.post<
+      { trackingID: string[] },
+      AxiosResponse<{
+        resCode: number;
+        orderList: ParcelByTrackingId[];
+        message: string;
+      }>
+    >(getEndpoint({ route: 'getParcelsByTrackingIds' as Routes }), {
+      trackingID,
+    }),
   getParcelsByOrderId: (orderId: string) =>
     axios.post<{ orderId: string }, AxiosResponse<ApiResponse<Parcel[]>>>(
       getEndpoint({ route: 'getParcelsByOrderId' as Routes }),

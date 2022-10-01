@@ -4,10 +4,44 @@ import type {
   ParcelSize,
   TempControl,
   PickupRound,
+  ParcelStatus,
   Postal,
 } from './parcelMeta';
 
+export interface ParcelByTrackingId {
+  orderID: string;
+  trackingID: string;
+  aliasID: string;
+  parcelSize: ParcelSize;
+  pickupRound: number;
+  dropRound: DropRound;
+  cod: number;
+  temp: number;
+  orderDate: string;
+  pickupType: string;
+  userID: string | number;
+  parcelChanged: boolean;
+  parcelCreatedAt: string;
+  parcelUpdatedAt: string;
+  parcelType: string;
+  PODStatus: string;
+  senderName: string;
+  senderNo: string;
+  pickupAddress: string;
+  pickupProvince: string;
+  pickupDistrict: string;
+  pickupPostcode: string;
+  receiverName: string;
+  receiverNo: string;
+  dropAddress: string;
+  dropProvince: string;
+  dropDistrict: string;
+  dropPostcode: string;
+  status: ParcelStatus;
+}
+
 export interface Parcel {
+  aliasID?: number | string; // added in Q3 2022 for SCG
   branch_id: null | string;
   cod: number;
   created_at: string;
@@ -37,7 +71,7 @@ export interface Parcel {
   shipmentID: string;
   shipment_id: number;
   size: string;
-  status: string;
+  status: ParcelStatus;
   temp: TempControl;
   transfer_hub: Hubs;
   updated_at: string;
@@ -54,8 +88,8 @@ export interface ParcelToSort {
   temp: number;
   orderDate: string;
   pickupType: string;
-  userID: string;
-  parcelChanged: string;
+  userID: string | number;
+  parcelChanged: boolean;
   parcelCreatedAt: string;
   parcelUpdatedAt: string;
   parcelType: string;
@@ -72,7 +106,7 @@ export interface ParcelToSort {
   dropProvince: string;
   dropDistrict: string;
   dropPostcode: string;
-  status: string;
+  status: ParcelStatus;
   plannerRound: number;
   plannerHub: Hubs;
   sequence: number;
@@ -91,4 +125,4 @@ export interface ParcelToSort {
   address_id: Postal;
 }
 
-export type ParcelMixin = Partial<Parcel & ParcelToSort>;
+export type ParcelMixin = Partial<Parcel & ParcelToSort & ParcelByTrackingId>;

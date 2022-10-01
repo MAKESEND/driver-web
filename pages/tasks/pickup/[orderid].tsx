@@ -4,7 +4,7 @@ import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useGetParcelsByOrderId } from 'hooks/useQueryData';
 import Seo from 'components/common/Seo';
-import { PickupLoader } from 'components/tasks/pickup/orderid/PickupLoader';
+import TaskLoader from 'components/tasks/TaskLoader';
 import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 
@@ -57,7 +57,7 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
         }}
       >
         {isLoading ? (
-          <PickupLoader />
+          <TaskLoader />
         ) : (
           <PickupOrderId orderId={orderId} parcels={parcels} float sticky />
         )}
