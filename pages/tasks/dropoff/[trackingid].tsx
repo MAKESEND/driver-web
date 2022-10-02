@@ -8,6 +8,11 @@ import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
 import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import TaskLoader from 'components/tasks/TaskLoader';
 
+import dynamic from 'next/dynamic';
+const DropoffTrackingId = dynamic(
+  () => import('components/tasks/dropoff/DropoffTrackingId')
+);
+
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
   query,
@@ -50,7 +55,11 @@ export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
           paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
         }}
       >
-        {isLoading ? <TaskLoader /> : null}
+        {isLoading ? (
+          <TaskLoader />
+        ) : (
+          <DropoffTrackingId parcel={parcel} sticky float />
+        )}
       </MobileContainer>
     </>
   );

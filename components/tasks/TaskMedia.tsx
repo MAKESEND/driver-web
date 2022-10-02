@@ -21,6 +21,8 @@ export interface TaskMediaProps {
   setImages: Dispatch<SetStateAction<File[]>>;
   maxImgs?: number;
   sticky?: boolean;
+  defaultExpanded?: boolean;
+  disabled?: boolean;
 }
 
 export const TaskMedia: FC<TaskMediaProps> = ({
@@ -28,6 +30,8 @@ export const TaskMedia: FC<TaskMediaProps> = ({
   setImages = () => console.warn('no setImages given to TaskMedia'),
   maxImgs = 3,
   sticky = false,
+  defaultExpanded = false,
+  disabled = false,
 }) => {
   const { t } = useTranslation('tasks');
 
@@ -43,8 +47,11 @@ export const TaskMedia: FC<TaskMediaProps> = ({
     },
   });
 
+  if (disabled) return null;
+
   return (
     <Accordion
+      defaultExpanded={defaultExpanded}
       sx={{
         ...(sticky && {
           position: 'sticky',
@@ -68,16 +75,19 @@ export const TaskMedia: FC<TaskMediaProps> = ({
             container
             width="100%"
             justifyContent="space-between"
-            alignItems="center"
-            gridColumn={3}
-            spacing={1}
+            alignItems="stretch"
+            columnSpacing={{ xs: 2 }}
           >
             {images.map((image, index) => (
-              <Grid item key={image.lastModified + index}>
+              <Grid item xs={6} sm={4} key={image.lastModified + index}>
                 <ImageThumb image={image} index={index} setImages={setImages} />
               </Grid>
             ))}
-            {images.length < maxImgs && <AddImage onClick={open} />}
+            {images.length < maxImgs && (
+              <Grid item xs={6} sm={4}>
+                <AddImage onClick={open} />
+              </Grid>
+            )}
           </Grid>
         )}
       </AccordionDetails>

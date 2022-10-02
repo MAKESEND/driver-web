@@ -1,6 +1,6 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
-import { blobToBase64 } from 'utils/common/blobToBase64';
+import { blobToBase64 } from 'utils/common/imgProcessor';
 import { styled, Box, Card, CircularProgress, IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
@@ -8,13 +8,16 @@ const CloseIcon = dynamic(() => import('@mui/icons-material/Close'));
 
 const Image = styled('img')(() => ({
   width: '100%',
-  height: '100%',
+  height: 'auto',
+  aspectRatio: '1',
   objectFit: 'contain',
 }));
 
 export const SquareBox = styled(Box)(() => ({
-  width: '6.25rem',
-  height: '6.25rem',
+  // width: '6.25rem',
+  // height: '6.25rem',
+  width: '100%',
+  height: '100%',
 }));
 
 export interface IImageThumbProps {

@@ -5,4 +5,5 @@ export * from './TaskMedia';
 export * from './TaskLoader';
 export * from './TaskFilter';
 export * from './TaskSelector';
+export * from './TaskSignature';
 export * from './NoTask';

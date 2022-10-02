@@ -2,6 +2,7 @@ export enum ImageType {
   image = 'image',
   signature = 'signature',
   pickupPOD = 'pickupPOD',
+  dropPOD = 'dropPOD',
   sorting = 'sorting',
 }
 

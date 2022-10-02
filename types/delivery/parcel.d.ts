@@ -9,9 +9,9 @@ import type {
 } from './parcelMeta';
 
 export interface ParcelByTrackingId {
+  aliasID?: number | string; // added in Q3 2022 for SCG
   orderID: string;
   trackingID: string;
-  aliasID: string;
   parcelSize: ParcelSize;
   pickupRound: number;
   dropRound: DropRound;

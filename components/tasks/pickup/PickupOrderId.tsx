@@ -3,12 +3,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { pickupParcelState } from 'states';
-import imageCompression from 'browser-image-compression';
-import { blobToBase64 } from 'utils/common/blobToBase64';
+import imgProcesser from 'utils/common/imgProcessor';
 import { useUploadImage } from 'hooks/useMutateData';
-import { Box, Button, Divider } from '@mui/material';
-import { TaskMedia } from 'components/tasks/TaskMedia';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
+import { Button, Divider } from '@mui/material';
+import TaskMedia from 'components/tasks/TaskMedia';
+import TopContainer from 'components/common/mobile/TopContainer';
+import BottomContainer from 'components/common/mobile/BottomContainer';
 import PickupParcelList from './orderid/PickupParcelList';
 import TaskSelector from '../TaskSelector';
 
@@ -18,13 +18,6 @@ export interface PickupOrderIdProps {
   float?: boolean;
   sticky?: boolean;
 }
-
-const bottomPadding = '1rem';
-const imgZipOptions = {
-  maxSizeMB: 1,
-  // maxWidthOrHeight: 1920,
-  useWebWorker: true,
-};
 
 export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
   orderId,
@@ -42,7 +35,7 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
 
   const onConfirm = async () => {
     try {
-      const serializedImg = await imgProcesser(images, imgZipOptions);
+      const serializedImg = await imgProcesser(images);
 
       mutate({
         orderID: orderId,
@@ -89,20 +82,7 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: (t) => t.spacing(2),
-          paddingY: (t) => t.spacing(1),
-          ...(sticky && {
-            position: 'sticky',
-            top: 0,
-            zIndex: (t) => t.zIndex.drawer,
-            backgroundColor: (t) => t.palette.white.main,
-          }),
-        }}
-      >
+      <TopContainer sticky={sticky}>
         <TaskMedia images={images} setImages={setImages} />
         <TaskSelector
           href="/scanner?type=pickup"
@@ -112,25 +92,14 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
           filteredParcels={filteredParcels}
           setFilteredParcels={setFilteredParcels}
         />
-      </Box>
+      </TopContainer>
       <Divider />
       <PickupParcelList
         parcels={filteredParcels}
         selectedParcels={selectedParcels}
         setSelectedParcels={setSelectedParcels}
       />
-      <MobileContainer
-        sx={{
-          paddingY: bottomPadding,
-          ...(float && {
-            position: 'fixed',
-            bottom: 0,
-            left: '50%',
-            transform: 'translate(-50%)',
-            paddingX: (t) => t.spacing(2),
-          }),
-        }}
-      >
+      <BottomContainer float={float}>
         <Button
           variant="contained"
           disabled={isLoading}
@@ -143,32 +112,9 @@ export const PickupOrderId: React.FC<PickupOrderIdProps> = ({
           {t('btn.confirm')}&nbsp;
           {`(${selectedParcels.length}/${parcels.length})`}
         </Button>
-      </MobileContainer>
+      </BottomContainer>
     </>
   );
 };
 
 export default PickupOrderId;
-
-type compressionArgs = Parameters<typeof imageCompression>;
-
-/**
- * Compress and encode with Base64
- * @param images
- * @param imgZipOptions
- * @returns
- */
-const imgProcesser = async (
-  images: File[],
-  imgZipOptions: compressionArgs[1]
-) => {
-  const imgCompression = images.map((img) =>
-    imageCompression(img, imgZipOptions)
-  );
-  const compressedImgs = await Promise.all(imgCompression);
-  const imgSerializing = compressedImgs.map((img) =>
-    blobToBase64(img, img.type)
-  );
-  const serializedImg = await Promise.all(imgSerializing);
-  return serializedImg;
-};
