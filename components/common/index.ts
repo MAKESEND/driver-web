@@ -10,3 +10,4 @@ export * from './pincode';
 export * from './Seo';
 export * from './SearchBar';
 export * from './mobile';
+export * from './Row';

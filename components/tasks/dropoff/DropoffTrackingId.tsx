@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import TaskMedia from 'components/tasks/TaskMedia';
 import TaskSignature from 'components/tasks/TaskSignature';
 import TopContainer from 'components/common/mobile/TopContainer';
-import DropoffTask from './trackingid/DropoffTask';
+import DropoffTask from './DropoffTask';
 import DropoffConfirmButton from './trackingid/DropoffConfirmButton';
 
 export interface DropoffTrackingIdProps {

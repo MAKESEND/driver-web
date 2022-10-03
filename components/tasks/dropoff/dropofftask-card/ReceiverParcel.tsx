@@ -1,9 +1,9 @@
 import type { ParcelStatus } from 'types';
 import { Chip, Typography } from '@mui/material';
-import { Row } from '../DropoffTaskCard';
+import Row from 'components/common/Row';
 
 export interface ReceiverParcelProps {
-  sequence: number;
+  sequence?: number;
   trackingID: string;
   status: ParcelStatus;
 }

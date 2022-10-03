@@ -13,6 +13,7 @@ export const BottomContainer = styled(MobileContainer, {
     left: '50%',
     transform: 'translate(-50%)',
     padding: theme.spacing(2), // 16px
+    zIndex: theme.zIndex.drawer,
   }),
 }));
 

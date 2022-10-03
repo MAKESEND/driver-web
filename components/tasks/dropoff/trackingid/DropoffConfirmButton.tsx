@@ -39,12 +39,14 @@ export const DropoffConfirmButton: React.FC<DropoffConfirmButtonProps> = ({
   const { push } = useRouter();
   const { t } = useTranslation('tasks');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const {
     isLoading: uploadingPodImg,
     mutate: mutatePodImg,
     isSuccess: podUploaded,
   } = useUploadImage();
+
   const {
     isLoading: uploadingSignImg,
     mutate: mutateSignImg,
@@ -54,8 +56,13 @@ export const DropoffConfirmButton: React.FC<DropoffConfirmButtonProps> = ({
   useEffect(() => {
     return () => {
       setIsLoading(false);
+      setIsDisabled(false);
     };
   }, []);
+
+  useEffect(() => {
+    setIsDisabled(uploadingPodImg || uploadingSignImg || isLoading || disabled);
+  }, [uploadingPodImg, uploadingSignImg, isLoading, disabled]);
 
   useEffect(() => {
     if (podUploaded && signUploaded) {
@@ -106,7 +113,7 @@ export const DropoffConfirmButton: React.FC<DropoffConfirmButtonProps> = ({
     <BottomContainer float={float}>
       <Button
         variant="contained"
-        disabled={uploadingPodImg || uploadingSignImg || isLoading || disabled}
+        disabled={isDisabled}
         onClick={() => onConfirm()}
         sx={{
           width: '100%',

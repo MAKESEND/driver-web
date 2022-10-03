@@ -44,7 +44,7 @@ export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
       );
 
       setMode(
-        toConfirm
+        !toConfirm
           ? ('collectlist' as DropoffModes)
           : ('tasklist' as DropoffModes)
       );
