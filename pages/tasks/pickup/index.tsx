@@ -2,12 +2,20 @@ import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useGetPickupTasks } from 'hooks/useQueryData';
-import Seo from 'components/common/Seo';
-import { Loader } from 'components/common/loader/Loader';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
-import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { PickupTasks } from 'components/tasks/pickup/PickupTasks';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
+const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
+const MobileContainer = dynamic(
+  () => import('components/common/mobile/MobileContainer')
+);
+const Loader = dynamic(() => import('components/common/loader/Loader'));
+const PickupTasks = dynamic(
+  () => import('components/tasks/pickup/PickupTasks')
+);
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

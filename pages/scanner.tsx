@@ -3,10 +3,14 @@ import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState, useEffect } from 'react';
-import Seo from 'components/common/Seo';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import ScannerPanel from 'components/scanner/ScannerPanel';
 import { useRouter } from 'next/router';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
+const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

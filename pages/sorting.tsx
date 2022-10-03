@@ -2,11 +2,15 @@ import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useGetSortingList } from 'hooks/useQueryData';
-import Seo from 'components/common/Seo';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { Box } from '@mui/material';
-import Loader from 'components/common/loader/Loader';
-import SortingList from 'components/sorting/SortingList';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
+const SortingList = dynamic(() => import('components/sorting/SortingList'));
+const Loader = dynamic(() => import('components/common/loader/Loader'));
+const Box = dynamic(() => import('@mui/material/Box'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

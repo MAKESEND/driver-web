@@ -2,8 +2,12 @@ import type { ReactNode } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Seo from 'components/common/Seo';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

@@ -2,10 +2,16 @@ import type { GetStaticProps } from 'next';
 import type { ReactNode } from 'react';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import Seo from 'components/common/Seo';
-import Settings from 'components/settings/Settings';
-import { MobileContainer } from 'components/common';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
+const MobileContainer = dynamic(
+  () => import('components/common/mobile/MobileContainer')
+);
+const Settings = dynamic(() => import('components/settings/Settings'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

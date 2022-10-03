@@ -3,15 +3,18 @@ import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useGetParcelsByOrderId } from 'hooks/useQueryData';
-import Seo from 'components/common/Seo';
-import TaskLoader from 'components/tasks/TaskLoader';
-import MobileLayout from 'components/layouts/mobileLayout/MobileLayout';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
 
 import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const MobileLayout = dynamic(
+  () => import('components/layouts/mobileLayout/MobileLayout')
+);
+const MobileContainer = dynamic(
+  () => import('components/common/mobile/MobileContainer')
+);
+const TaskLoader = dynamic(() => import('components/tasks/TaskLoader'));
 const PickupOrderId = dynamic(
-  () => import('components/tasks/pickup/PickupOrderId'),
-  { ssr: false }
+  () => import('components/tasks/pickup/PickupOrderId')
 );
 
 export const getServerSideProps: GetServerSideProps = async ({

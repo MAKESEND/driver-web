@@ -1,16 +1,26 @@
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
-import type { DropoffModes } from 'types';
 import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { statusToConfirm } from 'utils/constants/tasks';
-import { useGetDropoffTasks } from 'hooks';
-import Seo from 'components/common/Seo';
-import DrawerLayout from 'components/layouts/drawerLayout/DrawerLayout';
-import { FlexCenterBox } from 'components/layouts/FlexCenterBox';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
-import { Loader } from 'components/common/loader/Loader';
-import { DropoffTasks } from 'components/tasks/dropoff/DropoffTasks';
+import { useGetDropoffTasks } from 'hooks/useQueryData';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
+const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
+const MobileContainer = dynamic(
+  () => import('components/common/mobile/MobileContainer')
+);
+const Loader = dynamic(() => import('components/common/loader/Loader'));
+const DropoffCollectlist = dynamic(
+  () => import('components/tasks/dropoff/page/DropoffCollectlist')
+);
+const DropoffTasklist = dynamic(
+  () => import('components/tasks/dropoff/page/DropoffTasklist')
+);
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
@@ -21,37 +31,28 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   };
 };
 
-export interface DropoffPageProps {
-  defaultMode?: DropoffModes;
-}
-
-export const DropoffPage: NextPageWithLayout<DropoffPageProps> = ({
-  defaultMode = 'collectlist' as DropoffModes,
-}) => {
+export const DropoffPage: NextPageWithLayout = () => {
   const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
     '60e18027d1e7a00013affbb6' // testing id, should be removed
   );
-  const [mode, setMode] = useState<DropoffModes>(defaultMode);
+
+  const [toConfirm, setToConfirm] = useState<boolean>(false);
 
   useEffect(() => {
-    return () => setMode(defaultMode);
-  }, [defaultMode]);
+    return () => setToConfirm(false);
+  }, []);
 
   useEffect(() => {
     if (Array.isArray(dropoffTasks)) {
-      const toConfirm = dropoffTasks.some((task) =>
+      const isConfirming = dropoffTasks.some((task) =>
         statusToConfirm.includes(task.status)
       );
 
-      setMode(
-        !toConfirm
-          ? ('collectlist' as DropoffModes)
-          : ('tasklist' as DropoffModes)
-      );
+      setToConfirm(isConfirming);
     }
   }, [dropoffTasks]);
 
-  const Worklist = DropoffTasks[mode] ?? DropoffTasks.collectlist;
+  const Worklist = toConfirm ? DropoffTasklist : DropoffCollectlist;
 
   return (
     <>
