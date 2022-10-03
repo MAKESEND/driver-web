@@ -38,7 +38,7 @@ export interface DropoffTask {
   temp: TempControl;
   orderDate: string;
   pickupType: string;
-  userID: string;
+  userID: string | number;
   parcelChanged: boolean;
   parcelCreatedAt: string;
   parcelUpdatedAt: string;
