@@ -39,7 +39,7 @@ export interface DropoffTask {
   orderDate: string;
   pickupType: string;
   userID: string;
-  parcelChanged: string;
+  parcelChanged: boolean;
   parcelCreatedAt: string;
   parcelUpdatedAt: string;
   parcelType: string;
