@@ -1,5 +1,4 @@
 import type { GetStaticProps } from 'next';
-import type { ReactNode } from 'react';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -33,7 +32,7 @@ export const SettingsPage: NextPageWithLayout = () => {
   );
 };
 
-SettingsPage.getLayout = (page: ReactNode) => {
+SettingsPage.getLayout = (page: React.ReactNode) => {
   return <DrawerLayout>{page}</DrawerLayout>;
 };
 

@@ -8,9 +8,9 @@ const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout')
 );
+const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
 const SortingList = dynamic(() => import('components/sorting/SortingList'));
 const Loader = dynamic(() => import('components/common/loader/Loader'));
-const Box = dynamic(() => import('@mui/material/Box'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -32,17 +32,9 @@ export const SortingPage: NextPageWithLayout = () => {
     <>
       <Seo title="Sorting" />
       {isLoading ? (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
+        <FlexCenterBox>
           <Loader />
-        </Box>
+        </FlexCenterBox>
       ) : (
         <SortingList sortingList={sortingList} />
       )}

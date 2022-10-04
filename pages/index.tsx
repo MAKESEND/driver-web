@@ -1,8 +1,10 @@
 import type { NextPage, GetStaticProps } from 'next';
-import Seo from 'components/common/Seo';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+
+import dynamic from 'next/dynamic';
+const Seo = dynamic(() => import('components/common/Seo'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

@@ -1,29 +1,23 @@
-import { FC, ReactNode, useLayoutEffect } from 'react';
-import type { SxProps } from '@mui/material';
-import { useEffect, useState, useRef } from 'react';
+import type { SxProps, Theme } from '@mui/material';
+import { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useWindowSize } from 'react-use';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import DrawerMain from './DrawerMain';
 import DrawerHeader from './DrawerHeader';
-
-import dynamic from 'next/dynamic';
-const DrawerTopNav = dynamic(() => import('./DrawerTopNav'));
-// const DrawerHeader = dynamic(() => import('./DrawerHeader'));
-const DrawerSideNav = dynamic(() => import('./DrawerSideNav/DrawerSideNav'), {
-  ssr: false,
-});
+import DrawerTopNav from './DrawerTopNav';
+import DrawerSideNav from './DrawerSideNav/DrawerSideNav';
 
 export interface DrawerLayout {
-  children: ReactNode;
+  children: React.ReactNode;
   fillContainer?: boolean;
-  sxMain?: SxProps;
+  sxMain?: SxProps<Theme>;
   hideOnScroll?: boolean;
 }
 
 const drawerWidth = '16rem';
 const breakPoint = 900;
 
-export const DrawerLayout: FC<DrawerLayout> = ({
+export const DrawerLayout: React.FC<DrawerLayout> = ({
   children,
   fillContainer = false,
   sxMain = {},

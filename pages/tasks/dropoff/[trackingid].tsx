@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -69,7 +68,7 @@ export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
   );
 };
 
-DropoffTaskPage.getLayout = (page: ReactNode) => {
+DropoffTaskPage.getLayout = (page: React.ReactNode) => {
   return (
     <MobileLayout fillContainer hideOnScroll>
       {page}

@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -25,7 +24,7 @@ export const Dashboard: NextPageWithLayout = () => {
   );
 };
 
-Dashboard.getLayout = (page: ReactNode) => {
+Dashboard.getLayout = (page: React.ReactNode) => {
   return <DrawerLayout fillContainer>{page}</DrawerLayout>;
 };
 
