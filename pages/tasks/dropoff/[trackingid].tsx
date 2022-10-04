@@ -2,6 +2,7 @@ import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useGetParcelsByTrackingId } from 'hooks/useQueryData';
+import trackingIdValidator from 'utils/trackingIdValidator';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -21,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }) => {
   const { trackingid } = query;
-  const invalidId = !/ex\d{13}/i.test(trackingid as string);
+  const invalidId = trackingIdValidator(trackingid as string);
 
   return {
     props: {
