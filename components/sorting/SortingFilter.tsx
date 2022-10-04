@@ -1,16 +1,18 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { Theme } from '@mui/material';
 import type { ParcelMixin, Parcel, ParcelToSort } from 'types';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState } from 'recoil';
 import { sortingRoundState } from 'states';
-import { Autocomplete, TextField, Box, Button, Menu } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
-import { FilterOption } from 'components/FilterOptions';
 import { rounds } from 'utils/constants/delivery';
+import { FilterOption } from 'components/FilterOptions';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import { Autocomplete, Button, Grid, Menu, styled } from '@mui/material';
 
 import dynamic from 'next/dynamic';
+const TextField = dynamic(() => import('@mui/material/TextField'));
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
 );
@@ -18,9 +20,15 @@ const QrCodeScannerIcon = dynamic(
   () => import('@mui/icons-material/QrCodeScanner')
 );
 
+const IconButton = styled(Button)(({ theme }) => ({
+  minWidth: theme.spacing(5),
+  width: theme.spacing(5),
+  height: theme.spacing(5),
+}));
+
 export interface SortingFilterProps {
   selectedParcel?: ParcelMixin | null;
-  setSelectedParcel?: Dispatch<SetStateAction<ParcelMixin | null>>;
+  setSelectedParcel?: React.Dispatch<React.SetStateAction<ParcelMixin | null>>;
   sortingList?: ParcelMixin[];
 }
 
@@ -31,7 +39,7 @@ const filterOptions = createFilterOptions<ParcelMixin>({
       .join(),
 });
 
-export const SortingFilter: FC<SortingFilterProps> = ({
+export const SortingFilter: React.FC<SortingFilterProps> = ({
   selectedParcel = null,
   setSelectedParcel = () => console.warn('no setter to SortingFilter'),
   sortingList = [],
@@ -41,6 +49,9 @@ export const SortingFilter: FC<SortingFilterProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [selectedRounds, setSelectedRounds] = useRecoilState(sortingRoundState);
+  const breakpointSM = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.up('sm')
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -76,50 +87,74 @@ export const SortingFilter: FC<SortingFilterProps> = ({
   }, []);
 
   return (
-    <Box sx={{ display: 'flex', gap: '1rem', width: '100%' }}>
-      <Autocomplete
-        sx={{ flexGrow: 1 }}
-        disablePortal
-        disableCloseOnSelect
-        options={parcels.sort((a, b) => +(a?.round ?? 0) - +(b?.round ?? 0))}
-        value={selectedParcel}
-        size="small"
-        blurOnSelect
-        filterOptions={filterOptions}
-        getOptionLabel={(option) =>
-          `${option?.trackingID?.trim() ?? ''} ${
-            option?.receiverName?.trim() ?? ''
-          }`
-        }
-        groupBy={groupBy}
-        renderInput={(params) => <TextField {...params} label={t('Parcels')} />}
-        onChange={(_event, value) => setSelectedParcel(value)}
-      />
-      <Button
-        onClick={handleClick}
-        variant="outlined"
-        size="small"
-        sx={{ minWidth: '1rem' }}
-      >
-        <FilterIcon />
-      </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        {rounds.map((round) => (
-          <FilterOption
-            key={round}
-            option={round}
-            selectedOption={selectedRounds}
-            setSelectedOption={setSelectedRounds}
-            label={`${t('round')} ${round}`}
-          />
-        ))}
-      </Menu>
-      <Link href="/scanner?type=sorting" passHref>
-        <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
-          <QrCodeScannerIcon />
-        </Button>
-      </Link>
-    </Box>
+    <Grid container spacing={1} justifyContent={{ xs: 'end', sm: 'center' }}>
+      <Grid item xs={12} sm={10}>
+        <Autocomplete
+          sx={{ flexGrow: 1 }}
+          disablePortal
+          disableCloseOnSelect
+          options={parcels.sort((a, b) => +(a?.round ?? 0) - +(b?.round ?? 0))}
+          value={selectedParcel}
+          size="small"
+          blurOnSelect
+          filterOptions={filterOptions}
+          getOptionLabel={(option) =>
+            `${option?.trackingID?.trim() ?? ''} ${
+              option?.receiverName?.trim() ?? ''
+            }`
+          }
+          groupBy={groupBy}
+          onChange={(_event, value) => setSelectedParcel(value)}
+          renderInput={(params) => (
+            <TextField {...params} label={t('Parcels')} />
+          )}
+        />
+      </Grid>
+      <Grid item xs={6} sm={1}>
+        {breakpointSM ? (
+          <IconButton variant="outlined" onClick={handleClick}>
+            <FilterIcon />
+          </IconButton>
+        ) : (
+          <Button
+            fullWidth
+            variant="outlined"
+            endIcon={<FilterIcon />}
+            onClick={handleClick}
+          >
+            {t('filter')}
+          </Button>
+        )}
+        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          {rounds.map((round) => (
+            <FilterOption
+              key={round}
+              option={round}
+              selectedOption={selectedRounds}
+              setSelectedOption={setSelectedRounds}
+              label={`${t('round')} ${round}`}
+            />
+          ))}
+        </Menu>
+      </Grid>
+      <Grid item xs={6} sm={1}>
+        <Link href="/scanner?type=sorting" passHref>
+          {breakpointSM ? (
+            <IconButton variant="outlined">
+              <QrCodeScannerIcon />
+            </IconButton>
+          ) : (
+            <Button
+              fullWidth
+              variant="outlined"
+              endIcon={<QrCodeScannerIcon />}
+            >
+              {t('btn.scan')}
+            </Button>
+          )}
+        </Link>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -9,6 +9,8 @@
     "parcelsToSort": "Parcels to sort"
   },
   "btn": {
-    "sort": "Sort"
+    "sort": "Sort",
+    "filter": "Filter",
+    "scan": "Scan"
   }
 }
