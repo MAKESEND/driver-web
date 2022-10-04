@@ -1,4 +1,4 @@
-import type { UseQueryOptions } from 'react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import type {
   MSApiResponse,
   Parcel,
@@ -8,7 +8,7 @@ import type {
   ParcelByTrackingId,
 } from 'types';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { rounds } from 'utils/constants/delivery';
 
 const retry = 2;

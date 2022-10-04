@@ -5,7 +5,7 @@ import type {
   ImageUploadRequest,
 } from 'types';
 import axios from 'axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 export const useUpdateParcelStatus = () => {
   return useMutation(async (payload: ParcelStatusRequest) => {
