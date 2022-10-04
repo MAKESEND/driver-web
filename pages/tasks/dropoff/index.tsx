@@ -2,8 +2,10 @@ import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { statusToConfirm } from 'utils/constants/tasks';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetDropoffTasks } from 'hooks/useQueryData';
+import { statusToConfirm } from 'utils/constants/tasks';
+import getDropoffTasks from 'utils/services/getDropoffTasks';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -22,9 +24,17 @@ const DropoffTasklist = dynamic(
   () => import('components/tasks/dropoff/page/DropoffTasklist')
 );
 
+const driverId = '60e18027d1e7a00013affbb6';
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(
+    ['dropoffTasks', driverId],
+    async () => await getDropoffTasks(driverId)
+  );
+
   return {
     props: {
+      dehydratedState: dehydrate(queryClient),
       ...(locale &&
         (await serverSideTranslations(locale, ['common', 'tasks']))),
     },
@@ -33,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
 
 export const DropoffPage: NextPageWithLayout = () => {
   const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
-    '60e18027d1e7a00013affbb6' // testing id, should be removed
+    driverId // testing id, should be removed
   );
 
   const [toConfirm, setToConfirm] = useState<boolean>(false);

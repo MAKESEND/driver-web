@@ -16,9 +16,9 @@ const staleTime = 5 * 60 * 1000; // 5 mins
 const config = {
   retry,
   staleTime,
+  cacheTime: staleTime * 12 * 10,
   refetchInterval: staleTime,
-  cacheTime: staleTime,
-  refetchOnWindowFocus: true,
+  refetchOnWindowFocus: false,
 };
 
 export const useGetSortingList = (

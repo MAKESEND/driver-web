@@ -17,12 +17,12 @@ export type AppPropsWithLayout = AppProps & {
 
 function MyApp({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { session, dehydratedState, ...pageProps },
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <CoreProvider session={session}>
+    <CoreProvider session={session} dehydratedState={dehydratedState}>
       {getLayout(<Component {...pageProps} />)}
     </CoreProvider>
   );

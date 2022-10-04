@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import {
   QueryClient as ReactQueryClient,
   QueryClientProvider,
+  Hydrate,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DefaultSeo } from 'next-seo';
@@ -17,7 +18,8 @@ import { theme } from 'styles';
 export const CoreProvider: React.FC<{
   children?: React.ReactNode;
   session: any;
-}> = ({ children, session }) => {
+  dehydratedState: any;
+}> = ({ children, session, dehydratedState }) => {
   const [queryClient] = useState(() => new ReactQueryClient());
   const [refetchInterval, setRefetchInterval] = useState<number>(0);
 
@@ -28,16 +30,18 @@ export const CoreProvider: React.FC<{
       refetchInterval={refetchInterval}
     >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <RecoilRoot>
-            <DefaultSeo {...DefaultSeoConfig} />
-            <CssBaseline />
-            <SessionChecker setter={setRefetchInterval} />
-            <RouteLoader>{children}</RouteLoader>
-            <OnlineIndicator />
-            <ReactQueryDevtools />
-          </RecoilRoot>
-        </ThemeProvider>
+        <Hydrate state={dehydratedState}>
+          <ThemeProvider theme={theme}>
+            <RecoilRoot>
+              <DefaultSeo {...DefaultSeoConfig} />
+              <CssBaseline />
+              <SessionChecker setter={setRefetchInterval} />
+              <RouteLoader>{children}</RouteLoader>
+              <OnlineIndicator />
+              <ReactQueryDevtools />
+            </RecoilRoot>
+          </ThemeProvider>
+        </Hydrate>
       </QueryClientProvider>
     </SessionProvider>
   );

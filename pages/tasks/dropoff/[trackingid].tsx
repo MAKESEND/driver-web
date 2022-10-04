@@ -1,8 +1,10 @@
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetParcelsByTrackingId } from 'hooks/useQueryData';
-import trackingIdValidator from 'utils/trackingIdValidator';
+import idValidator from 'utils/idValidator';
+import getParcelsByTrackingId from 'utils/services/getParcelsByTrackingId';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -21,16 +23,25 @@ export const getServerSideProps: GetServerSideProps = async ({
   locale,
   query,
 }) => {
-  const { trackingid } = query;
-  const invalidId = trackingIdValidator(trackingid as string);
+  const trackingId = query?.trackingid as string;
+  const isValidId = idValidator.trackingId(trackingId);
+  const queryClient = new QueryClient();
+
+  if (isValidId) {
+    await queryClient.prefetchQuery(
+      ['parcel', trackingId],
+      async () => await getParcelsByTrackingId(trackingId)
+    );
+  }
 
   return {
     props: {
-      trackingId: trackingid,
+      trackingId,
+      dehydratedState: dehydrate(queryClient),
       ...(locale &&
         (await serverSideTranslations(locale, ['common', 'parcel', 'tasks']))),
     },
-    ...(invalidId && {
+    ...(!isValidId && {
       redirect: {
         destination: '/error',
       },

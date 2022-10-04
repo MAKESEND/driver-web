@@ -1,7 +1,10 @@
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetParcelsByOrderId } from 'hooks/useQueryData';
+import idValidators from 'utils/idValidator';
+import getParcelsByOrderId from 'utils/services/getParcelsByOrderId';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -20,16 +23,25 @@ export const getServerSideProps: GetServerSideProps = async ({
   locale,
   query,
 }) => {
-  const { orderid } = query;
-  const invalidId = !/ms\d{13}/i.test(orderid as string);
+  const orderId = query?.orderid as string;
+  const isValidId = idValidators.orderId(orderId);
+  const queryClient = new QueryClient();
+
+  if (isValidId) {
+    await queryClient.prefetchQuery(
+      ['parcelsByOrderId', orderId],
+      async () => await getParcelsByOrderId(orderId)
+    );
+  }
 
   return {
     props: {
-      orderId: orderid,
+      orderId,
+      dehydratedState: dehydrate(queryClient),
       ...(locale &&
         (await serverSideTranslations(locale, ['common', 'parcel', 'tasks']))),
     },
-    ...(invalidId && {
+    ...(!isValidId && {
       redirect: {
         destination: '/error',
       },

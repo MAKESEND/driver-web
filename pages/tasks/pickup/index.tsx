@@ -1,9 +1,11 @@
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetPickupTasks } from 'hooks/useQueryData';
 
 import dynamic from 'next/dynamic';
+import { getPickupTasks } from 'utils';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout')
@@ -18,8 +20,16 @@ const PickupTasks = dynamic(
 );
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const queryClient = new QueryClient();
+  const driverId: string | undefined = undefined;
+  await queryClient.prefetchQuery(
+    ['pickupTasks', driverId],
+    async () => await getPickupTasks()
+  );
+
   return {
     props: {
+      dehydratedState: dehydrate(queryClient),
       ...(locale &&
         (await serverSideTranslations(locale, ['common', 'tasks', 'sorting']))),
     },
