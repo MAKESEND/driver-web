@@ -45,6 +45,11 @@ export const api = {
     axios.get<ApiResponse<DropoffTask[]>>(
       `${getEndpoint({ route: 'getDropoffTasks' as Routes })}/${driverId}`
     ),
+  getParcelsByDate: (serviceDate?: string) =>
+    axios.post<ApiResponse<ParcelByTrackingId[]>>(
+      `${getEndpoint({ route: 'getParcelsByDate' as Routes })}`,
+      { serviceDate }
+    ),
   updateParcelStatus: (payload: ParcelStatusRequest) =>
     axios.post<ApiResponse<ParcelStatusResponse>>(
       getEndpoint({ route: 'updateParcelStatus' as Routes }),

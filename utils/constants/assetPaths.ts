@@ -17,7 +17,9 @@ export const assetPaths: IAssetPaths = {
   merchant: {
     getParcelsByTrackingIds: `/api/google/makesend/getShipmentByTrackingID`,
   },
-  legacy: {},
+  legacy: {
+    getParcelsByDate: `/api/google/makesend/order/fetch`,
+  },
 };
 
 export default assetPaths;

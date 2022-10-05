@@ -9,6 +9,7 @@ export enum Routes {
   sortParcel = 'sortParcel',
   uploadImg = 'uploadImg',
   updateParcelStatus = 'updateParcelStatus',
+  getParcelsByDate = 'getParcelsByDate',
 }
 
 export interface ApiResponse<T = unknown> {

@@ -4,4 +4,6 @@ export const languages = [
   { id: 'zh', title: '中文', flag: 'tw' },
 ];
 
-export default languages;
+export const countries = {
+  th: { id: 'th', name: 'Thailand', timezone: 7 },
+};

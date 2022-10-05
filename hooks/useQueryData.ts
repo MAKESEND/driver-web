@@ -7,9 +7,11 @@ import type {
   DropoffTask,
   ParcelByTrackingId,
 } from 'types';
+import type { countries } from 'utils/constants/locales';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { rounds } from 'utils/constants/delivery';
+import { locale } from 'utils/common/locale';
 
 const retry = 2;
 const staleTime = 5 * 60 * 1000; // 5 mins
@@ -169,6 +171,37 @@ export const useGetParcelsByTrackingId = (
       }
 
       return;
+    },
+    { ...config, ...customConfig }
+  );
+};
+
+export const useGetParcelsByDate = (
+  date?: string,
+  country = 'th',
+  customConfig?: Omit<
+    UseQueryOptions<
+      ParcelByTrackingId[] | undefined,
+      unknown,
+      ParcelByTrackingId[] | undefined,
+      string[]
+    >,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  const localDate =
+    date ?? locale.getLocalDate(country as keyof typeof countries);
+
+  return useQuery(
+    ['parcels', localDate],
+    async () => {
+      const {
+        data: { data: parcels },
+      } = await axios.get<MSApiResponse<ParcelByTrackingId[]>>(
+        `/api/parcel/date/${date}`
+      );
+
+      return parcels;
     },
     { ...config, ...customConfig }
   );
