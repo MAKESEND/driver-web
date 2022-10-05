@@ -1,8 +1,7 @@
-import type { FC } from 'react';
 import { Box } from '@mui/material';
 import { Loader } from 'components/common/loader/Loader';
 
-export const PickupLoader: FC = () => {
+export const PickupLoader: React.FC = () => {
   return (
     <Box
       sx={{

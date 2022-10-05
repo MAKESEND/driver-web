@@ -1,12 +1,11 @@
-import type { FC } from 'react';
-import type { Parcel } from 'types/delivery/parcel';
+import type { Parcel } from 'types';
 import { Waybill } from './Waybill';
 
 export interface WaybillsProps {
   parcels: Parcel[];
 }
 
-export const Waybills: FC<WaybillsProps> = ({ parcels }) => {
+export const Waybills: React.FC<WaybillsProps> = ({ parcels }) => {
   if (!parcels.length) return null;
 
   return (

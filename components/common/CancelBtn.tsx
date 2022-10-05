@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { IconButton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
@@ -8,7 +7,7 @@ export interface ICancelBtnProps {
   onClick?: () => void;
 }
 
-export const CancelBtn: FC<ICancelBtnProps> = ({
+export const CancelBtn: React.FC<ICancelBtnProps> = ({
   onClick = () => console.warn("no onClick handler is given to 'CancelBtn'"),
 }) => {
   return (

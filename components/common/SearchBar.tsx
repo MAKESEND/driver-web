@@ -1,7 +1,6 @@
-import type { FC } from 'react';
+import { useTranslation } from 'next-i18next';
 import { styled, alpha, InputBase, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useTranslation } from 'next-i18next';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -49,7 +48,7 @@ export interface ISearchBar {
   isMobile?: boolean;
 }
 
-export const SearchBar: FC<ISearchBar> = ({ isMobile = true }) => {
+export const SearchBar: React.FC<ISearchBar> = ({ isMobile = true }) => {
   const { t } = useTranslation('common');
 
   return isMobile ? (

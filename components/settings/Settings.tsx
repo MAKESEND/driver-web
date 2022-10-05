@@ -1,7 +1,6 @@
-import { FC, useCallback } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useState, useCallback } from 'react';
 import { useTranslation } from 'next-i18next';
 import { languages } from 'utils/constants/locales';
 import { Box, Divider, Typography } from '@mui/material';
@@ -11,7 +10,9 @@ const Select = dynamic(() => import('@mui/material/Select'));
 const MenuItem = dynamic(() => import('@mui/material/MenuItem'));
 const Image = dynamic(() => import('next/image'));
 
-export const Settings: FC = () => {
+export const Settings: React.FC = () => {
+  const langs = Object.values(languages);
+
   const router = useRouter();
   const { t } = useTranslation('settings');
   const [lang, setLang] = useState<string>(router.locale ?? 'en');
@@ -37,7 +38,7 @@ export const Settings: FC = () => {
         onChange={onChange}
         fullWidth
       >
-        {languages.map(({ id, title, flag }) => (
+        {langs.map(({ id, title, flag }) => (
           <MenuItem key={id} value={id}>
             <Typography
               sx={{

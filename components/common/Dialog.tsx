@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -15,7 +14,7 @@ import {
   DialogActions,
 } from '@mui/material';
 
-export const Dialog: FC = () => {
+export const Dialog: React.FC = () => {
   const { t } = useTranslation('common');
   const Title = useRecoilValue(dialogTitle);
   const Body = useRecoilValue(dialogBody);

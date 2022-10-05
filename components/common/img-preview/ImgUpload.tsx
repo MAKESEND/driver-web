@@ -1,11 +1,10 @@
-import type { FC } from 'react';
 import UploadProgress from './UploadProgress';
 
 export interface IImgUploadProps {
   images: File[];
 }
 
-export const ImgUpload: FC<IImgUploadProps> = ({ images }) => {
+export const ImgUpload: React.FC<IImgUploadProps> = ({ images }) => {
   return (
     <>
       {images.map((image, index) => (

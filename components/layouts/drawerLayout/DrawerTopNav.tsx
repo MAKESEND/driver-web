@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import type { AppBarProps } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -48,7 +47,7 @@ const AppBar = styled(MuiAppBar, {
   })
 );
 
-export const DrawerTopNav: FC<DrawerTopNavProps> = ({
+export const DrawerTopNav: React.FC<DrawerTopNavProps> = ({
   open = false,
   isMobile = true,
   hideOnScroll = false,

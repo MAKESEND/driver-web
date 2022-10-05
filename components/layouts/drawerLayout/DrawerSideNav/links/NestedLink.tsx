@@ -1,11 +1,9 @@
-import type { FC } from 'react';
 import type { Link } from 'types';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { SingleLink } from './SingleLink';
 import { LinkIcons } from './LinkIcons';
 import {
-  Box,
   Collapse,
   List,
   ListItemButton,
@@ -23,7 +21,7 @@ export interface NestedLinkProps {
   links?: Link[];
 }
 
-export const NestedLink: FC<NestedLinkProps> = ({ links, id: group }) => {
+export const NestedLink: React.FC<NestedLinkProps> = ({ links, id: group }) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
 

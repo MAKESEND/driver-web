@@ -1,10 +1,11 @@
-import type { FC } from 'react';
 import type { PickupTasksProps } from '../PickupTasks';
 import { memo } from 'react';
 import { Box } from '@mui/material';
 import { PickupTaskCard } from './PickupTaskCard';
 
-export const PickupTaskList: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
+export const PickupTaskList: React.FC<PickupTasksProps> = ({
+  pickupTasks = [],
+}) => {
   if (!pickupTasks || !pickupTasks.length) return null;
 
   return (

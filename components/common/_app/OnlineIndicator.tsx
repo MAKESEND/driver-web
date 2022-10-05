@@ -1,16 +1,17 @@
-import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useNetworkState } from 'react-use';
 import { useTranslation } from 'next-i18next';
 import { Alert, Snackbar } from '@mui/material';
-import SignalWifiOffIcon from '@mui/icons-material/SignalWifiOff';
 
 import dynamic from 'next/dynamic';
+const SignalWifiOffIcon = dynamic(
+  () => import('@mui/icons-material/SignalWifiOff')
+);
 const SignalWifiIcon = dynamic(
   () => import('@mui/icons-material/SignalWifiStatusbar4Bar')
 );
 
-export const OnlineIndicator: FC = () => {
+export const OnlineIndicator: React.FC = () => {
   const state = useNetworkState();
   const { t } = useTranslation('common');
   const [open, setOpen] = useState<boolean>(false);

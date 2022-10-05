@@ -1,6 +1,5 @@
-import type { FC } from 'react';
-import { camerasState, selectedCameraState } from 'states';
 import { useRecoilValue, useRecoilState } from 'recoil';
+import { camerasState, selectedCameraState } from 'states';
 import ImageIcon from '@mui/icons-material/Image';
 import { ButtonGroup, MenuItem, IconButton, Select } from '@mui/material';
 
@@ -8,7 +7,7 @@ export interface ScannerButtonsProps {
   isLoading?: boolean;
 }
 
-export const ScannerButtons: FC<ScannerButtonsProps> = ({
+export const ScannerButtons: React.FC<ScannerButtonsProps> = ({
   isLoading = false,
 }) => {
   const cameras = useRecoilValue(camerasState);
@@ -17,8 +16,8 @@ export const ScannerButtons: FC<ScannerButtonsProps> = ({
 
   return (
     <ButtonGroup
-      size='small'
-      variant='contained'
+      size="small"
+      variant="contained"
       fullWidth
       sx={{
         backgroundColor: (theme) => theme.palette.common.white,
@@ -30,7 +29,7 @@ export const ScannerButtons: FC<ScannerButtonsProps> = ({
         <ImageIcon />
       </IconButton>
       <Select
-        size='small'
+        size="small"
         fullWidth
         disabled={isLoading}
         value={selectedCamera}

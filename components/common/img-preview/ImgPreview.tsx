@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useDropzone } from 'react-dropzone';
@@ -12,7 +11,7 @@ export interface IImgPreviewProps {
   max?: number;
 }
 
-export const ImgPreview: FC<IImgPreviewProps> = ({ max = 3 }) => {
+export const ImgPreview: React.FC<IImgPreviewProps> = ({ max = 3 }) => {
   const { t } = useTranslation('common');
   const [images, setImages] = useState<File[]>([]);
   const [maxImgs, setMaxImgs] = useState<number>(max);

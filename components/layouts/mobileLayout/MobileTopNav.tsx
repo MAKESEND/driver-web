@@ -1,9 +1,8 @@
-import type { FC } from 'react';
-import type { SxProps } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import { useRouter } from 'next/router';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { DrawerHeader } from '../drawerLayout/DrawerHeader';
 import { AppBar, Toolbar, IconButton, Slide } from '@mui/material';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 import dynamic from 'next/dynamic';
 const ChevronLeftIcon = dynamic(
@@ -13,10 +12,10 @@ const ChevronLeftIcon = dynamic(
 export interface MobileTopNavProps {
   hideOnScroll?: boolean;
   redirectPath?: string;
-  sxProps?: SxProps;
+  sxProps?: SxProps<Theme>;
 }
 
-export const MobileTopNav: FC<MobileTopNavProps> = ({
+export const MobileTopNav: React.FC<MobileTopNavProps> = ({
   hideOnScroll = false,
   redirectPath,
   sxProps,

@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box, styled, Typography as MuiTypography } from '@mui/material';
 
@@ -24,7 +23,7 @@ const Typography = styled(MuiTypography, {
   }),
 }));
 
-export const PincodeDots: FC<PincodeDotsProps> = ({
+export const PincodeDots: React.FC<PincodeDotsProps> = ({
   pincode,
   isError = false,
   digits = 4,

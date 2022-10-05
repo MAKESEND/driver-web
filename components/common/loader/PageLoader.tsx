@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { Box as MuiBox, Fade, styled } from '@mui/material';
 import Loader from './Loader';
 
@@ -20,7 +19,7 @@ interface PageLoaderProps {
   isLoading?: boolean;
 }
 
-export const PageLoader: FC<PageLoaderProps> = ({ isLoading = false }) => {
+export const PageLoader: React.FC<PageLoaderProps> = ({ isLoading = false }) => {
   return (
     <Fade in={isLoading} unmountOnExit>
       <Box>

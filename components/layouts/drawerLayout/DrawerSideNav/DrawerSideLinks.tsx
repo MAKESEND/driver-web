@@ -1,13 +1,12 @@
-import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { Divider, List } from '@mui/material';
 import sideLinks from 'utils/constants/sideLinks';
 import DrawerSettings from './DrawerSettings';
 import { SingleLink, NestedLink } from './links';
+import { Divider, List } from '@mui/material';
 
-export const DrawerSideLinks: FC = () => {
+export const DrawerSideLinks: React.FC = () => {
   const { t } = useTranslation('common');
   const [onPath, setOnPath] = useState<string>('');
   const { asPath } = useRouter();

@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { signOut } from 'next-auth/react';
 import ExitIcon from '@mui/icons-material/ExitToAppOutlined';
 import {
@@ -12,7 +11,7 @@ export interface DrawerSignoutProps {
   signoutText?: string;
 }
 
-export const DrawerSignout: FC<DrawerSignoutProps> = ({
+export const DrawerSignout: React.FC<DrawerSignoutProps> = ({
   signoutText = 'Signout',
 }) => {
   return (

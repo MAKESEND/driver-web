@@ -1,3 +1,5 @@
+import type { countries } from 'utils';
+
 export enum ENVs {
   production = 'production',
   staging = 'staging',
@@ -18,6 +20,8 @@ export enum DropoffModes {
 export type Dictionary = {
   [key: string]: any;
 };
+
+export type Countries = keyof typeof countries;
 
 export interface Link {
   id: string;

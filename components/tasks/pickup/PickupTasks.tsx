@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import type { PickupTask } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +11,9 @@ export interface PickupTasksProps {
   pickupTasks?: PickupTask[];
 }
 
-export const PickupTasks: FC<PickupTasksProps> = ({ pickupTasks = [] }) => {
+export const PickupTasks: React.FC<PickupTasksProps> = ({
+  pickupTasks = [],
+}) => {
   const { t } = useTranslation(['tasks', 'sorting']);
   const [filteredTasks, setFilteredTasks] = useState<PickupTask[]>([]);
 

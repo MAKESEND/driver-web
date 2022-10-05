@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import type { OpenGraph } from 'next-seo/lib/types';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
@@ -10,7 +9,7 @@ export interface SeoProps {
   titleTemplate?: string;
 }
 
-export const Seo: FC<SeoProps> = ({
+export const Seo: React.FC<SeoProps> = ({
   title,
   description,
   image,

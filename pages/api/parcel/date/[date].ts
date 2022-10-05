@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Countries } from 'types';
+import { locale } from 'utils/common/locale';
 import { api } from 'utils/services';
 
 export default async function handler(
@@ -11,7 +13,10 @@ export default async function handler(
 
   try {
     if (req.method === 'POST') {
-      const response = await api.getParcelsByDate(req.query?.date as string);
+      const date =
+        (req.query?.date as Countries) ??
+        locale.getLocalDate((req.query?.country as Countries) ?? 'th');
+      const response = await api.getParcelsByDate(date);
       response?.data?.status && (status = response.data.status);
       response?.data?.message && (message = response.data.message);
       response?.data?.data && (data = response.data.data);

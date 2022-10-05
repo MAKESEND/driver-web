@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Typography as MuiTypography, styled } from '@mui/material';
 
 const Typography = styled(MuiTypography)(({ theme }) => ({
@@ -15,10 +14,10 @@ export interface ScannerTitleProps {
   title?: string;
 }
 
-export const ScannerTitle: FC<ScannerTitleProps> = ({
+export const ScannerTitle: React.FC<ScannerTitleProps> = ({
   title = 'Scan QR Code',
 }) => {
-  return <Typography variant='h2'>{title}</Typography>;
+  return <Typography variant="h2">{title}</Typography>;
 };
 
 export default ScannerTitle;

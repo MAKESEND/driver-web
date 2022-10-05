@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Button, Typography } from '@mui/material';
 
@@ -9,7 +8,7 @@ export interface IPlaceholderProps {
   onClick?: () => void;
 }
 
-export const Placeholder: FC<IPlaceholderProps> = ({
+export const Placeholder: React.FC<IPlaceholderProps> = ({
   onClick = () => undefined,
 }) => {
   const { t } = useTranslation('common');

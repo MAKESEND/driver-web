@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -33,7 +32,7 @@ const Container = styled(Box)(() => ({
   alignItems: 'center',
 }));
 
-export const ScannerPanel: FC = () => {
+export const ScannerPanel: React.FC = () => {
   const { t } = useTranslation(['scanner', 'common']);
   const router = useRouter();
   const [isScanning, setIsScanning] = useState<boolean>(false);

@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import Link from 'next/link';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import {
@@ -13,12 +12,12 @@ export interface DrawerSettingsProps {
   selected?: boolean;
 }
 
-export const DrawerSettings: FC<DrawerSettingsProps> = ({
+export const DrawerSettings: React.FC<DrawerSettingsProps> = ({
   settingsText = 'Settings',
   selected = false,
 }) => {
   return (
-    <Link href='/settings' passHref>
+    <Link href="/settings" passHref>
       <ListItem button selected={selected}>
         <ListItemIcon>
           <SettingsIcon />

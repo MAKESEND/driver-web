@@ -1,16 +1,13 @@
-import type { FC } from 'react';
 import type { Parcel } from 'types';
 import { useTranslation } from 'next-i18next';
 import { Box, Chip, Typography, styled } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const SnowFlakeIcon = dynamic(
-  () => import('components/common/icons/SnowFlakeIcon'),
-  { ssr: false }
+  () => import('components/common/icons/SnowFlakeIcon')
 );
 const InventoryIcon = dynamic(
-  () => import('components/common/icons/InventoryIcon'),
-  { ssr: false }
+  () => import('components/common/icons/InventoryIcon')
 );
 
 const Row = styled(Box)(() => ({
@@ -24,7 +21,7 @@ export interface PickupCardContentProps {
   parcel: Parcel;
 }
 
-export const PickupCardContent: FC<PickupCardContentProps> = ({
+export const PickupCardContent: React.FC<PickupCardContentProps> = ({
   parcel: {
     shipmentID,
     temp,

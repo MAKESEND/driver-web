@@ -1,5 +1,5 @@
-import type { FC } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import {
   ListItem,
   ListItemText,
@@ -7,7 +7,6 @@ import {
   Typography,
 } from '@mui/material';
 import LinkIcons from './LinkIcons';
-import { useTranslation } from 'next-i18next';
 
 export interface SingleLinkProps {
   id: string;
@@ -17,7 +16,7 @@ export interface SingleLinkProps {
   disabled?: boolean;
 }
 
-export const SingleLink: FC<SingleLinkProps> = ({
+export const SingleLink: React.FC<SingleLinkProps> = ({
   id,
   group,
   href = '/',

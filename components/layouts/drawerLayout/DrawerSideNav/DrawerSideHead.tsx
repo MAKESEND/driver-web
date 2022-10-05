@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import Image from 'next/image';
 import { Box, styled, Typography } from '@mui/material';
 
@@ -20,7 +19,7 @@ const AppLogo = styled(Typography)(() => ({
   textAlign: 'center',
 }));
 
-export const DrawerSideHead: FC<DrawerSideHeadProps> = ({
+export const DrawerSideHead: React.FC<DrawerSideHeadProps> = ({
   placeholder = 'MAKESEND',
   imgSrc,
   drawerWidth = '16rem',
