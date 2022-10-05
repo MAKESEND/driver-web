@@ -1,0 +1,13 @@
+{
+  "title": {
+    "scanQrCode": "Scan QR Code",
+    "tapToScan": "Tap to scan",
+    "switchCamera": "Switch camera",
+    "cameraDenied": "Camera is not available. Please update your permission"
+  },
+  "btn": {
+    "start": "Start",
+    "stop": "Stop",
+    "reload": "Reload"
+  }
+}

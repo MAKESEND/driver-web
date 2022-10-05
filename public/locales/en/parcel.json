@@ -1,0 +1,13 @@
+{
+  "trackingID": "Tracking ID",
+  "customer": "Customer",
+  "receiver": "Receiver",
+  "sender": "Sender",
+  "address": "Address",
+  "name": "Name",
+  "phone": "Phone",
+  "status": "Status",
+  "rack": "Rack",
+  "nickname": "Nickname",
+  "hub": "Hub"
+}

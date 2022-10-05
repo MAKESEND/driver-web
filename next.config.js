@@ -6,6 +6,7 @@ const { i18n } = require('./next-i18next.config');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+const { APP_ENV } = process.env;
 
 const nextConfig = {
   // reactStrictMode: true,
@@ -14,10 +15,21 @@ const nextConfig = {
     domains: ['flagcdn.com', 'images.unsplash.com'],
   },
   publicRuntimeConfig: {
-    production: process.env.APP_ENV === 'production',
-    staging: process.env.APP_ENV === 'staging',
-    local: process.env.APP_ENV === 'local',
-    MAPBOX_GL_ACCESS_TOKEN: process.env.MAPBOX_GL_ACCESS_TOKEN,
+    ENV: { APP_ENV },
+  },
+  serverRuntimeConfig: {
+    msKey: {
+      production: {
+        updateParcelStatus: 'micros_status_service_4rgbb_prod',
+        sorting: '43655de15bea494dba0ba32c99115fff',
+        updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+      },
+      development: {
+        updateParcelStatus: '43655de15bea494dba0ba32c99115fff',
+        sorting: '43655de15bea494dba0ba32c99115fff',
+        updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+      },
+    },
   },
   // pwa: {
   //   disable: process.env.NODE_ENV !== 'production',

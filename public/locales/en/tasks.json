@@ -1,0 +1,40 @@
+{
+  "pickup": {},
+  "dropoff": {},
+  "title": {
+    "noTask": "There's no assignment yet",
+    "pickup": "Pickup",
+    "dropoff": "Dropoff",
+    "uploadPhotos": "Upload photos",
+    "orders": "orders"
+  },
+  "label": {
+    "searchParcel": "Search parcel",
+    "pickup": "Pick up",
+    "orders": "orders",
+    "order": "order",
+    "name": "Name",
+    "senderPhone": "Sender phone",
+    "phone": "Phone",
+    "parcelCount": "No. of parcels",
+    "orderId": "Order ID",
+    "pickupAddress": "Pickup address",
+    "deliver": "Deliver",
+    "address": "Address",
+    "district": "District",
+    "parcel": "parcel",
+    "parcels": "parcels",
+    "pc": "pc",
+    "pcs": "pcs"
+  },
+  "btn": {
+    "scanner": "Scanner",
+    "confirm": "Confirm",
+    "skip": "Skip",
+    "details": "Details"
+  },
+  "status": {
+    "Delivering": "Delivering",
+    "Delivered": "Delivered"
+  }
+}
