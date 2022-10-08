@@ -12,7 +12,8 @@ const pink = '#EDEFF2';
 const secondary = 'rgba(0,0,0,0.6)';
 
 // size
-const maxWidth = '34rem';
+const btnMaxWidth = 360;
+const portMaxWidth = 544;
 
 export const theme = createTheme({
   palette: {
@@ -41,6 +42,12 @@ export const theme = createTheme({
       grey80,
       pink,
       secondary,
+    },
+  },
+  layout: {
+    size: {
+      btnMaxWidth,
+      portMaxWidth,
     },
   },
   typography: {
@@ -75,7 +82,7 @@ export const theme = createTheme({
       defaultProps: {
         sx: {
           width: '100%',
-          maxWidth,
+          portMaxWidth,
         },
       },
     },

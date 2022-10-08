@@ -18,7 +18,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 const Home: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
-    router.push('/dashboard');
+    router.push('/auth/login');
   });
 
   return (

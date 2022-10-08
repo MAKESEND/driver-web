@@ -12,7 +12,7 @@ const nextConfig = {
   // reactStrictMode: true,
   i18n,
   images: {
-    domains: ['flagcdn.com', 'images.unsplash.com'],
+    domains: ['flagcdn.com', 'images.unsplash.com', 'res.cloudinary.com'],
   },
   publicRuntimeConfig: {
     ENV: { APP_ENV },

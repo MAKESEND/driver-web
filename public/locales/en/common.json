@@ -41,9 +41,12 @@
     "loading": "Loading",
     "starting": "Starting",
     "offline": "App is offline",
-    "online": "App is connected to the Internet"
+    "online": "App is connected to the Internet",
+    "rememberMe": "Remember me",
+    "forgetPassword": "Forget password?"
   },
   "btn": {
+    "login": "Login",
     "cancel": "Cancel",
     "close": "Close"
   },
@@ -62,5 +65,9 @@
       "cancel": "Cancel",
       "upload": "Upload"
     }
+  },
+  "auth": {
+    "phone": "Phone",
+    "dob": "Date of birth"
   }
 }
