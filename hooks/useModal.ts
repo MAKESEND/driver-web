@@ -1,8 +1,8 @@
-import type { ModalType, ShowAction } from 'types';
+import type { ModalShowAction } from 'types';
 import { useContext } from 'react';
 import { ModalContext } from 'components/common/_app/ModalProvider';
 
-type TProps = Omit<ShowAction<ModalType>, 'type'>;
+type TProps = Omit<ModalShowAction, 'type'>;
 
 export const useModal = (): [(props: TProps) => void, () => void] => {
   const context = useContext(ModalContext);

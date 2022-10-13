@@ -8,4 +8,5 @@ export * from './material-ui.d';
 export * from './notifications.d';
 export * from './scanner.d';
 export * from './token.d';
+export * from './toast.d';
 export * from './warehouse.d';

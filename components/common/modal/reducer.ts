@@ -1,6 +1,6 @@
-import type { ModalType, Action, ModalProps } from 'types';
+import type { ModalType, ModalAction, ModalProps } from 'types';
 
-export const initState: Omit<Action, 'type'> & {
+export const modalInitState: Omit<ModalAction, 'type'> & {
   show: boolean;
   props?: ModalProps[keyof ModalProps];
   modalType?: ModalType;
@@ -8,10 +8,10 @@ export const initState: Omit<Action, 'type'> & {
   show: false,
 };
 
-export const reducer = (
-  state: typeof initState,
-  action: Action
-): typeof initState => {
+export const modalReducer = (
+  state: typeof modalInitState,
+  action: ModalAction
+): typeof modalInitState => {
   switch (action.type) {
     case 'show':
       return { show: true, ...action };

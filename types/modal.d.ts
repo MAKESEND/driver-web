@@ -15,16 +15,16 @@ export type ModalType = keyof ModalProps;
 
 export type ConfirmModalProps = ModalProps[ModalType.CONFIRM];
 
-export interface ShowAction<T extends ModalType> {
-  type: 'open';
+interface ModalShowAction {
+  type: 'show';
   handleClose: () => void;
-  props?: ModalProps[T];
-  modalType: T;
+  props?: ModalProps[keyof ModalProps];
+  modalType: ModalType;
 }
 
-export type HideAction = {
-  type: 'close';
+type ModalHideAction = {
+  type: 'hide';
   handleClose?: never;
 };
 
-export type Action = ShowAction | HideAction;
+export type ModalAction = ModalShowAction | ModalHideAction;

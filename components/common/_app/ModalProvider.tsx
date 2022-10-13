@@ -1,11 +1,11 @@
-import type { Action, ModalType } from 'types';
+import type { ModalAction, ModalType } from 'types';
 import { useReducer, createContext } from 'react';
-import { initState, reducer } from 'components/common/modal/reducer';
+import { modalInitState, modalReducer } from 'components/common/modal/reducer';
 import { Modal } from '@mui/material';
 import ConfirmModal from 'components/common/modal/confirm-modal/ConfirmModal';
 
 export const ModalContext = createContext<
-  [typeof initState, React.Dispatch<Action>] | null
+  [typeof modalInitState, React.Dispatch<ModalAction>] | null
 >(null);
 
 const MODAL: {
@@ -17,14 +17,14 @@ const MODAL: {
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [state, dispatch] = useReducer(reducer, initState);
+  const [state, dispatch] = useReducer(modalReducer, modalInitState);
   const { props, modalType } = state;
   const ModalComponent = modalType ? MODAL[modalType] ?? null : null;
 
   return (
     <ModalContext.Provider value={[state, dispatch]}>
       {state.show && ModalComponent && (
-        <Modal open={state.open}>
+        <Modal open={state.show}>
           <ModalComponent {...props} />
         </Modal>
       )}

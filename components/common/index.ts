@@ -8,5 +8,7 @@ export * from './loader';
 export * from './pincode';
 export * from './Seo';
 export * from './SearchBar';
+export * from './modal';
 export * from './mobile';
+export * from './toast';
 export * from './Row';
