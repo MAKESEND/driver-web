@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DefaultSeo } from 'next-seo';
 import { DefaultSeoConfig } from 'next-seo.config';
 import SessionChecker from './SessionChecker';
+import ModalProvider from './ModalProvider';
 import OnlineIndicator from './OnlineIndicator';
 import RouteLoader from 'components/common/loader/RouteLoader';
 import { ThemeProvider, CssBaseline } from '@mui/material';
@@ -33,12 +34,14 @@ export const CoreProvider: React.FC<{
         <Hydrate state={dehydratedState}>
           <ThemeProvider theme={theme}>
             <RecoilRoot>
-              <DefaultSeo {...DefaultSeoConfig} />
-              <CssBaseline />
-              <SessionChecker setter={setRefetchInterval} />
-              <RouteLoader>{children}</RouteLoader>
-              <OnlineIndicator />
-              <ReactQueryDevtools />
+              <ModalProvider>
+                <DefaultSeo {...DefaultSeoConfig} />
+                <CssBaseline />
+                <SessionChecker setter={setRefetchInterval} />
+                <RouteLoader>{children}</RouteLoader>
+                <OnlineIndicator />
+                <ReactQueryDevtools />
+              </ModalProvider>
             </RecoilRoot>
           </ThemeProvider>
         </Hydrate>

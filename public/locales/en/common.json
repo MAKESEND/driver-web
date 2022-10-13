@@ -48,7 +48,10 @@
   "btn": {
     "login": "Login",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm",
+    "ok": "OK",
+    "no": "No"
   },
   "pincode": {
     "title": {
