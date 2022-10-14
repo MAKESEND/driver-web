@@ -1,13 +1,14 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useDriverCheckin, useDriverLogin } from 'hooks/useMutateData';
+import { useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
-import LoginFormDOB from './login-form/LoginFormDOB';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
+  ssr: false,
+});
+const LoginFormDOB = dynamic(() => import('./login-form/LoginFormDOB'), {
   ssr: false,
 });
 const LoginFormOptions = dynamic(
@@ -26,10 +27,9 @@ export interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
   const router = useRouter();
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, setError } = useFormContext();
   const [remember, setRemember] = useState(false);
-  const { mutateAsync: driverLogin, isLoading: isLoginLoading } =
-    useDriverLogin();
+  const { mutateAsync: driverLogin } = useDriverLogin();
 
   const formComponentProps: LoginFormComponentProps = {
     formId,
@@ -38,19 +38,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
 
   const onSubmit = async (formData: any) => {
     const { status, data } = await driverLogin(formData);
+
     if (status === 200 && data) {
       router.push('/dashboard');
+    } else {
+      const type = 'login_failure';
+      const message = 'invalid phone or date of birth';
+      ['phone', 'dob'].forEach((name) => {
+        setError(name, { type, message });
+      });
     }
   };
 
   return (
-    <form
-      id={formId}
-      name={formId}
-      method="post"
-      action="/api/auth/login"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form id={formId} name={formId} onSubmit={handleSubmit(onSubmit)}>
       <FlexCenterBox sx={{ flexDirection: 'column', gap: 1 }}>
         <LoginFormDOB {...formComponentProps} />
         <LoginFormPhone {...formComponentProps} />
