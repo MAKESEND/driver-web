@@ -10,9 +10,8 @@ export default async function handler(
   let data = null;
 
   try {
-    if (req.method === 'GET') {
-      // TODO update req headers parsing logic to extract driverId
-      const response = await api.getDriverData(req.headers as any);
+    if (req.method === 'POST' && req.body.phone && req.body.dob) {
+      const response = await api.checkinDriver(req.body);
       response.data?.data && (data = response.data.data);
       response.data?.status && (status = response.data.status);
       response.data?.message && (message = response.data.message);
@@ -23,7 +22,7 @@ export default async function handler(
   } catch (error: any) {
     status = error?.response?.status ?? 500;
     message = error?.response?.data?.message ?? error?.message ?? 'error';
-    console.log("something went wrong in '/api/auth/getUser");
+    console.log("something went wrong in '/api/auth/driver-checkin");
     console.log(message);
   }
 

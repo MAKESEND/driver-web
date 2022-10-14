@@ -1,3 +1,5 @@
+import type { DriverAuthRequest } from 'types';
+import { useForm, FormProvider } from 'react-hook-form';
 import LoginBanner from './LoginBanner';
 import LoginForm from './LoginForm';
 import LoginActions from './LoginActions';
@@ -5,24 +7,27 @@ import { Card, CardContent, CardActions } from '@mui/material';
 
 export const Login: React.FC = () => {
   const formId = 'ms-login';
+  const methods = useForm<DriverAuthRequest>();
 
   return (
-    <Card>
-      <CardContent>
-        <LoginBanner />
-        <LoginForm id={formId} />
-      </CardContent>
-      <CardActions
-        sx={{
-          justifyContent: 'center',
-          flexDirection: 'column',
-          gap: 1,
-          padding: (t) => t.spacing(2),
-        }}
-      >
-        <LoginActions formId={formId} />
-      </CardActions>
-    </Card>
+    <FormProvider {...methods}>
+      <Card>
+        <CardContent>
+          <LoginBanner />
+          <LoginForm id={formId} />
+        </CardContent>
+        <CardActions
+          sx={{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            gap: 1,
+            padding: (t) => t.spacing(2),
+          }}
+        >
+          <LoginActions formId={formId} />
+        </CardActions>
+      </Card>
+    </FormProvider>
   );
 };
 

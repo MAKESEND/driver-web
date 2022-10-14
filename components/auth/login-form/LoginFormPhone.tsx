@@ -1,8 +1,6 @@
 import type { LoginFormComponentProps } from '../LoginForm';
-import { memo, useEffect, useRef } from 'react';
+import { memo } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
-import { userPhoneState } from 'states/auth';
 import { InputWrapper } from './InputWrapper';
 import { Divider, IconButton, InputBase } from '@mui/material';
 
@@ -14,35 +12,16 @@ const PhoneIcon = dynamic(
 
 export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
   formId,
-  remember = false,
 }) => {
   const { t } = useTranslation('common');
-  const initRef = useRef(true);
   const { control } = useFormContext();
-  const [userPhone, setUserPhone] = useRecoilState(userPhoneState);
-
-  useEffect(() => {
-    if (!remember && !initRef.current) {
-      setUserPhone('');
-    } else if (remember && control._formValues?.phone) {
-      setUserPhone(control._formValues.phone);
-    }
-
-    initRef.current = false;
-  }, [control, remember, setUserPhone]);
-
-  useEffect(() => {
-    return () => {
-      initRef.current = true;
-    };
-  }, []);
 
   return (
     <Controller
       name="phone"
       control={control}
       rules={{ required: true, pattern: /^0\d{9}$/g }}
-      defaultValue={userPhone}
+      defaultValue=""
       render={({ field: { onChange, value, ...field } }) => (
         <InputWrapper>
           <InputBase
@@ -53,13 +32,7 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
             placeholder={t('auth.phone')}
             sx={{ flexGrow: 1 }}
             value={value}
-            onChange={(...args) => {
-              const [event] = args;
-              if (remember) {
-                setUserPhone(event.target.value);
-              }
-              return onChange(...args);
-            }}
+            onChange={onChange}
             {...field}
           />
           <Divider orientation="vertical" sx={{ height: 32 }} />

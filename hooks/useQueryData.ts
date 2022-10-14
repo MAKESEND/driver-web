@@ -6,6 +6,7 @@ import type {
   PickupTask,
   DropoffTask,
   ParcelByTrackingId,
+  Driver,
 } from 'types';
 import type { countries } from 'utils/constants/locales';
 import axios from 'axios';
@@ -207,11 +208,32 @@ export const useGetParcelsByDate = (
   );
 };
 
+export const useGetDriverData = (
+  driverId: string,
+  customConfig?: Omit<
+    UseQueryOptions<Driver | undefined, unknown, Driver | undefined, string[]>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery(
+    ['driver', driverId],
+    async () => {
+      const {
+        data: { data: driverData },
+      } = await axios.get<MSApiResponse<Driver>>(`/api/driver/${driverId}`);
+
+      return driverData;
+    },
+    { ...config, ...customConfig }
+  );
+};
+
 export const queries = {
   useGetSortingList,
   useGetParcelsByOrderId,
   useGetPickupTasks,
   useGetDropoffTasks,
+  useGetDriverData,
 };
 
 export default queries;

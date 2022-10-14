@@ -1,11 +1,12 @@
-import type { Control, FieldValues } from 'react-hook-form';
-import type { DriverAuthRequest } from 'types';
+import axios from 'axios';
 import { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import { useDriverCheckin, useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
 import LoginFormDOB from './login-form/LoginFormDOB';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
   ssr: false,
 });
@@ -24,35 +25,38 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
+  const router = useRouter();
+  const { handleSubmit } = useFormContext();
   const [remember, setRemember] = useState(false);
-  const methods = useForm<DriverAuthRequest>();
-  const { handleSubmit } = methods;
+  const { mutateAsync: driverLogin, isLoading: isLoginLoading } =
+    useDriverLogin();
 
   const formComponentProps: LoginFormComponentProps = {
     formId,
     remember,
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (formData: any) => {
+    const { status, data } = await driverLogin(formData);
+    if (status === 200 && data) {
+      router.push('/dashboard');
+    }
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        id={formId}
-        name={formId}
-        method="post"
-        action="/api/auth/login"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <FlexCenterBox sx={{ flexDirection: 'column' }}>
-          <LoginFormDOB {...formComponentProps} />
-          <LoginFormPhone {...formComponentProps} />
-          <LoginFormOptions setRemember={setRemember} />
-        </FlexCenterBox>
-      </form>
-    </FormProvider>
+    <form
+      id={formId}
+      name={formId}
+      method="post"
+      action="/api/auth/login"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FlexCenterBox sx={{ flexDirection: 'column', gap: 1 }}>
+        <LoginFormDOB {...formComponentProps} />
+        <LoginFormPhone {...formComponentProps} />
+        <LoginFormOptions setRemember={setRemember} />
+      </FlexCenterBox>
+    </form>
   );
 };
 
