@@ -28,7 +28,7 @@ export const LoginFormOptions: React.FC<LoginFormOptionsProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap: 'wrap',
-        px: 0.5,
+        px: 1,
       }}
     >
       <FormControlLabel

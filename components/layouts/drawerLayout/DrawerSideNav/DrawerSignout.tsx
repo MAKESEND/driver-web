@@ -1,4 +1,3 @@
-import { signOut } from 'next-auth/react';
 import ExitIcon from '@mui/icons-material/ExitToAppOutlined';
 import {
   ListItem,
@@ -6,6 +5,7 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material';
+import { Router, useRouter } from 'next/router';
 
 export interface DrawerSignoutProps {
   signoutText?: string;
@@ -14,8 +14,14 @@ export interface DrawerSignoutProps {
 export const DrawerSignout: React.FC<DrawerSignoutProps> = ({
   signoutText = 'Signout',
 }) => {
+  const router = useRouter();
+
   return (
-    <ListItem button aria-label='logout-button' onClick={() => signOut()}>
+    <ListItem
+      button
+      aria-label="logout-button"
+      onClick={() => router.replace('/auth/login')}
+    >
       <ListItemText>
         <Typography>{signoutText}</Typography>
       </ListItemText>

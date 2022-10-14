@@ -1,16 +1,25 @@
 import type { LoginFormComponentProps } from '../LoginForm';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFormContext, Controller } from 'react-hook-form';
-import { InputWrapper } from './InputWrapper';
-import { Divider, IconButton, InputBase } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { userPhoneState } from 'states';
+import { InputWrapper } from './InputWrapper';
+import FormInputAlert from './FormInputAlert';
+import {
+  Box,
+  Divider,
+  Fade,
+  IconButton,
+  InputBase,
+  Typography,
+} from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const PhoneIcon = dynamic(
   () => import('@mui/icons-material/LocalPhoneOutlined')
 );
+const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
 export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
   formId,
@@ -18,8 +27,20 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
 }) => {
   const { t } = useTranslation('common');
   const initRef = useRef(true);
+  const [isError, setIsError] = useState(false);
   const [userPhone, setUserPhone] = useRecoilState(userPhoneState);
-  const { control, formState, getValues, clearErrors } = useFormContext();
+  const { control, formState, getValues, clearErrors, setValue } =
+    useFormContext();
+
+  useEffect(() => {
+    if (formState.errors?.phone || formState.errors?.login_failed) {
+      setIsError(true);
+    }
+
+    if (!formState.errors?.phone && !formState.errors?.login_failed) {
+      setIsError(false);
+    }
+  }, [formState.errors?.phone, formState.errors?.login_failed]);
 
   useEffect(() => {
     if (!remember && !initRef.current) {
@@ -33,49 +54,109 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
 
   useEffect(() => {
     return () => {
+      setIsError(false);
       initRef.current = true;
     };
   }, []);
 
   return (
-    <Controller
-      name="phone"
-      control={control}
-      rules={{ required: true, pattern: /^0\d{9}$/g }}
-      defaultValue={userPhone}
-      render={({ field: { onChange, value, ...field } }) => (
-        <InputWrapper>
-          <InputBase
-            id="user_phone"
-            type="tel"
-            autoFocus
-            required
-            placeholder={t('auth.phone')}
-            sx={{ flexGrow: 1 }}
-            value={value}
-            onChange={(...args) => {
-              const [event] = args;
-              if (remember) {
-                setUserPhone(event.target.value);
-              }
-
-              if (formState.errors?.phone) {
-                clearErrors('phone');
-              }
-
-              return onChange(...args);
+    <Box
+      sx={{
+        position: 'relative',
+        pb: 3,
+        width: '100%',
+        maxWidth: (t) => t.layout.size.btnMaxWidth,
+        textAlign: 'start',
+      }}
+    >
+      <label htmlFor="user_phone" form={formId}>
+        <Typography component="span" sx={{ ml: 1, fontSize: '0.875rem' }}>
+          {t('auth.phone')}
+        </Typography>
+      </label>
+      <Controller
+        name="phone"
+        control={control}
+        rules={{
+          required: {
+            value: true,
+            message: t('auth.error.required', { field: t('auth.phone') }),
+          },
+          pattern: {
+            value: /^0\d{9}$/g,
+            message: t('auth.error.invalidPhone'),
+          },
+        }}
+        defaultValue={userPhone}
+        render={({ field: { onChange, value, ...field } }) => (
+          <InputWrapper
+            sx={{
+              borderColor: (t) => (isError ? t.palette.error.main : ''),
             }}
-            {...field}
-          />
-          <Divider orientation="vertical" sx={{ height: 32 }} />
-          <label htmlFor="user_phone" form={formId}>
-            <IconButton disabled>
-              <PhoneIcon sx={{ color: (t) => t.palette.common.darkGrey }} />
-            </IconButton>
-          </label>
-        </InputWrapper>
-      )}
-    />
+          >
+            <InputBase
+              id="user_phone"
+              type="tel"
+              autoFocus
+              required
+              value={value}
+              placeholder={t('auth.phone')}
+              endAdornment={
+                value && (
+                  <IconButton
+                    color={isError ? 'error' : undefined}
+                    onClick={() => setValue('phone', '')}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                )
+              }
+              sx={{
+                flexGrow: 1,
+                color: (t) => (isError ? t.palette.error.main : ''),
+              }}
+              onChange={(...args) => {
+                const [event] = args;
+                if (remember) {
+                  setUserPhone(event.target.value);
+                }
+
+                setIsError(false);
+                if (formState.errors?.phone || formState.errors?.login_failed) {
+                  clearErrors(['phone', 'login_failed']);
+                }
+
+                return onChange(...args);
+              }}
+              {...field}
+            />
+            <Divider
+              orientation="vertical"
+              sx={{
+                height: '32px',
+                borderColor: (t) => (isError ? t.palette.error.main : ''),
+              }}
+            />
+            <label htmlFor="user_phone" form={formId}>
+              <IconButton disabled>
+                <PhoneIcon
+                  sx={{
+                    color: (t) =>
+                      isError
+                        ? t.palette.error.main
+                        : t.palette.common.darkGrey,
+                  }}
+                />
+              </IconButton>
+            </label>
+          </InputWrapper>
+        )}
+      />
+      <FormInputAlert show={isError} sx={{ position: 'absolute', left: 0 }}>
+        {(formState.errors?.phone?.message as string) ||
+          (formState.errors?.login_failed?.message as string)}
+      </FormInputAlert>
+    </Box>
   );
 };
 

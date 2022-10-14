@@ -71,6 +71,12 @@
   },
   "auth": {
     "phone": "Phone",
-    "dob": "Date of birth"
+    "dob": "Date of birth",
+    "error": {
+      "invalidPhone": "Invalid phone number",
+      "invalidDOB": "Invalid date of birth",
+      "required": "{{field}} is required!",
+      "loginFailed": "Invalid phone or date of birth"
+    }
   }
 }
