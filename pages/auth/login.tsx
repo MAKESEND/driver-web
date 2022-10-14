@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 export const LoginPage: NextPage = () => {
   return (
     <>
-      <Seo title="MAKESEND" />
+      <Seo title="Login" />
       <Box sx={{ backgroundColor: (t) => t.palette.common.lightGrey }}>
         <MobileContainer
           sx={{

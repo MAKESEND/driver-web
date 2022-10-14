@@ -9,6 +9,7 @@ export * from './pincode';
 export * from './Seo';
 export * from './SearchBar';
 export * from './StyledImage';
+export * from './StyledAnchor';
 export * from './modal';
 export * from './mobile';
 export * from './toast';
