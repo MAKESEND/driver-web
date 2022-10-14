@@ -18,10 +18,10 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
 }) => {
   const { t } = useTranslation('common');
   const thisYear = new Date().getUTCFullYear();
-  const initRef = useRef(true);
   const dateInputRef = useRef<HTMLInputElement | null>(null);
-  const { control, getValues } = useFormContext();
+  const initRef = useRef(true);
   const [userDOB, setUserDOB] = useRecoilState(userDOBState);
+  const { control, formState, getValues, clearErrors } = useFormContext();
 
   useEffect(() => {
     if (!remember && !initRef.current) {
@@ -67,6 +67,11 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
               if (remember) {
                 setUserDOB(event.target.value);
               }
+
+              if (formState.errors?.dob) {
+                clearErrors('dob');
+              }
+
               return onChange(...args);
             }}
             {...field}

@@ -17,9 +17,9 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
   remember,
 }) => {
   const { t } = useTranslation('common');
-  const { control, getValues } = useFormContext();
   const initRef = useRef(true);
   const [userPhone, setUserPhone] = useRecoilState(userPhoneState);
+  const { control, formState, getValues, clearErrors } = useFormContext();
 
   useEffect(() => {
     if (!remember && !initRef.current) {
@@ -58,6 +58,11 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
               if (remember) {
                 setUserPhone(event.target.value);
               }
+
+              if (formState.errors?.phone) {
+                clearErrors('phone');
+              }
+
               return onChange(...args);
             }}
             {...field}

@@ -1,16 +1,12 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useFormContext } from 'react-hook-form';
 import { useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
+import LoginFormPhone from './login-form/LoginFormPhone';
+import LoginFormDOB from './login-form/LoginFormDOB';
 
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
-  ssr: false,
-});
-const LoginFormDOB = dynamic(() => import('./login-form/LoginFormDOB'), {
-  ssr: false,
-});
 const LoginFormOptions = dynamic(
   () => import('./login-form/LoginFormOptions'),
   { ssr: false }
@@ -39,14 +35,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
   const onSubmit = async (formData: any) => {
     const { status, data } = await driverLogin(formData);
 
-    if (status === 200 && data) {
+    if (status === 201 && data) {
       router.push('/dashboard');
     } else {
       const type = 'login_failure';
       const message = 'invalid phone or date of birth';
-      ['phone', 'dob'].forEach((name) => {
-        setError(name, { type, message });
-      });
+      setError('login_failed', { type, message });
     }
   };
 

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
@@ -8,9 +9,18 @@ export interface LoginActionProps {
 
 export const LoginAction: React.FC<LoginActionProps> = ({ formId }) => {
   const { t } = useTranslation('common');
-  const { formState } = useFormContext();
+  const [disabled, setDisabled] = useState(false);
+  const {
+    formState: { isSubmitting, errors },
+  } = useFormContext();
 
-  console.log(formState.errors);
+  useEffect(() => {
+    if (errors?.phone || errors?.dob || errors?.login_failed) {
+      setDisabled(true);
+    }
+
+    return () => setDisabled(false);
+  }, [errors?.phone, errors?.dob, errors?.login_failed]);
 
   return (
     <Button
@@ -18,7 +28,7 @@ export const LoginAction: React.FC<LoginActionProps> = ({ formId }) => {
       type="submit"
       variant="contained"
       fullWidth
-      disabled={formState.isSubmitting}
+      disabled={isSubmitting || disabled}
       sx={{ maxWidth: (t) => t.layout.size.btnMaxWidth }}
     >
       {t('btn.login')}
