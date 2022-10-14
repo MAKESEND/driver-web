@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'components/common/StyledImage';
 import { useState, useRef, useLayoutEffect } from 'react';
 import { useWindowSize } from 'react-use';
 import { Box } from '@mui/material';
