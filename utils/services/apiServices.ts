@@ -1,11 +1,13 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type {
-  Routes,
+  Driver,
+  DriverAuthRequest,
   Parcel,
   ImageUploadRequest,
   ParcelToSort,
   ParcelStatusRequest,
   ParcelStatusResponse,
+  DriverCheckinResponse,
   MSApiResponse,
   ApiResponse,
   GooglePickupResponse,
@@ -14,6 +16,7 @@ import type {
 } from 'types';
 import axios from 'axios';
 import getConfig from 'next/config';
+import get from 'lodash/get';
 import { getEndpoint } from './getEndpoint';
 
 export const api = {
@@ -25,46 +28,70 @@ export const api = {
         orderList: ParcelByTrackingId[];
         message: string;
       }>
-    >(getEndpoint({ route: 'getParcelsByTrackingIds' as Routes }), {
+    >(getEndpoint({ route: 'getParcelsByTrackingIds' }), {
       trackingID,
     }),
   getParcelsByOrderId: (orderId: string) =>
     axios.post<{ orderId: string }, AxiosResponse<ApiResponse<Parcel[]>>>(
-      getEndpoint({ route: 'getParcelsByOrderId' as Routes }),
+      getEndpoint({ route: 'getParcelsByOrderId' }),
       { orderId }
     ),
   getSortingList: () =>
     axios.get<ApiResponse<ParcelToSort[]>>(
-      getEndpoint({ route: 'getSortingList' as Routes })
+      getEndpoint({ route: 'getSortingList' })
     ),
   getPickupTasks: () =>
     axios.post<ApiResponse<GooglePickupResponse>>(
-      getEndpoint({ route: 'getPickupTasks' as Routes })
+      getEndpoint({ route: 'getPickupTasks' })
     ),
   getDropoffTasks: (driverId = '') =>
     axios.get<ApiResponse<DropoffTask[]>>(
-      `${getEndpoint({ route: 'getDropoffTasks' as Routes })}/${driverId}`
+      `${getEndpoint({ route: 'getDropoffTasks' })}/${driverId}`
     ),
   getParcelsByDate: (serviceDate?: string) =>
     axios.post<ApiResponse<ParcelByTrackingId[]>>(
-      `${getEndpoint({ route: 'getParcelsByDate' as Routes })}`,
+      `${getEndpoint({ route: 'getParcelsByDate' })}`,
       { serviceDate }
     ),
   updateParcelStatus: (payload: ParcelStatusRequest) =>
     axios.post<ApiResponse<ParcelStatusResponse>>(
-      getEndpoint({ route: 'updateParcelStatus' as Routes }),
+      getEndpoint({ route: 'updateParcelStatus' }),
       payload,
       getConfigKey('sorting')
     ),
   uploadImg: (payload: ImageUploadRequest) =>
     axios.post<MSApiResponse>(
-      getEndpoint({ route: 'uploadImg' as Routes }),
+      getEndpoint({ route: 'uploadImg' }),
       payload,
       getConfigKey('updateParcelSize')
+    ),
+  getDriverData: (driverId: string) =>
+    axios.get<MSApiResponse<Driver>>(
+      `${getEndpoint({ route: 'driversRoot' })}/${driverId}`,
+      getConfigKey('driverMgnt')
+    ),
+  authDriver: (payload: DriverAuthRequest) =>
+    axios.post<Omit<MSApiResponse, 'data'> & { id: string }>(
+      getEndpoint({ route: 'driverAuth' }),
+      payload,
+      getConfigKey('driverMgnt')
+    ),
+  checkinDriver: (payload: DriverAuthRequest) =>
+    axios.post<MSApiResponse<DriverCheckinResponse>>(
+      getEndpoint({ route: 'driverCheckin' }),
+      payload,
+      getConfigKey('driverMgnt')
     ),
 };
 
 export default api;
+
+const keyHeader = {
+  sorting: 'ms-key',
+  updateParcelStatus: 'ms-key',
+  updateParcelSize: 'ms-key',
+  driverMgnt: 'apiKey',
+};
 
 const getConfigKey = (key: string): AxiosRequestConfig => {
   const {
@@ -77,7 +104,7 @@ const getConfigKey = (key: string): AxiosRequestConfig => {
   return {
     headers: {
       'Content-Type': 'application/json',
-      'ms-key': msKey[APP_ENV][key],
+      [get(keyHeader, key, 'ms-key')]: msKey[APP_ENV][key],
     },
   };
 };

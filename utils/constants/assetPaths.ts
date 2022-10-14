@@ -14,6 +14,9 @@ export const assetPaths: IAssetPaths = {
   checkTransferHub: `/micros/hub/api/hubtransfer/checkhub`,
   getSortingList: '/micros/parcel/dropoff/sorting/get/EX',
   uploadImg: '/apiold/api/delivery/uploadPOD',
+  driverAuth: '/drivers/authorized',
+  driverCheckin: '/drivers/checkin',
+  driversRoot: '/drivers',
   merchant: {
     getParcelsByTrackingIds: `/api/google/makesend/getShipmentByTrackingID`,
   },

@@ -23,11 +23,13 @@ const nextConfig = {
         updateParcelStatus: 'micros_status_service_4rgbb_prod',
         sorting: '43655de15bea494dba0ba32c99115fff',
         updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+        driverMgnt: 'cxMqm5pJlfBVgO0e9I4DlBs5xgghR8TC',
       },
       development: {
         updateParcelStatus: '43655de15bea494dba0ba32c99115fff',
         sorting: '43655de15bea494dba0ba32c99115fff',
         updateParcelSize: '43655de15bea494dba0ba32c99115fff',
+        driverMgnt: 'cxMqm5pJlfBVgO0e9I4DlBs5xgghR8TC',
       },
     },
   },

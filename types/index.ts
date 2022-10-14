@@ -1,6 +1,7 @@
 export * from './apiServices.d';
 export * from './common.d';
 export * from './delivery';
+export * from './driver.d';
 export * from './msMicros';
 export * from './map.d';
 export * from './modal';
