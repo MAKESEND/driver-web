@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
 // const withPWA = require('next-pwa');
-// eslint-disable-next-line
 const { i18n } = require('./next-i18next.config');
-// eslint-disable-next-line
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+const { version } = require('./package.json');
 const { APP_ENV } = process.env;
 
 const nextConfig = {
@@ -16,6 +15,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     ENV: { APP_ENV },
+    version,
   },
   serverRuntimeConfig: {
     jwt: {
@@ -36,6 +36,14 @@ const nextConfig = {
         driverMgnt: 'cxMqm5pJlfBVgO0e9I4DlBs5xgghR8TC',
       },
     },
+  },
+  rewrites: async () => {
+    return [
+      {
+        source: '/version',
+        destination: '/api/version',
+      },
+    ];
   },
   // pwa: {
   //   disable: process.env.NODE_ENV !== 'production',
