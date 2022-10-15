@@ -5,7 +5,8 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
+import { useSignout } from 'hooks/useMutateData';
 
 export interface DrawerSignoutProps {
   signoutText?: string;
@@ -15,12 +16,23 @@ export const DrawerSignout: React.FC<DrawerSignoutProps> = ({
   signoutText = 'Signout',
 }) => {
   const router = useRouter();
+  const { mutateAsync: singout } = useSignout();
 
   return (
     <ListItem
       button
       aria-label="logout-button"
-      onClick={() => router.replace('/auth/login')}
+      onClick={async () => {
+        try {
+          const { status } = await singout();
+          if (status === 200) {
+            router.replace('/auth/login');
+          }
+        } catch (error: any) {
+          console.log('something went wrong when signingout');
+          console.warn(error.message ?? error);
+        }
+      }}
     >
       <ListItemText>
         <Typography>{signoutText}</Typography>

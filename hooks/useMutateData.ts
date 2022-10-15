@@ -46,6 +46,16 @@ export const useDriverCheckin = () => {
   );
 };
 
-export const mutations = { useUpdateParcelStatus, useUploadImage };
+export const useSignout = () => {
+  return useMutation(() => axios.get('/api/auth/signout'));
+};
+
+export const mutations = {
+  useUpdateParcelStatus,
+  useUploadImage,
+  useDriverLogin,
+  useDriverCheckin,
+  useSignout,
+};
 
 export default mutations;

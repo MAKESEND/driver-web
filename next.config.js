@@ -19,7 +19,7 @@ const nextConfig = {
   },
   serverRuntimeConfig: {
     jwt: {
-      produciton: 'ccfe889f96a010040bc13ca2850dd58d16bebc7a',
+      production: 'ccfe889f96a010040bc13ca2850dd58d16bebc7a',
       develop: '9569e7aa43082713eb4e81c236cbae75843c429d',
     },
     msKey: {
@@ -37,7 +37,7 @@ const nextConfig = {
       },
     },
   },
-  rewrites: async () => {
+  async rewrites() {
     return [
       {
         source: '/version',
@@ -46,6 +46,19 @@ const nextConfig = {
       {
         source: '/health',
         destination: '/api/health',
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+        ],
       },
     ];
   },
