@@ -43,6 +43,10 @@ const nextConfig = {
         source: '/version',
         destination: '/api/version',
       },
+      {
+        source: '/health',
+        destination: '/api/health',
+      },
     ];
   },
   // pwa: {
