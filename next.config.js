@@ -18,6 +18,10 @@ const nextConfig = {
     ENV: { APP_ENV },
   },
   serverRuntimeConfig: {
+    jwt: {
+      produciton: 'ccfe889f96a010040bc13ca2850dd58d16bebc7a',
+      develop: '9569e7aa43082713eb4e81c236cbae75843c429d',
+    },
     msKey: {
       production: {
         updateParcelStatus: 'micros_status_service_4rgbb_prod',
