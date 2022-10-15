@@ -93,6 +93,10 @@ export const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
+        root: {
+          padding: '0.5rem 0',
+          fontSize: '0.875rem',
+        },
         outlinedSecondary: {
           color: grey80,
           border: grey40,

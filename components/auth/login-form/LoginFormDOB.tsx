@@ -5,14 +5,7 @@ import { useRecoilState } from 'recoil';
 import { userDOBState } from 'states/auth';
 import { InputWrapper } from './InputWrapper';
 import { FormInputAlert } from './FormInputAlert';
-import {
-  Box,
-  Fade,
-  Divider,
-  IconButton,
-  InputBase,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, IconButton, InputBase, Typography } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
@@ -21,9 +14,18 @@ const CalendarMonthIcon = dynamic(
 );
 const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 
+// fix ts lint type check
+interface HTMLInputElement {
+  showPicker: () => void;
+}
+
 export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
   formId,
   remember = false,
+  hintSpace = false,
+  clearable = false,
+  showLabel = false,
+  lastItem = false,
 }) => {
   const { t } = useTranslation('common');
   const thisYear = new Date().getUTCFullYear();
@@ -64,19 +66,20 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
   return (
     <Box
       sx={{
-        position: 'relative',
-        pb: 3,
-        mb: 0.5,
         width: '100%',
         maxWidth: (t) => t.layout.size.btnMaxWidth,
         textAlign: 'start',
+        ...(!lastItem && { mb: isError ? 0 : 2 }),
+        ...(hintSpace && { position: 'relative', pb: 3 }),
       }}
     >
-      <label htmlFor="user_dob" form={formId}>
-        <Typography component="span" sx={{ ml: 1, fontSize: '0.875rem' }}>
-          {t('auth.dob')}
-        </Typography>
-      </label>
+      {showLabel && (
+        <label htmlFor="user_dob" form={formId}>
+          <Typography component="span" sx={{ ml: 1, fontSize: '0.875rem' }}>
+            {t('auth.dob')}
+          </Typography>
+        </label>
+      )}
       <Controller
         name="dob"
         control={control}
@@ -105,6 +108,7 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
               placeholder={t('auth.dob')}
               inputRef={dateInputRef}
               endAdornment={
+                clearable &&
                 value && (
                   <IconButton
                     color={isError ? 'error' : undefined}
@@ -167,7 +171,12 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
           </InputWrapper>
         )}
       />
-      <FormInputAlert show={isError} sx={{ position: 'absolute', left: 0 }}>
+      <FormInputAlert
+        show={isError}
+        sx={{
+          ...(hintSpace && { position: 'absolute', left: 0 }),
+        }}
+      >
         {(formState.errors?.dob?.message as string) ||
           (formState.errors?.login_failed?.message as string)}
       </FormInputAlert>

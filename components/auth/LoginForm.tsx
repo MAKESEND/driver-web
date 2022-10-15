@@ -1,13 +1,18 @@
+import type { SxProps, Theme } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useFormContext } from 'react-hook-form';
 import { useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
-import LoginFormPhone from './login-form/LoginFormPhone';
-import LoginFormDOB from './login-form/LoginFormDOB';
 
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
+  ssr: false,
+});
+const LoginFormDOB = dynamic(() => import('./login-form/LoginFormDOB'), {
+  ssr: false,
+});
 const LoginFormOptions = dynamic(
   () => import('./login-form/LoginFormOptions'),
   { ssr: false }
@@ -16,6 +21,11 @@ const LoginFormOptions = dynamic(
 export interface LoginFormComponentProps {
   formId?: string;
   remember?: boolean;
+  hintSpace?: boolean;
+  clearable?: boolean;
+  showLabel?: boolean;
+  lastItem?: boolean;
+  sx?: SxProps<Theme>;
 }
 
 export interface LoginFormProps {
@@ -32,6 +42,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
   const formComponentProps: LoginFormComponentProps = {
     formId,
     remember,
+    hintSpace: false,
+    showLabel: false,
+    clearable: false,
   };
 
   const onSubmit = async (formData: any) => {
@@ -55,7 +68,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
     <form id={formId} name={formId} onSubmit={handleSubmit(onSubmit)}>
       <FlexCenterBox sx={{ flexDirection: 'column' }}>
         <LoginFormDOB {...formComponentProps} />
-        <LoginFormPhone {...formComponentProps} />
+        <LoginFormPhone {...formComponentProps} lastItem />
         <LoginFormOptions setRemember={setRemember} />
       </FlexCenterBox>
     </form>

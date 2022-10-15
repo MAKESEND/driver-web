@@ -19,6 +19,8 @@ export const FormInputAlert: React.FC<FormInputAlertProps> = ({
   sx,
   iconProps,
 }) => {
+  if (!show) return null;
+
   return (
     <Fade in={show}>
       <Typography

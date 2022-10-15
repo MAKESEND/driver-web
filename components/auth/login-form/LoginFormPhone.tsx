@@ -6,14 +6,7 @@ import { useRecoilState } from 'recoil';
 import { userPhoneState } from 'states';
 import { InputWrapper } from './InputWrapper';
 import FormInputAlert from './FormInputAlert';
-import {
-  Box,
-  Divider,
-  Fade,
-  IconButton,
-  InputBase,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, IconButton, InputBase, Typography } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const PhoneIcon = dynamic(
@@ -24,6 +17,10 @@ const ClearIcon = dynamic(() => import('@mui/icons-material/Clear'));
 export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
   formId,
   remember,
+  hintSpace = false,
+  clearable = false,
+  showLabel = false,
+  lastItem = false,
 }) => {
   const { t } = useTranslation('common');
   const initRef = useRef(true);
@@ -62,18 +59,19 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
   return (
     <Box
       sx={{
-        position: 'relative',
-        pb: 3,
         width: '100%',
         maxWidth: (t) => t.layout.size.btnMaxWidth,
-        textAlign: 'start',
+        ...(!lastItem && { mb: isError ? 0 : 2 }),
+        ...(hintSpace && { textAlign: 'start', position: 'relative', pb: 3 }),
       }}
     >
-      <label htmlFor="user_phone" form={formId}>
-        <Typography component="span" sx={{ ml: 1, fontSize: '0.875rem' }}>
-          {t('auth.phone')}
-        </Typography>
-      </label>
+      {showLabel && (
+        <label htmlFor="user_phone" form={formId}>
+          <Typography component="span" sx={{ ml: 1, fontSize: '0.875rem' }}>
+            {t('auth.phone')}
+          </Typography>
+        </label>
+      )}
       <Controller
         name="phone"
         control={control}
@@ -102,6 +100,7 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
               value={value}
               placeholder={t('auth.phone')}
               endAdornment={
+                clearable &&
                 value && (
                   <IconButton
                     color={isError ? 'error' : undefined}
@@ -152,7 +151,15 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
           </InputWrapper>
         )}
       />
-      <FormInputAlert show={isError} sx={{ position: 'absolute', left: 0 }}>
+      <FormInputAlert
+        show={isError}
+        sx={{
+          ...(hintSpace && {
+            position: 'absolute',
+            left: 0,
+          }),
+        }}
+      >
         {(formState.errors?.phone?.message as string) ||
           (formState.errors?.login_failed?.message as string)}
       </FormInputAlert>
