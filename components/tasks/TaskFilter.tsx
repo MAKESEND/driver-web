@@ -118,6 +118,7 @@ export const TaskFilter = <T, R>({
         onChange={onChange}
         sx={{ flexGrow: 1 }}
         InputProps={{
+          sx: { height: (t) => t.spacing(5.25) },
           ...(searchVal && {
             endAdornment: (
               <IconButton
@@ -136,7 +137,7 @@ export const TaskFilter = <T, R>({
         onClick={openFilterMenu}
         variant="outlined"
         size="small"
-        sx={{ minWidth: '1rem' }}
+        sx={{ minWidth: (t) => t.spacing(5.25) }}
       >
         <FilterIcon />
       </Button>
@@ -155,7 +156,11 @@ export const TaskFilter = <T, R>({
       </Menu>
       {scan && (
         <Link href={href} passHref>
-          <Button variant="outlined" size="small" sx={{ minWidth: '1rem' }}>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ minWidth: (t) => t.spacing(5.25) }}
+          >
             <QrCodeScannerIcon />
           </Button>
         </Link>
