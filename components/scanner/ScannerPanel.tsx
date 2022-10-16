@@ -1,8 +1,9 @@
-import type { ScannerMode } from 'types';
+import type { ScannerMode, ScannerType, ScannedResult } from 'types';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import SideDrawer from '../common/SideDrawer';
+import ScannerResultSingle from './single/ScannerResultSingle';
 import {
   Box,
   Button,
@@ -35,19 +36,39 @@ const Container = styled(Box)(() => ({
 
 export interface ScannerPanelProps {
   mode?: keyof typeof ScannerMode;
+  type?: keyof typeof ScannerType;
 }
 
-export const ScannerPanel: React.FC<ScannerPanelProps> = ({ mode }) => {
+export const ScannerPanel: React.FC<ScannerPanelProps> = ({
+  mode = 'single',
+  type,
+}) => {
+  const isSingleMode = mode === 'single';
+
   const { t } = useTranslation(['scanner', 'common']);
   const router = useRouter();
   const [isDenied, setIsDenied] = useState<boolean>(false);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [scannedResult, setScannedResult] = useState<ScannedResult | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (scannedResult) {
+      setOpenDrawer(true);
+      if (isSingleMode) {
+        setIsScanning(false);
+      }
+    }
+  }, [scannedResult, isSingleMode]);
 
   useEffect(() => {
     return () => {
-      setIsScanning(false);
       setIsDenied(false);
+      setIsScanning(false);
+      setOpenDrawer(false);
+      setScannedResult(null);
     };
   }, []);
 
@@ -57,8 +78,14 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({ mode }) => {
         isScanning={isScanning}
         setIsScanning={setIsScanning}
         setIsDenied={setIsDenied}
+        setScannedResult={setScannedResult}
       />
-      <SideDrawer open={openDrawer} setOpen={setOpenDrawer} />
+      <SideDrawer open={openDrawer} setOpen={setOpenDrawer}>
+        {/* TODO render scanned result for bulk mode */}
+        {isSingleMode ? (
+          <ScannerResultSingle scannedResult={scannedResult} type={type} />
+        ) : null}
+      </SideDrawer>
       <Container>
         {isDenied ? (
           <Box>
@@ -75,12 +102,7 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({ mode }) => {
                 setIsScanning((oldVal) => !oldVal);
               }}
             >
-              <QrCodeScannerIcon
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
+              <QrCodeScannerIcon sx={{ width: '100%', height: '100%' }} />
             </IconButton>
             <Typography>{t('title.tapToScan')}</Typography>
           </>

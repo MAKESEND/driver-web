@@ -7,11 +7,6 @@ export enum ENVs {
   local = 'local',
 }
 
-export enum ScannerTypes {
-  pickup = 'pickup',
-  dropoff = 'dropoff',
-}
-
 export enum DropoffModes {
   collectlist = 'collectlist',
   tasklist = 'tasklist',
@@ -29,4 +24,10 @@ export interface Link {
   href?: string;
   disabled?: boolean;
   links?: Link[];
+}
+
+export enum StringType {
+  trackingId = 'trackingId',
+  orderId = 'orderId',
+  url = 'url',
 }

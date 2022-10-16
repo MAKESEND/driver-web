@@ -1,4 +1,4 @@
-import type { FC, Dispatch, SetStateAction } from 'react';
+import type { FacingMode, ScannedResult } from 'types';
 import type { Html5Qrcode } from 'html5-qrcode';
 import { useEffect, useMemo, useCallback, useRef } from 'react';
 import { useWindowSize } from 'react-use';
@@ -33,25 +33,24 @@ const ButtonWrapper = styled(Box, {
   })
 );
 
-export type FacingMode = 'environment' | 'user';
-
 export interface CameraStarter {
-  facingMode?: FacingMode;
+  facingMode?: keyof typeof FacingMode;
   deviceId?: { exact: string };
 }
 
 export interface ScannerFullProps {
   isScanning?: boolean;
-  setIsScanning?: Dispatch<SetStateAction<boolean>>;
-  setIsDenied?: Dispatch<SetStateAction<boolean>>;
+  setIsScanning?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsDenied?: React.Dispatch<React.SetStateAction<boolean>>;
+  setScannedResult?: React.Dispatch<React.SetStateAction<ScannedResult | null>>;
 }
 
-export const Scanner: FC<ScannerFullProps> = ({
+export const Scanner: React.FC<ScannerFullProps> = ({
   isScanning = false,
-  setIsScanning = () =>
-    console.warn("no isScanning setter is given to 'ScannerFull'"),
-  setIsDenied = () =>
-    console.warn("no isDenied setter is given to 'ScannerFull'"),
+  setIsScanning = () => console.warn('no setIsScanning given to ScannerFull'),
+  setIsDenied = () => console.warn('no setIsDenied given to ScannerFull'),
+  setScannedResult = () =>
+    console.warn('no setScannedResult given to ScannerFull'),
 }) => {
   const { width, height } = useWindowSize();
   const { t } = useTranslation(['scanner', 'common']);
@@ -80,7 +79,10 @@ export const Scanner: FC<ScannerFullProps> = ({
   const startScanner = useCallback(
     async (scanner: Html5Qrcode | null, cameraId?: string) => {
       const onSuccess = (decodedText: string) => {
-        console.log(decodedText);
+        setScannedResult({
+          text: decodedText,
+          scanned_at: new Date().toISOString(),
+        });
       };
 
       const onError = (errorText: string) => {
@@ -108,7 +110,7 @@ export const Scanner: FC<ScannerFullProps> = ({
         console.log(error.message || error);
       }
     },
-    [camConfig]
+    [camConfig, setScannedResult]
   );
 
   const initScanner = useCallback(
@@ -119,13 +121,7 @@ export const Scanner: FC<ScannerFullProps> = ({
         if (cams.length) {
           setCameras(cams);
           const scanner = new Html5Qrcode('reader');
-          if (scannerRef.current) {
-            if (scannerRef.current.getState() === 2) {
-              await scannerRef.current.stop();
-            }
-            scannerRef.current.clear();
-            scannerRef.current = null;
-          }
+          await stopCamera(scannerRef.current);
           scannerRef.current = scanner;
           hasStartedRef.current = true;
           startScanner(scanner, camId);
@@ -145,40 +141,46 @@ export const Scanner: FC<ScannerFullProps> = ({
     [startScanner, setIsScanning, setIsDenied, setCameras]
   );
 
-  // init scanner with camera
+  const stopCamera = async (camera: Html5Qrcode | null) => {
+    try {
+      if (camera && camera.getState() === 2) {
+        await camera.stop();
+        camera.clear();
+      }
+    } catch (error: any) {
+      console.warn('something went wrong when stopping scanner');
+      console.log(error?.message ?? error);
+    }
+  };
+
   useEffect(() => {
+    // init scanner with camera
     if (isScanning && !hasStartedRef.current) {
       initScanner(selectedCamera);
     }
   }, [initScanner, isScanning, selectedCamera]);
 
-  // switch between cameras
   useEffect(() => {
+    // switch between cameras
     if (isScanning && hasStartedRef.current) {
       startScanner(scannerRef.current, selectedCamera);
+    } else if (!isScanning && hasStartedRef.current) {
+      // stop and clear camera stream
+      stopCamera(scannerRef.current);
+      scannerRef.current = null;
+      hasStartedRef.current = false;
     }
   }, [isScanning, startScanner, selectedCamera]);
 
   useEffect(() => {
+    // reset and clear active camera stream
     return () => {
-      if (scannerRef.current && scannerRef.current.getState() === 2) {
-        scannerRef.current
-          .stop()
-          .then(() => {
-            scannerRef.current?.clear();
-            scannerRef.current = null;
-          })
-          .catch((err) => {
-            console.warn('something went wrong when stopping scanner');
-            console.log(err.message);
-          });
-      }
-
+      stopCamera(scannerRef.current);
+      scannerRef.current = null;
       hasStartedRef.current = false;
       setIsScanning(false);
     };
-    // eslint-disable-next-line
-  }, []);
+  }, [setIsScanning]);
 
   return (
     <Backdrop
@@ -204,10 +206,10 @@ export const Scanner: FC<ScannerFullProps> = ({
           },
         }}
         CircularProps={{
-          sx: { color: (theme) => theme.palette.white.main },
+          sx: { color: (t) => t.palette.white.main },
         }}
         TypographyProps={{
-          sx: { color: (theme) => theme.palette.white.main },
+          sx: { color: (t) => t.palette.white.main },
         }}
         text={`${t('hint.starting', { ns: 'common' })}...`}
       />
@@ -227,7 +229,7 @@ export const Scanner: FC<ScannerFullProps> = ({
           setIsScanning(false);
         }}
       >
-        <CancelIcon sx={{ color: (theme) => theme.palette.white.main }} />
+        <CancelIcon sx={{ color: (t) => t.palette.white.main }} />
       </IconButton>
       <ButtonWrapper minWidth={minWidth}>
         <ScannerButtons />

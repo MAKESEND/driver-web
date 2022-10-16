@@ -1,6 +1,6 @@
+import type { ScannerType, ScannerMode } from 'types';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
-import type { ScannerMode } from 'types';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -21,22 +21,26 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
+const defaultMode = 'single';
 export const ScannerPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const [mode, setMode] = useState<ScannerMode>();
+  const [type, setType] = useState<keyof typeof ScannerType>();
+  const [mode, setMode] = useState<keyof typeof ScannerMode>(defaultMode);
 
   useEffect(() => {
-    setMode(router.query?.type as string as ScannerMode);
+    setType(router.query?.type as ScannerType);
+    setMode((router.query?.mode as ScannerMode) ?? defaultMode);
 
     return () => {
-      setMode(undefined);
+      setType(undefined);
+      setMode(defaultMode);
     };
   }, [router.query]);
 
   return (
     <>
       <Seo title="Scanner" />
-      <ScannerPanel mode={mode} />
+      <ScannerPanel type={type} mode={mode} />
     </>
   );
 };
