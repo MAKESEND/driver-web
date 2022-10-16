@@ -6,6 +6,7 @@
     "cameraDenied": "Camera is not available. Please update your permission"
   },
   "btn": {
+    "swipeUp": "Swipe up",
     "start": "Start",
     "stop": "Stop",
     "reload": "Reload"

@@ -5,6 +5,8 @@ export * from './FlexSpacer';
 export * from './img-preview';
 export * from './loader';
 export * from './pincode';
+export * from './ReactPortal';
+export * from './SideDrawer';
 export * from './Seo';
 export * from './SearchBar';
 export * from './StyledImage';

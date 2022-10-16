@@ -1,4 +1,4 @@
 export * from './Scanner';
-export * from './ScannerPanel';
 export * from './ScannerButtons';
+export * from './ScannerPanel';
 export * from './ScannerTitle';

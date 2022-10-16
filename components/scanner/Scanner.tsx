@@ -7,11 +7,11 @@ import { isMobile } from 'react-device-detect';
 import { camerasState, selectedCameraState } from 'states';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Box, Backdrop, IconButton, styled } from '@mui/material';
+import Loader from 'components/common/loader/Loader';
+import ScannerButtons from './ScannerButtons';
+import ScannerTitle from './ScannerTitle';
 
 import dynamic from 'next/dynamic';
-const Loader = dynamic(() => import('components/common/loader/Loader'));
-const ScannerButtons = dynamic(() => import('./ScannerButtons'));
-const ScannerTitle = dynamic(() => import('./ScannerTitle'));
 const CancelIcon = dynamic(() => import('@mui/icons-material/Cancel'));
 
 const ButtonWrapper = styled(Box, {

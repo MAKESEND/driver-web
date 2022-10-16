@@ -1,6 +1,8 @@
+import type { ScannerMode } from 'types';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import SideDrawer from '../common/SideDrawer';
 import {
   Box,
   Button,
@@ -19,8 +21,7 @@ const IconButton = styled(MuiIconButton)(() => ({
 import dynamic from 'next/dynamic';
 const Scanner = dynamic(() => import('./Scanner'), { ssr: false });
 const QrCodeScannerIcon = dynamic(
-  () => import('@mui/icons-material/QrCodeScanner'),
-  { ssr: false }
+  () => import('@mui/icons-material/QrCodeScanner')
 );
 
 const Container = styled(Box)(() => ({
@@ -32,11 +33,16 @@ const Container = styled(Box)(() => ({
   alignItems: 'center',
 }));
 
-export const ScannerPanel: React.FC = () => {
+export interface ScannerPanelProps {
+  mode?: keyof typeof ScannerMode;
+}
+
+export const ScannerPanel: React.FC<ScannerPanelProps> = ({ mode }) => {
   const { t } = useTranslation(['scanner', 'common']);
   const router = useRouter();
-  const [isScanning, setIsScanning] = useState<boolean>(false);
   const [isDenied, setIsDenied] = useState<boolean>(false);
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -52,6 +58,7 @@ export const ScannerPanel: React.FC = () => {
         setIsScanning={setIsScanning}
         setIsDenied={setIsDenied}
       />
+      <SideDrawer open={openDrawer} setOpen={setOpenDrawer} />
       <Container>
         {isDenied ? (
           <Box>
