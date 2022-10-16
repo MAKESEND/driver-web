@@ -1,3 +1,4 @@
+import type { UserData } from 'types';
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 const { persistAtom } = recoilPersist();
@@ -18,4 +19,9 @@ export const userDOBState = atom<string>({
   key: 'uesrDOB',
   default: '',
   effects_UNSTABLE: [persistAtom],
+});
+
+export const userDataState = atom<UserData | null>({
+  key: 'userData',
+  default: null,
 });

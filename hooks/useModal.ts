@@ -1,6 +1,6 @@
 import type { ModalShowAction } from 'types';
 import { useContext } from 'react';
-import { ModalContext } from 'components/common/_app/ModalProvider';
+import { ModalContext } from 'components/_app/ModalProvider';
 
 type TProps = Omit<ModalShowAction, 'type'>;
 

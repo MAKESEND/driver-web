@@ -1,4 +1,3 @@
-export * from './_app';
 export * from './icons';
 export * from './BranchSelect';
 export * from './CancelBtn';

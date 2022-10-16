@@ -1,6 +1,6 @@
 import type { CustomAlertProps } from 'types';
 import { useState, useCallback, useContext } from 'react';
-import { ToastContext } from 'components/common/_app/ToastProvider';
+import { ToastContext } from 'components/_app/ToastProvider';
 
 export const useToast = () => {
   const context = useContext(ToastContext);

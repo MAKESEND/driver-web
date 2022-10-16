@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { RecoilRoot } from 'recoil';
-import { SessionProvider } from 'next-auth/react';
 import {
   QueryClient as ReactQueryClient,
   QueryClientProvider,
@@ -9,47 +8,40 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DefaultSeo } from 'next-seo';
 import { DefaultSeoConfig } from 'next-seo.config';
-import SessionChecker from './SessionChecker';
+import SessionProvider from './SessionProvider';
 import ModalProvider from './ModalProvider';
 import ToastProvider from './ToastProvider';
 import OnlineIndicator from './OnlineIndicator';
 import RouteLoader from 'components/common/loader/RouteLoader';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { theme } from 'styles';
+import { theme } from 'styles/theme';
 
 export const CoreProvider: React.FC<{
   children?: React.ReactNode;
-  session: any;
   dehydratedState: any;
-}> = ({ children, session, dehydratedState }) => {
+}> = ({ children, dehydratedState }) => {
   const [queryClient] = useState(() => new ReactQueryClient());
-  const [refetchInterval, setRefetchInterval] = useState<number>(0);
 
   return (
-    <SessionProvider
-      session={session}
-      refetchOnWindowFocus
-      refetchInterval={refetchInterval}
-    >
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={dehydratedState}>
-          <ThemeProvider theme={theme}>
-            <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={dehydratedState}>
+        <ThemeProvider theme={theme}>
+          <RecoilRoot>
+            <SessionProvider>
               <ModalProvider>
                 <ToastProvider>
                   <DefaultSeo {...DefaultSeoConfig} />
                   <CssBaseline />
-                  <SessionChecker setter={setRefetchInterval} />
                   <RouteLoader>{children}</RouteLoader>
                   <OnlineIndicator />
                   <ReactQueryDevtools />
                 </ToastProvider>
               </ModalProvider>
-            </RecoilRoot>
-          </ThemeProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </SessionProvider>
+            </SessionProvider>
+          </RecoilRoot>
+        </ThemeProvider>
+      </Hydrate>
+    </QueryClientProvider>
   );
 };
 

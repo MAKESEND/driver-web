@@ -7,6 +7,8 @@ import FlexCenterBox from 'components/layouts/FlexCenterBox';
 
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { useSetRecoilState } from 'recoil';
+import { userDataState } from 'states';
 const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
   ssr: false,
 });
@@ -37,6 +39,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
   const { t } = useTranslation('common');
   const { handleSubmit, setError } = useFormContext();
   const [remember, setRemember] = useState(false);
+  const setUserData = useSetRecoilState(userDataState);
   const { mutateAsync: driverLogin } = useDriverLogin();
 
   const formComponentProps: LoginFormComponentProps = {
@@ -51,8 +54,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
     try {
       const { status, data } = await driverLogin(formData);
 
-      if (status === 200 && data) {
-        router.push('/dashboard');
+      if (status === 200) {
+        setUserData(data);
       }
     } catch (error: any) {
       if (error?.response?.status === 400) {

@@ -1,3 +1,5 @@
+import type { NextApiResponse } from 'next';
+
 export const cookie = {
   parse(cookieStr?: string): { [key: string]: string } {
     const cookies = cookieStr?.split(';');
@@ -15,6 +17,12 @@ export const cookie = {
     }
 
     return {};
+  },
+  remove(res: NextApiResponse, name: string, cookie?: string, path = '/') {
+    res.setHeader(
+      'Set-Cookie',
+      `${name}=${cookie}; path=${path}; Max-Age=0; expires=0;`
+    );
   },
 };
 

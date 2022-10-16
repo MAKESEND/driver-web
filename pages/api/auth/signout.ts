@@ -8,6 +8,6 @@ export default async function handler(
   const cookieStore = cookie.parse(req.headers.cookie);
   const token = cookieStore?.token;
 
-  res.setHeader('Set-Cookie', `token=${token}; path=/; Max-Age=0; expires=0;`);
+  cookie.remove(res, 'token', token);
   res.status(200).json({ message: 'success', data: null });
 }
