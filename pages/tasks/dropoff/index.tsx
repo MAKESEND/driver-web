@@ -4,8 +4,11 @@ import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetDropoffTasks } from 'hooks/useQueryData';
+import jwt from 'utils/auth/jwt';
 import { statusToConfirm } from 'utils/constants/tasks';
 import getDropoffTasks from 'utils/services/getDropoffTasks';
+import { useRecoilValue } from 'recoil';
+import { userDataState } from 'states';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -24,29 +27,53 @@ const DropoffTasklist = dynamic(
   () => import('components/tasks/dropoff/page/DropoffTasklist')
 );
 
-const driverId = '60e18027d1e7a00013affbb6';
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    ['dropoffTasks', driverId],
-    async () => await getDropoffTasks(driverId)
-  );
+const driverId = '';
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  locale,
+}) => {
+  try {
+    const token = req.cookies?.token;
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      ...(locale &&
-        (await serverSideTranslations(locale, ['common', 'tasks']))),
-    },
-  };
+    if (!token) {
+      throw new Error('Unauthroized');
+    }
+
+    const userData = jwt.verify(token);
+
+    const queryClient = new QueryClient();
+
+    await queryClient.prefetchQuery(
+      ['dropoffTasks', userData?.id],
+      async () => await getDropoffTasks(userData?.id)
+    );
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        ...(locale &&
+          (await serverSideTranslations(locale, ['common', 'tasks']))),
+      },
+    };
+  } catch (error: any) {
+    console.log('something went wrong in /tasks/dropoff');
+    console.log(error?.message ?? error);
+
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
 };
 
 export const DropoffPage: NextPageWithLayout = () => {
-  const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
-    driverId // testing id, should be removed
-  );
-
   const [toConfirm, setToConfirm] = useState<boolean>(false);
+  const userData = useRecoilValue(userDataState);
+  const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
+    userData?.id as string
+  );
 
   useEffect(() => {
     return () => setToConfirm(false);

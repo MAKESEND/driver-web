@@ -17,6 +17,7 @@ export const MSDeliveryLoader: React.FC = () => {
         }}
       >
         <Image
+          priority
           src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/bxbwwosk6mzkk1vdukcs"
           alt="makesend_logo"
           layout="fill"

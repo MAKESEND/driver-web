@@ -3,9 +3,9 @@ import api from './apiServices';
 
 export const getParcelsByDate = async (
   date?: string
-): Promise<ParcelByTrackingId[] | void> => {
+): Promise<ParcelByTrackingId[]> => {
   try {
-    if (window || typeof window !== 'undefined') {
+    if (typeof globalThis?.window !== 'undefined') {
       throw new Error('getParcelsByDate is server-side only');
     }
 
@@ -13,11 +13,17 @@ export const getParcelsByDate = async (
       data: { data: parcels },
     } = await api.getParcelsByDate(date);
 
+    if (!parcels) {
+      throw new Error('no parcels');
+    }
+
     return parcels;
   } catch (error: any) {
     console.log('something went wrong in getParcelsByDate');
     console.log(error?.message ?? error);
   }
+
+  return [];
 };
 
 export default getParcelsByDate;

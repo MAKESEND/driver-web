@@ -1,11 +1,14 @@
-import type { GetStaticProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetPickupTasks } from 'hooks/useQueryData';
+import jwt from 'utils/auth/jwt';
+import { getPickupTasks } from 'utils/services/getPickupTasks';
+import { useRecoilValue } from 'recoil';
+import { userDataState } from 'states';
 
 import dynamic from 'next/dynamic';
-import { getPickupTasks } from 'utils';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout')
@@ -19,26 +22,53 @@ const PickupTasks = dynamic(
   () => import('components/tasks/pickup/PickupTasks')
 );
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const queryClient = new QueryClient();
-  const driverId: string | undefined = undefined;
-  await queryClient.prefetchQuery(
-    ['pickupTasks', driverId],
-    async () => await getPickupTasks()
-  );
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  locale,
+}) => {
+  try {
+    const token = req.cookies?.token;
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-      ...(locale &&
-        (await serverSideTranslations(locale, ['common', 'tasks', 'sorting']))),
-    },
-  };
+    if (!token) {
+      throw new Error('Unauthroized');
+    }
+
+    const userData = jwt.verify(token);
+
+    const queryClient = new QueryClient();
+
+    await queryClient.prefetchQuery(
+      ['pickupTasks', userData?.id],
+      async () => await getPickupTasks()
+    );
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        ...(locale &&
+          (await serverSideTranslations(locale, [
+            'common',
+            'tasks',
+            'sorting',
+          ]))),
+      },
+    };
+  } catch (error: any) {
+    console.log('something went wrong in /tasks/pickup');
+    console.log(error?.message ?? error);
+
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
 };
 
 export const PickupPage: NextPageWithLayout = () => {
-  // this should filter by driver id with authentication
-  const { data: pickupTasks, isLoading } = useGetPickupTasks();
+  const userData = useRecoilValue(userDataState);
+  const { data: pickupTasks, isLoading } = useGetPickupTasks(userData?.id);
 
   return (
     <>

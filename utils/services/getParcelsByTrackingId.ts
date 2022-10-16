@@ -3,9 +3,9 @@ import api from './apiServices';
 
 export const getParcelsByTrackingId = async (
   trackingId: string
-): Promise<ParcelByTrackingId | void> => {
+): Promise<ParcelByTrackingId | null> => {
   try {
-    if (window || typeof window !== 'undefined') {
+    if (typeof globalThis?.window !== 'undefined') {
       throw new Error('getParcelsByTrackingId is server-side only');
     }
 
@@ -24,6 +24,8 @@ export const getParcelsByTrackingId = async (
     console.log('something went wrong in getParcelsByTrackingId');
     console.log(error?.message ?? error);
   }
+
+  return null;
 };
 
 export default getParcelsByTrackingId;
