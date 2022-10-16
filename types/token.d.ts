@@ -11,4 +11,5 @@ export interface UserData {
   nickname: string;
   exp: number; // in seconds
   iat: number; // in seconds
+  redirect?: { destination: string };
 }

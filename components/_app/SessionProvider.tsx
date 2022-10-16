@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useValidateUser } from 'hooks';
+import omit from 'lodash/omit';
 import { useRecoilState } from 'recoil';
 import { userDataState } from 'states/auth';
 import PageLoader from 'components/common/loader/PageLoader';
-import MSDeliveryLoader from 'components/common/loader/delivery/MSDeliveryLoader';
 
 export interface SessionProviderProps {
   children?: React.ReactNode;
@@ -15,12 +15,24 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
 }) => {
   const router = useRouter();
   const [isOnAuthRoute, setIsOnAuthRoute] = useState<boolean>(false);
+  const initRef = useRef(true);
   const [userData, setUserData] = useRecoilState(userDataState);
+  const [redirectDestination, setRedirectDestination] = useState<string | null>(
+    null
+  );
 
   const { data, isLoading } = useValidateUser({
     refetchOnWindowFocus: true,
     retry: 0,
   });
+
+  useEffect(() => {
+    initRef.current = false;
+
+    return () => {
+      initRef.current = true;
+    };
+  }, []);
 
   useEffect(() => {
     // check if the user is on auth route
@@ -30,17 +42,26 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
 
   useEffect(() => {
     // revalidate userData with cookie
-    setUserData(data ?? null);
+    if (data?.redirect) {
+      setUserData(omit(data, ['redirect']));
+      setRedirectDestination(data.redirect.destination);
+    } else {
+      setUserData(data ?? null);
+    }
+
+    return () => setRedirectDestination(null);
   }, [data, setUserData]);
 
   useEffect(() => {
-    // redirect user if user data is cleared
     if (userData && isOnAuthRoute) {
-      router.replace('/dashboard');
+      router.replace(redirectDestination ?? '/dashboard');
     } else if (!userData && !isOnAuthRoute) {
-      router.replace('/auth/login');
+      // redirect user if user data is cleared
+      if (!initRef.current) {
+        router.replace('/auth/login');
+      }
     }
-  }, [userData, router, isOnAuthRoute]);
+  }, [redirectDestination, userData, router, isOnAuthRoute]);
 
   if (isLoading) return <PageLoader isLoading />;
 

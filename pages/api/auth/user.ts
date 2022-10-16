@@ -1,14 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'utils/auth/jwt';
 import cookie from 'utils/auth/cookie';
-import getConfig from 'next/config';
-
-const {
-  publicRuntimeConfig: {
-    ENV: { APP_ENV },
-  },
-  serverRuntimeConfig: { jwt: jwtSecret },
-} = getConfig();
+import last from 'lodash/last';
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +13,10 @@ export default async function handler(
   let token;
 
   try {
-    const secret = jwtSecret[APP_ENV];
+    const { host, referer } = req.headers;
+    const paths = referer?.split(host as string);
+    const destination = last(paths);
+
     const cookieStore = cookie.parse(req.headers.cookie);
     token = cookieStore?.token;
 
@@ -29,11 +25,15 @@ export default async function handler(
       throw new Error('Unauthorized');
     }
 
-    data = jwt.verify(token, secret) as JwtPayload;
+    data = jwt.verify(token);
 
     if ((data?.exp ?? 0) <= Math.ceil(Date.now() / 1000)) {
       status = 401;
       throw new Error('token expired');
+    }
+
+    if (destination) {
+      data = { ...data, redirect: { destination } };
     }
   } catch (error: any) {
     status = /^2\d{2}$/g.test(String(status)) ? 500 : status;
