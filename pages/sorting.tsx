@@ -1,7 +1,9 @@
-import type { GetStaticProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetSortingList } from 'hooks/useQueryData';
+import { getSortingList } from 'utils/services/getSortingList';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -12,17 +14,37 @@ const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
 const SortingList = dynamic(() => import('components/sorting/SortingList'));
 const Loader = dynamic(() => import('components/common/loader/Loader'));
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      ...(locale &&
-        (await serverSideTranslations(locale, [
-          'common',
-          'sorting',
-          'parcel',
-        ]))),
-    },
-  };
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  try {
+    const queryClient = new QueryClient();
+
+    await queryClient.prefetchQuery(
+      ['sortinglist'],
+      async () => await getSortingList()
+    );
+
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        ...(locale &&
+          (await serverSideTranslations(locale, [
+            'common',
+            'sorting',
+            'parcel',
+          ]))),
+      },
+    };
+  } catch (error: any) {
+    console.log('something went wrong in /sorting');
+    console.log(error?.message ?? error);
+
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
 };
 
 export const SortingPage: NextPageWithLayout = () => {
