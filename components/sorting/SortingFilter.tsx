@@ -9,10 +9,16 @@ import { rounds } from 'utils/constants/delivery';
 import { FilterOption } from 'components/FilterOptions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import { Autocomplete, Button, Grid, Menu, styled } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Grid,
+  Menu,
+  styled,
+  TextField,
+} from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const TextField = dynamic(() => import('@mui/material/TextField'));
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
 );

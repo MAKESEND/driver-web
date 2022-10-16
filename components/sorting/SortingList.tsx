@@ -2,10 +2,15 @@ import type { ParcelToSort, ParcelMixin, ParcelStatus } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import MobileContainer from 'components/common/mobile/MobileContainer';
-import SortingFilter from 'components/sorting/SortingFilter';
-import ParcelCard from 'components/ParcelCard';
 import { useUpdateParcelStatus } from 'hooks/useMutateData';
+import MobileContainer from 'components/common/mobile/MobileContainer';
+import ParcelCard from 'components/ParcelCard';
+
+import dynamic from 'next/dynamic';
+const SortingFilter = dynamic(
+  () => import('components/sorting/SortingFilter'),
+  { ssr: false }
+);
 
 export interface SortingList {
   sortingList?: ParcelToSort[];
