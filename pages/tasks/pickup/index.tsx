@@ -3,12 +3,11 @@ import type { NextPageWithLayout } from '../../_app';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetPickupTasks } from 'hooks/useQueryData';
-import { useRecoilValue } from 'recoil';
-import { userDataState } from 'states';
 import auth from 'utils/auth';
 import { getPickupTasks } from 'utils/services/getPickupTasks';
 
 import dynamic from 'next/dynamic';
+import { UserData } from 'types';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout')
@@ -71,8 +70,9 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 };
 
-export const PickupPage: NextPageWithLayout = () => {
-  const userData = useRecoilValue(userDataState);
+export const PickupPage: NextPageWithLayout<{ userData?: UserData }> = ({
+  userData,
+}) => {
   const { data: pickupTasks, isLoading } = useGetPickupTasks(userData?.id);
 
   return (

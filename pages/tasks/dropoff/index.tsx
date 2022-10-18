@@ -1,11 +1,10 @@
 import type { GetServerSideProps } from 'next';
 import type { NextPageWithLayout } from '../../_app';
+import type { UserData } from 'types';
 import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetDropoffTasks } from 'hooks/useQueryData';
-import { useRecoilValue } from 'recoil';
-import { userDataState } from 'states';
 import auth from 'utils/auth';
 import { statusToConfirm } from 'utils/constants/tasks';
 import getDropoffTasks from 'utils/services/getDropoffTasks';
@@ -72,9 +71,10 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 };
 
-export const DropoffPage: NextPageWithLayout = () => {
+export const DropoffPage: NextPageWithLayout<{ userData?: UserData }> = ({
+  userData,
+}) => {
   const [toConfirm, setToConfirm] = useState<boolean>(false);
-  const userData = useRecoilValue(userDataState);
   const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
     userData?.id as string
   );
