@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetDropoffTasks } from 'hooks/useQueryData';
-import jwt from 'utils/auth/jwt';
-import { statusToConfirm } from 'utils/constants/tasks';
-import getDropoffTasks from 'utils/services/getDropoffTasks';
 import { useRecoilValue } from 'recoil';
 import { userDataState } from 'states';
+import auth from 'utils/auth';
+import { statusToConfirm } from 'utils/constants/tasks';
+import getDropoffTasks from 'utils/services/getDropoffTasks';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
@@ -27,19 +27,23 @@ const DropoffTasklist = dynamic(
   () => import('components/tasks/dropoff/page/DropoffTasklist')
 );
 
-const driverId = '';
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   locale,
 }) => {
   try {
-    const token = req.cookies?.token;
+    const userData = auth.getUser(req);
 
-    if (!token) {
-      throw new Error('Unauthroized');
+    // abort if token is invalid/missing
+    // redirect to login
+    if (!userData) {
+      return {
+        redirect: {
+          destination: '/auth/login',
+          permanent: false,
+        },
+      };
     }
-
-    const userData = jwt.verify(token);
 
     const queryClient = new QueryClient();
 
@@ -61,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/error',
         permanent: false,
       },
     };

@@ -229,30 +229,33 @@ export const useGetDriverData = (
   );
 };
 
-export const useValidateUser = (
+export const useUser = (
   customConfig?: Omit<
-    UseQueryOptions<
-      UserData | undefined,
-      unknown,
-      UserData | undefined,
-      string[]
-    >,
+    UseQueryOptions<UserData | null, unknown, UserData | null, string[]>,
     'queryKey' | 'queryFn'
   >
 ) => {
   return useQuery(
     ['user'],
     async () => {
-      const {
-        data: { data: userData },
-      } = await axios.get<MSApiResponse<UserData>>('/api/auth/user');
+      try {
+        const {
+          data: { data: userData },
+        } = await axios.get<MSApiResponse<UserData>>('/api/auth/user');
 
-      return userData;
+        return userData ?? null;
+      } catch (error: any) {
+        // prevent printing when unauthenticated
+        if (error?.response.status !== 401) {
+          console.log(
+            error?.response?.data?.message ?? error?.message ?? error
+          );
+        }
+
+        return null;
+      }
     },
-    {
-      // ...config,
-      ...customConfig,
-    }
+    { ...config, ...customConfig }
   );
 };
 
@@ -262,7 +265,7 @@ export const queries = {
   useGetPickupTasks,
   useGetDropoffTasks,
   useGetDriverData,
-  useValidateUser,
+  useUser,
 };
 
 export default queries;
