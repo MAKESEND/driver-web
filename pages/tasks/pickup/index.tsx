@@ -10,7 +10,8 @@ import dynamic from 'next/dynamic';
 import { UserData } from 'types';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout')
+  () => import('components/layouts/drawerLayout/DrawerLayout'),
+  { ssr: false }
 );
 const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
 const MobileContainer = dynamic(

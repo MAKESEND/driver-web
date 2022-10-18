@@ -9,7 +9,8 @@ import auth from 'utils/auth';
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout')
+  () => import('components/layouts/drawerLayout/DrawerLayout'),
+  { ssr: false }
 );
 const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
 const SortingList = dynamic(() => import('components/sorting/SortingList'));

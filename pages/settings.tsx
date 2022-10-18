@@ -5,7 +5,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout')
+  () => import('components/layouts/drawerLayout/DrawerLayout'),
+  { ssr: false }
 );
 const MobileContainer = dynamic(
   () => import('components/common/mobile/MobileContainer')

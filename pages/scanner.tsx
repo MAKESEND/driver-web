@@ -9,7 +9,8 @@ import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
 const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'));
 const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout')
+  () => import('components/layouts/drawerLayout/DrawerLayout'),
+  { ssr: false }
 );
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
