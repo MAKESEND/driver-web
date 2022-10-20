@@ -8,7 +8,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const { i18n } = require('./next-i18next.config');
 const { version } = require('./package.json');
-const { APP_ENV } = process.env;
+const { APP_ENV, NODE_ENV } = process.env;
+const isProduction = NODE_ENV === 'production';
 
 const nextConfig = {
   // reactStrictMode: true,
@@ -61,17 +62,37 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
         ],
       },
     ];
   },
-  pwa: {
-    disable: process.env.NODE_ENV !== 'production',
-    dest: 'public',
-    runtimeCaching,
-    buildExcludes: [/middleware-manifest.json$/],
-  },
+  ...(isProduction && {
+    pwa: {
+      disable: process.env.NODE_ENV !== 'production',
+      dest: 'public',
+      runtimeCaching,
+      // prevetn pre-caching issue when deploying on Vercel
+      buildExcludes: [/middleware-manifest.json$/],
+      // https://github.com/shadowwalker/next-pwa/issues/295
+    },
+  }),
 };
 
-// module.exports = withBundleAnalyzer(nextConfig);
-module.exports = withBundleAnalyzer(withPWA(nextConfig));
+module.exports = isProduction
+  ? withBundleAnalyzer(withPWA(nextConfig))
+  : withBundleAnalyzer(nextConfig);
+
+// config reference
+// https://javascript.plainenglish.io/how-to-set-up-next-js-with-typescript-to-get-a-100-score-in-google-lighthouse-and-vercel-analytics-6f97501a91c7
