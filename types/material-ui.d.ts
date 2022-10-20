@@ -28,6 +28,8 @@ declare module '@mui/material/styles/createPalette' {
     blue50: string;
     pink: string;
     secondary: string;
+    yellow50: string;
+    orange50: string;
   }
 }
 

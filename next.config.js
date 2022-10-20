@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
-// const withPWA = require('next-pwa');
-const { i18n } = require('./next-i18next.config');
+
+const withPWA = require('next-pwa');
+const runtimeCaching = require('next-pwa/cache');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+
+const { i18n } = require('./next-i18next.config');
 const { version } = require('./package.json');
 const { APP_ENV } = process.env;
 
@@ -62,10 +65,13 @@ const nextConfig = {
       },
     ];
   },
-  // pwa: {
-  //   disable: process.env.NODE_ENV !== 'production',
-  // },
+  pwa: {
+    disable: process.env.NODE_ENV !== 'production',
+    dest: 'public',
+    runtimeCaching,
+    buildExcludes: [/middleware-manifest.json$/],
+  },
 };
 
-// module.exports = withBundleAnalyzer(withPWA(nextConfig));
-module.exports = withBundleAnalyzer(nextConfig);
+// module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(withPWA(nextConfig));
