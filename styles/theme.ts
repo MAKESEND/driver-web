@@ -52,6 +52,8 @@ export const theme = createTheme({
     size: {
       btnMaxWidth,
       portMaxWidth,
+      drawerBreakpoint: 900,
+      drawerWidth: 320,
     },
   },
   typography: {

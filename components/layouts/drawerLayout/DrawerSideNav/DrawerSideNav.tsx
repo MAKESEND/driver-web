@@ -7,7 +7,7 @@ import { Drawer, Divider } from '@mui/material';
 
 export interface DrawerSideNav {
   screenWidth?: number;
-  drawerWidth?: string;
+  drawerWidth?: string | number;
   breakPoint?: number;
   open?: boolean;
   onClose?: () => void;

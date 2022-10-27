@@ -36,6 +36,8 @@ declare module '@mui/material/styles/createPalette' {
 enum layoutComponents {
   btnMaxWidth = 'btnMaxWidth',
   portMaxWidth = 'portMaxWidth',
+  drawerBreakpoint = 'drawerBreakpoint',
+  drawerWidth = 'drawerWidth',
 }
 
 declare module '@mui/material/styles' {

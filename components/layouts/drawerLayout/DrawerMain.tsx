@@ -8,7 +8,7 @@ export const DrawerMain = styled(Box, {
     prop !== 'fillContainer',
 })<{
   open?: boolean;
-  drawerWidth?: string;
+  drawerWidth?: string | number;
   isMobile?: boolean;
   fillContainer?: boolean;
 }>(

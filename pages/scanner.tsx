@@ -23,6 +23,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 const defaultMode = 'single';
+
 export const ScannerPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [type, setType] = useState<keyof typeof ScannerType>();
@@ -31,11 +32,6 @@ export const ScannerPage: NextPageWithLayout = () => {
   useEffect(() => {
     setType(router.query?.type as ScannerType);
     setMode((router.query?.mode as ScannerMode) ?? defaultMode);
-
-    return () => {
-      setType(undefined);
-      setMode(defaultMode);
-    };
   }, [router.query]);
 
   return (
