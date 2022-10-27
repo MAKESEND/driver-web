@@ -6,15 +6,16 @@ export const token = {
   getMaxAge(country: Countries = 'th'): number {
     // until midnight on the same day
     const timegap = countries[country]?.timezone ?? 0;
-    const now = new Date(Date.now() + timegap * 60 * 60 * 1000);
+    const timegapMS = timegap * 60 * 60 * 1000;
+    const now = new Date(Date.now() + timegapMS);
     const midnight = Date.UTC(
       now.getUTCFullYear(),
       now.getUTCMonth(),
       now.getUTCDate() + 1
     );
-    const localMidnight = midnight - timegap * 60 * 60 * 1000;
+    const localMidnight = midnight - timegapMS;
 
-    return localMidnight;
+    return localMidnight - Date.now();
   },
 };
 
