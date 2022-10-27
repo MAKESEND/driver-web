@@ -27,7 +27,6 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
   hideOnScroll = false,
 }) => {
   const theme = useTheme();
-  const drawerWidth = theme.layout.size.drawerWidth;
   const breakPoint = theme.layout.size.drawerBreakpoint;
 
   const { width } = useWindowSize();
@@ -58,6 +57,12 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
 
   return (
     <>
+      <DrawerSideNav
+        open={openDrawer}
+        breakPoint={breakPoint}
+        onClose={() => setOpenDrawer(false)}
+        screenWidth={width}
+      />
       <DrawerTopNav
         open={openDrawer}
         isMobile={isMobile}
@@ -66,24 +71,18 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
         isScrolling={trigger}
       />
       <DrawerHeader />
-      <DrawerSideNav
-        open={openDrawer}
-        drawerWidth={drawerWidth}
-        breakPoint={breakPoint}
-        onClose={() => setOpenDrawer(false)}
-        screenWidth={width}
-      />
       <DrawerMain
         component="main"
         open={openDrawer}
-        drawerWidth={drawerWidth}
         isMobile={isMobile}
         fillContainer={fillContainer}
         sx={sxMain}
         ref={mainRef}
       >
         {mobileContainer ? (
-          <MobileContainer sx={sxMobile}>{children}</MobileContainer>
+          <MobileContainer sx={{ ...sxMobile, p: 2 }}>
+            {children}
+          </MobileContainer>
         ) : (
           children
         )}
