@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNetworkState } from 'react-use';
 import { useTranslation } from 'next-i18next';
 import { Alert, Snackbar } from '@mui/material';
@@ -26,10 +26,6 @@ export const OnlineIndicator: React.FC = () => {
       }
       return false;
     });
-
-    return () => {
-      setOpen(false);
-    };
   }, [state]);
 
   return (

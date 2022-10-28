@@ -4,6 +4,9 @@ import { appWithTranslation } from 'next-i18next';
 
 import dynamic from 'next/dynamic';
 const CoreProvider = dynamic(() => import('components/_app/CoreProvider'));
+const OnlineIndicator = dynamic(
+  () => import('components/_app/OnlineIndicator')
+);
 
 export type NextPageWithLayout<T = unknown> = NextPage<T> & {
   getLayout?: (page: React.ReactElement) => React.ReactElement;
@@ -22,6 +25,7 @@ function MyApp({
   return (
     <CoreProvider dehydratedState={dehydratedState}>
       {getLayout(<Component {...pageProps} />)}
+      <OnlineIndicator />
     </CoreProvider>
   );
 }
