@@ -1,10 +1,15 @@
-import { useEffect, useRef } from 'react';
+import type { UserData } from 'types';
+import { useState, useEffect, useRef, createContext } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from 'hooks/useQueryData';
 import omit from 'lodash/omit';
-import { useRecoilState } from 'recoil';
-import { userDataState } from 'states/auth';
 import PageLoader from 'components/common/loader/PageLoader';
+
+type TUserData = UserData | null;
+
+export const UserContext = createContext<
+  [TUserData, React.Dispatch<React.SetStateAction<TUserData>>] | null
+>(null);
 
 export interface SessionProviderProps {
   Loader?: React.ReactNode;
@@ -18,7 +23,7 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
   const router = useRouter();
   const initRef = useRef<boolean>(true);
   const redirectRef = useRef<string | null>(null);
-  const [userData, setUserData] = useRecoilState(userDataState);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const { data, isLoading, isError } = useUser({
     refetchOnWindowFocus: true,
@@ -26,15 +31,6 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
     cacheTime: 0,
     staleTime: 0,
   });
-
-  useEffect(() => {
-    initRef.current = false;
-
-    return () => {
-      initRef.current = true;
-      setUserData(null);
-    };
-  }, [setUserData]);
 
   useEffect(() => {
     // revalidate userData with cookie
@@ -68,13 +64,16 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({
     }
   }, [userData, isLoading, router]);
 
-  if (isLoading && initRef.current) return <>{Loader}</> ?? <PageLoader />;
+  if (isLoading && initRef.current)
+    return Loader ? <>{Loader}</> : <PageLoader />;
 
-  return <>{children}</>;
+  return (
+    <UserContext.Provider value={[userData, setUserData]}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default SessionProvider;
 
-function isAuthPath(path: string) {
-  return /auth/i.test(path);
-}
+const isAuthPath = (path: string): boolean => /auth/i.test(path);

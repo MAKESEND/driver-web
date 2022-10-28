@@ -1,14 +1,15 @@
-import ExitIcon from '@mui/icons-material/ExitToAppOutlined';
+import { useRouter } from 'next/router';
+import useUser from 'hooks/useUser';
+import { useSignout } from 'hooks/useMutateData';
 import {
   ListItem,
   ListItemText,
   ListItemIcon,
   Typography,
 } from '@mui/material';
-import { useRouter } from 'next/router';
-import { useSignout } from 'hooks/useMutateData';
-import { useSetRecoilState } from 'recoil';
-import { userDataState } from 'states';
+
+import dynamic from 'next/dynamic';
+const ExitIcon = dynamic(() => import('@mui/icons-material/ExitToAppOutlined'));
 
 export interface DrawerSignoutProps {
   signoutText?: string;
@@ -18,7 +19,7 @@ export const DrawerSignout: React.FC<DrawerSignoutProps> = ({
   signoutText = 'Signout',
 }) => {
   const router = useRouter();
-  const setUserData = useSetRecoilState(userDataState);
+  const [, setUserData] = useUser();
   const { mutateAsync: singout } = useSignout();
 
   const logout = async () => {
@@ -29,7 +30,7 @@ export const DrawerSignout: React.FC<DrawerSignoutProps> = ({
         router.replace('/auth/login');
       }
     } catch (error: any) {
-      console.log('something went wrong when signingout');
+      console.log('something went wrong when signing out');
       console.warn(error.message ?? error);
     }
   };

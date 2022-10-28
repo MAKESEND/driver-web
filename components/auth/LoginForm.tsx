@@ -1,14 +1,12 @@
 import type { SxProps, Theme } from '@mui/material';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
+import useUser from 'hooks/useUser';
 import { useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
 
 import dynamic from 'next/dynamic';
-import { useTranslation } from 'next-i18next';
-import { useSetRecoilState } from 'recoil';
-import { userDataState } from 'states';
 const LoginFormPhone = dynamic(() => import('./login-form/LoginFormPhone'), {
   ssr: false,
 });
@@ -35,11 +33,10 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
-  const router = useRouter();
+  const [, setUserData] = useUser();
   const { t } = useTranslation('common');
-  const { handleSubmit, setError } = useFormContext();
   const [remember, setRemember] = useState(false);
-  const setUserData = useSetRecoilState(userDataState);
+  const { handleSubmit, setError } = useFormContext();
   const { mutateAsync: driverLogin } = useDriverLogin();
 
   const formComponentProps: LoginFormComponentProps = {
