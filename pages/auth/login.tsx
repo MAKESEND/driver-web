@@ -2,11 +2,8 @@ import type { NextPage, GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import dynamic from 'next/dynamic';
-const Seo = dynamic(() => import('components/common/Seo'));
 const Box = dynamic(() => import('@mui/material/Box'));
-const MobileContainer = dynamic(
-  () => import('components/common/mobile/MobileContainer')
-);
+const Seo = dynamic(() => import('components/common/Seo'));
 const Login = dynamic(() => import('components/auth/Login'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
@@ -20,19 +17,21 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 export const LoginPage: NextPage = () => {
   return (
     <>
-      <Seo title="Login" />
-      <Box sx={{ backgroundColor: (t) => t.palette.common.lightGrey }}>
-        <MobileContainer
+      <Seo title="Login" description="MAKESEND Driver App" />
+      <Box sx={{ bgcolor: (theme) => theme.palette.common.lightGrey }}>
+        <Box
           sx={{
             height: '100vh',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: (t) => t.spacing(2),
+            m: '0 auto',
+            p: (theme) => theme.spacing(2),
+            maxWidth: (theme) => theme.layout.size.portMaxWidth,
           }}
         >
           <Login />
-        </MobileContainer>
+        </Box>
       </Box>
     </>
   );
