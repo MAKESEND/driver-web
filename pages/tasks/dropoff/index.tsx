@@ -1,23 +1,18 @@
 import type { GetServerSideProps } from 'next';
-import type { NextPageWithLayout } from '../../_app';
-import type { UserData } from 'types';
-import { useEffect, useState } from 'react';
+import type { NextPageWithLayout } from 'pages/_app';
+import { useState, useEffect, Suspense } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { useGetDropoffTasks } from 'hooks/useQueryData';
-import auth from 'utils/auth';
 import { statusToConfirm } from 'utils/constants/tasks';
 import getDropoffTasks from 'utils/services/getDropoffTasks';
+import auth from 'utils/auth';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout'),
   { ssr: false }
-);
-const FlexCenterBox = dynamic(() => import('components/layouts/FlexCenterBox'));
-const MobileContainer = dynamic(
-  () => import('components/common/mobile/MobileContainer')
 );
 const Loader = dynamic(() => import('components/common/loader/Loader'));
 const DropoffCollectlist = dynamic(
@@ -54,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     return {
       props: {
+        userId: userData?.id,
         dehydratedState: dehydrate(queryClient),
         ...(locale &&
           (await serverSideTranslations(locale, ['common', 'tasks']))),
@@ -72,17 +68,11 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 };
 
-export const DropoffPage: NextPageWithLayout<{ userData?: UserData }> = ({
-  userData,
+export const DropoffPage: NextPageWithLayout<{ userId?: string }> = ({
+  userId,
 }) => {
   const [toConfirm, setToConfirm] = useState<boolean>(false);
-  const { data: dropoffTasks, isLoading } = useGetDropoffTasks(
-    userData?.id as string
-  );
-
-  useEffect(() => {
-    return () => setToConfirm(false);
-  }, []);
+  const { data: dropoffTasks } = useGetDropoffTasks(userId as string);
 
   useEffect(() => {
     if (Array.isArray(dropoffTasks)) {
@@ -99,24 +89,16 @@ export const DropoffPage: NextPageWithLayout<{ userData?: UserData }> = ({
   return (
     <>
       <Seo title="Dropoff" />
-      {isLoading ? (
-        <FlexCenterBox>
-          <Loader />
-        </FlexCenterBox>
-      ) : (
-        <>
-          <MobileContainer>
-            <Worklist dropoffTasks={dropoffTasks} />
-          </MobileContainer>
-        </>
-      )}
+      <Suspense fallback={<Loader />}>
+        <Worklist dropoffTasks={dropoffTasks} />
+      </Suspense>
     </>
   );
 };
 
 DropoffPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout sxMain={{ padding: 0 }} fillContainer>
+    <DrawerLayout fillContainer mobileContainer sxMobile={{ p: 2 }}>
       {page}
     </DrawerLayout>
   );
