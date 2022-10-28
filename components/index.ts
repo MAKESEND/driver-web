@@ -8,4 +8,5 @@ export * from './sorting';
 export * from './tasks';
 export * from './waybill';
 export * from './FilterOptions';
+export * from './Home';
 export * from './ParcelCard';

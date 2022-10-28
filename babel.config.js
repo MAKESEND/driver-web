@@ -1,8 +1,16 @@
-module.exports = {
+export const config = {
   presets: [
-    ['@babel/preset-env', { targets: { node: 'current' } }],
+    [
+      '@babel/preset-env',
+      {
+        modules: false,
+        targets: { node: 'current' },
+      },
+    ],
     '@babel/preset-typescript',
     'next/babel',
   ],
   plugins: [['styled-components', { ssr: true, displayName: true }]],
 };
+
+export default config;

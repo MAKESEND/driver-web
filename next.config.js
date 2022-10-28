@@ -83,7 +83,7 @@ const nextConfig = {
       disable: process.env.NODE_ENV !== 'production',
       dest: 'public',
       runtimeCaching,
-      // prevetn pre-caching issue when deploying on Vercel
+      // prevent pre-caching issue when deploying on Vercel
       buildExcludes: [/middleware-manifest.json$/],
       // https://github.com/shadowwalker/next-pwa/issues/295
     },
