@@ -1,11 +1,11 @@
 import type { DriverAuthRequest } from 'types';
 import { useForm, FormProvider } from 'react-hook-form';
-import LoginForm from './LoginForm';
-import LoginActions from './LoginActions';
+import LoginForm from 'components/auth/LoginForm';
+import LoginActions from 'components/auth/LoginActions';
 import { Card, CardContent, CardActions } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const LoginBanner = dynamic(() => import('./LoginBanner'), { ssr: false });
+const LoginBanner = dynamic(() => import('components/auth/LoginBanner'));
 
 export const Login: React.FC = () => {
   const formId = 'ms-login';
@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
             justifyContent: 'center',
             flexDirection: 'column',
             gap: 1,
-            padding: (t) => t.spacing(2),
+            padding: (theme) => theme.spacing(2),
           }}
         >
           <LoginActions formId={formId} />
