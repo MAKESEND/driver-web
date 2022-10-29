@@ -24,10 +24,6 @@ export const FilterOption = <T extends unknown>({
     setChecked(index > -1);
   }, [option, selectedOption]);
 
-  useEffect(() => {
-    return () => setChecked(false);
-  }, []);
-
   const onClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
 
@@ -41,13 +37,11 @@ export const FilterOption = <T extends unknown>({
   };
 
   return (
-    <MenuItem sx={{ paddingX: 0 }} onClick={onClick}>
+    <MenuItem sx={{ px: 0 }} onClick={onClick}>
       {option && (
         <>
           <Checkbox checked={checked} onClick={onClick} />
-          {Label ?? (
-            <Typography sx={{ paddingRight: '.5rem' }}>{label}</Typography>
-          )}
+          {Label ?? <Typography sx={{ pr: 1 }}>{label}</Typography>}
         </>
       )}
     </MenuItem>
