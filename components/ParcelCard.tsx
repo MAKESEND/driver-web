@@ -1,20 +1,19 @@
-import type { FC, ReactNode } from 'react';
 import type { ParcelMixin } from 'types';
 import { useTranslation } from 'next-i18next';
-import { CardActions, CardContent, styled, Typography } from '@mui/material';
 import MobileCard from 'components/common/mobile/MobileCard';
+import { CardActions, CardContent, styled, Typography } from '@mui/material';
 
-const SecondaryText = styled(Typography)((theme) => ({
+const SecondaryText = styled(Typography)(() => ({
   textAlign: 'start',
   color: 'rgba(0, 0, 0, 0.6)',
 }));
 
 export type ParcelCardProps<T = ParcelMixin> = T & {
-  Note?: ReactNode;
-  Actions?: ReactNode;
+  Note?: React.ReactNode;
+  Actions?: React.ReactNode;
 };
 
-const ParcelCard: FC<ParcelCardProps> = ({
+const ParcelCard: React.FC<ParcelCardProps> = ({
   trackingID = 'No trackingID',
   senderName = 'No sender name',
   senderNo = 'No sender phone',
@@ -38,7 +37,7 @@ const ParcelCard: FC<ParcelCardProps> = ({
       </CardContent>
       {Note && <CardContent>{Note}</CardContent>}
       {Actions && (
-        <CardActions sx={{ justifyContent: 'center', gap: '1rem' }}>
+        <CardActions sx={{ justifyContent: 'center', gap: 2 }}>
           {Actions}
         </CardActions>
       )}
