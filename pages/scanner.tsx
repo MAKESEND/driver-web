@@ -1,16 +1,18 @@
 import type { ScannerType, ScannerMode } from 'types';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
+import { useState, useEffect, Suspense } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'));
+const Loader = dynamic(() => import('components/common/loader/Loader'));
+const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'), {
+  suspense: true,
+});
 const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout'),
-  { ssr: false }
+  () => import('components/layouts/drawerLayout/DrawerLayout')
 );
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
@@ -37,7 +39,9 @@ export const ScannerPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Scanner" />
-      <ScannerPanel type={type} mode={mode} />
+      <Suspense fallback={<Loader />}>
+        <ScannerPanel type={type} mode={mode} />
+      </Suspense>
     </>
   );
 };

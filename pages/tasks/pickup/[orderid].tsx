@@ -9,13 +9,13 @@ import getParcelsByOrderId from 'utils/services/getParcelsByOrderId';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
+const TaskLoader = dynamic(() => import('components/tasks/TaskLoader'));
 const MobileLayout = dynamic(
   () => import('components/layouts/mobileLayout/MobileLayout')
 );
 const MobileContainer = dynamic(
   () => import('components/common/mobile/MobileContainer')
 );
-const TaskLoader = dynamic(() => import('components/tasks/TaskLoader'));
 const PickupOrderId = dynamic(
   () => import('components/tasks/pickup/PickupOrderId')
 );
@@ -81,8 +81,8 @@ export const PickupOrderPage: NextPageWithLayout<PickupOrderPageProps> = ({
         sx={{
           position: 'relative',
           margin: '0 auto',
-          paddingX: (t) => t.spacing(2),
-          paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
+          px: 2,
+          pb: `calc(36.5px + ${bottomPadding} * 2)`,
         }}
       >
         {isLoading ? (

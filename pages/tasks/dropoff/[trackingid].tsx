@@ -9,13 +9,13 @@ import getParcelsByTrackingId from 'utils/services/getParcelsByTrackingId';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
+const TaskLoader = dynamic(() => import('components/tasks/TaskLoader'));
 const MobileLayout = dynamic(
   () => import('components/layouts/mobileLayout/MobileLayout')
 );
 const MobileContainer = dynamic(
   () => import('components/common/mobile/MobileContainer')
 );
-const TaskLoader = dynamic(() => import('components/tasks/TaskLoader'));
 const DropoffTrackingId = dynamic(
   () => import('components/tasks/dropoff/DropoffTrackingId')
 );
@@ -81,8 +81,8 @@ export const DropoffTaskPage: NextPageWithLayout<DropoffTaskPageProps> = ({
         sx={{
           position: 'relative',
           margin: '0 auto',
-          paddingX: (t) => t.spacing(2),
-          paddingBottom: `calc(36.5px + ${bottomPadding} * 2)`,
+          px: 2,
+          pb: `calc(36.5px + ${bottomPadding} * 2)`,
         }}
       >
         {isLoading ? (
