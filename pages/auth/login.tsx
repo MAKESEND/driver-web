@@ -26,7 +26,7 @@ export const LoginPage: NextPage = () => {
             justifyContent: 'center',
             alignItems: 'center',
             m: '0 auto',
-            p: (theme) => theme.spacing(2),
+            p: 2,
             maxWidth: (theme) => theme.layout.size.portMaxWidth,
           }}
         >

@@ -2,13 +2,12 @@ import type { DropoffTask, ParcelStatus } from 'types';
 import { useState, useEffect, useRef, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { dropoffParcelState } from 'states';
-import { Box, Divider } from '@mui/material';
-import TaskSelector from '../../TaskSelector';
+import { Divider } from '@mui/material';
+import { useUpdateParcelStatus } from 'hooks/useMutateData';
 import CollectlistSummary from './collectlist/CollectlistSummary';
 import Collectlist from './collectlist/Collectlist';
 import CollectlistBottomNav from './collectlist/CollectlistBottomNav';
-import { useUpdateParcelStatus } from 'hooks/useMutateData';
-import NoTask from '../../NoTask';
+import TaskSelector from 'components/tasks/TaskSelector';
 
 export interface DropoffCollectlistProps {
   dropoffTasks?: DropoffTask[];
@@ -17,22 +16,13 @@ export interface DropoffCollectlistProps {
 export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   dropoffTasks = [],
 }) => {
-  const { isLoading, data, mutate } = useUpdateParcelStatus();
+  const { isLoading, mutate } = useUpdateParcelStatus();
   const syncedRef = useRef(false);
   const [selectedParcels, setSelectedParcels] = useState<string[]>([]);
   const [filteredParcels, setFilteredParcels] =
     useState<DropoffTask[]>(dropoffTasks);
   const [dropoffParcels, setDropoffParcels] =
     useRecoilState(dropoffParcelState);
-
-  useEffect(() => {
-    // reset local states
-    return () => {
-      syncedRef.current = false;
-      setSelectedParcels([]);
-      setFilteredParcels([]);
-    };
-  }, []);
 
   useEffect(() => {
     if (syncedRef.current) {
@@ -59,36 +49,29 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   };
 
   if (!dropoffTasks.length) {
-    return <NoTask />;
+    return null;
   }
 
   return (
     <>
-      <Box
-        sx={{
-          padding: (t) => t.spacing(2),
-          paddingBottom: 'calc(36.5px + 24px)',
-        }}
-      >
-        <CollectlistSummary />
-        <TaskSelector
-          sticky
-          disabled={isLoading}
-          parcels={dropoffTasks}
-          selectedParcels={selectedParcels}
-          setSelectedParcels={setSelectedParcels}
-          filteredParcels={filteredParcels}
-          setFilteredParcels={setFilteredParcels}
-          href="/scanner?type=dropoff"
-        />
-        <Divider />
-        <Collectlist
-          disabled={isLoading}
-          dropoffTasks={filteredParcels}
-          selectedParcels={selectedParcels}
-          setSelectedParcels={setSelectedParcels}
-        />
-      </Box>
+      <CollectlistSummary />
+      <TaskSelector
+        sticky
+        disabled={isLoading}
+        parcels={dropoffTasks}
+        selectedParcels={selectedParcels}
+        setSelectedParcels={setSelectedParcels}
+        filteredParcels={filteredParcels}
+        setFilteredParcels={setFilteredParcels}
+        href="/scanner?type=dropoff"
+      />
+      <Divider />
+      <Collectlist
+        disabled={isLoading}
+        dropoffTasks={filteredParcels}
+        selectedParcels={selectedParcels}
+        setSelectedParcels={setSelectedParcels}
+      />
       <CollectlistBottomNav
         disabled={!selectedParcels.length || isLoading}
         isLoading={isLoading}
@@ -100,6 +83,6 @@ export const DropoffCollectlist: React.FC<DropoffCollectlistProps> = ({
   );
 };
 
-const MemoizedDropoffCollectlist = memo(DropoffCollectlist);
+export const MemoizedDropoffCollectlist = memo(DropoffCollectlist);
 
 export default MemoizedDropoffCollectlist;

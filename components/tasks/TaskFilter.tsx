@@ -98,14 +98,14 @@ export const TaskFilter = <T, R>({
       sx={{
         width: '100%',
         display: 'flex',
-        gap: (t) => t.spacing(1),
+        gap: 1,
         ...sx,
         ...(sticky && {
           position: 'sticky',
           top: 0,
-          paddingY: (t) => t.spacing(1),
-          backgroundColor: (t) => t.palette.white.main,
-          zIndex: (t) => t.zIndex.drawer,
+          py: 1,
+          bgcolor: (theme) => theme.palette.white.main,
+          zIndex: (theme) => theme.zIndex.drawer,
         }),
       }}
     >
@@ -118,7 +118,7 @@ export const TaskFilter = <T, R>({
         onChange={onChange}
         sx={{ flexGrow: 1 }}
         InputProps={{
-          sx: { height: (t) => t.spacing(5.25) },
+          sx: { height: (theme) => theme.spacing(5) },
           ...(searchVal && {
             endAdornment: (
               <IconButton
@@ -137,7 +137,10 @@ export const TaskFilter = <T, R>({
         onClick={openFilterMenu}
         variant="outlined"
         size="small"
-        sx={{ minWidth: (t) => t.spacing(5.25) }}
+        sx={{
+          minWidth: (theme) => theme.spacing(5),
+          height: (theme) => theme.spacing(5),
+        }}
       >
         <FilterIcon />
       </Button>
@@ -157,9 +160,12 @@ export const TaskFilter = <T, R>({
       {scan && (
         <Link href={href} passHref>
           <Button
-            variant="outlined"
             size="small"
-            sx={{ minWidth: (t) => t.spacing(5.25) }}
+            variant="outlined"
+            sx={{
+              minWidth: (theme) => theme.spacing(5),
+              height: (theme) => theme.spacing(5),
+            }}
           >
             <QrCodeScannerIcon />
           </Button>

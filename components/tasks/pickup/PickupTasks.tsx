@@ -1,11 +1,11 @@
 import type { PickupTask } from 'types';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Divider, Typography } from '@mui/material';
-import NoTask from 'components/tasks/NoTask';
-import PickupTaskList from './page/PickupTaskList';
-import TaskFilter from '../TaskFilter';
 import { pickupTaskProps, rounds } from 'utils/constants/delivery';
+import NoTask from 'components/tasks/NoTask';
+import TaskFilter from 'components/tasks/TaskFilter';
+import PickupTaskList from 'components/tasks/pickup/page/PickupTaskList';
+import { Divider, Typography } from '@mui/material';
 
 export interface PickupTasksProps {
   pickupTasks?: PickupTask[];

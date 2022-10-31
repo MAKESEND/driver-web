@@ -1,6 +1,6 @@
 import type { PickupTask, DropoffTask, ParcelSize, ParcelStatus } from 'types';
 
-export const pickupTasks: PickupTask[] = [
+const pickupTasks: PickupTask[] = [
   {
     order: '',
     order_id: 'MS2209122222108',
@@ -197,7 +197,7 @@ export const pickupTasks: PickupTask[] = [
   },
 ];
 
-export const dropoffTasks: DropoffTask[] = [
+const dropoffTasks: DropoffTask[] = [
   {
     orderID: 'MS2209231731205',
     trackingID: 'EX2209231731660',
@@ -643,3 +643,5 @@ export const dropoffTasks: DropoffTask[] = [
     sequence: 13,
   },
 ];
+
+export { pickupTasks, dropoffTasks };

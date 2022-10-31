@@ -10,16 +10,18 @@ import auth from 'utils/auth';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout'),
-  { ssr: false }
-);
 const Loader = dynamic(() => import('components/common/loader/Loader'));
+const NoTask = dynamic(() => import('components/tasks/NoTask'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
 const DropoffCollectlist = dynamic(
-  () => import('components/tasks/dropoff/page/DropoffCollectlist')
+  () => import('components/tasks/dropoff/page/DropoffCollectlist'),
+  { suspense: true }
 );
 const DropoffTasklist = dynamic(
-  () => import('components/tasks/dropoff/page/DropoffTasklist')
+  () => import('components/tasks/dropoff/page/DropoffTasklist'),
+  { suspense: true }
 );
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -84,13 +86,17 @@ export const DropoffPage: NextPageWithLayout<{ userId?: string }> = ({
     }
   }, [dropoffTasks]);
 
-  const Worklist = toConfirm ? DropoffTasklist : DropoffCollectlist;
+  if (!dropoffTasks || !dropoffTasks.length) return <NoTask />;
 
   return (
     <>
       <Seo title="Dropoff" />
       <Suspense fallback={<Loader />}>
-        <Worklist dropoffTasks={dropoffTasks} />
+        {toConfirm ? (
+          <DropoffTasklist dropoffTasks={dropoffTasks} />
+        ) : (
+          <DropoffCollectlist dropoffTasks={dropoffTasks} />
+        )}
       </Suspense>
     </>
   );
@@ -98,7 +104,16 @@ export const DropoffPage: NextPageWithLayout<{ userId?: string }> = ({
 
 DropoffPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout fillContainer mobileContainer sxMobile={{ p: 2 }}>
+    <DrawerLayout
+      fillContainer
+      mobileContainer
+      sxMobile={{
+        position: 'relative',
+        height: 'auto',
+        p: 2,
+        pb: 'calc(36.5px + 24px)',
+      }}
+    >
       {page}
     </DrawerLayout>
   );

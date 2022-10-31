@@ -1,8 +1,7 @@
 import type { SxProps } from '@mui/material';
 import { useTranslation } from 'next-i18next';
-import { MobileContainer } from 'components/common/mobile/MobileContainer';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 export interface CollectlistBottomNavProps {
   disabled?: boolean;
@@ -26,18 +25,22 @@ export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
   const { t } = useTranslation('tasks');
 
   return (
-    <MobileContainer
+    <Box
       sx={{
         position: 'absolute',
+        width: '100%',
+        mb: 2,
         bottom: 0,
-        marginBottom: (t) => t.spacing(2),
+        left: 0,
+        right: 0,
+        maxWidth: (theme) => theme.layout.size.portMaxWidth,
         ...sx,
       }}
     >
       <Button
         variant="contained"
         disabled={disabled}
-        onClick={() => onConfirm()}
+        onClick={onConfirm}
         sx={{
           width: '100%',
           maxWidth: { xs: '80vw', sm: '20rem' },
@@ -51,7 +54,7 @@ export const CollectlistBottomNav: React.FC<CollectlistBottomNavProps> = ({
           `(${countSelected}/${countTotal})`
         )}
       </Button>
-    </MobileContainer>
+    </Box>
   );
 };
 

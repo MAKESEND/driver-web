@@ -16,7 +16,7 @@ export const ModalLayout: React.FC<{
         transform: 'translate(-50%, -50%)',
         width: { sm: 280 },
         minWidth: 280,
-        bgColor: (t) => t.palette.common.white,
+        bgcolor: (t) => t.palette.common.white,
         boxShadown: '0px 4x 12px rgba(0, 0, 0, 0.16)',
         borderRadius: 2,
         p: 3,
