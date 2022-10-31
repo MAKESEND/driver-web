@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next';
 import { selectedBranchState } from 'states';
 import { useRecoilState } from 'recoil';
 import { Select } from '@mui/material';

@@ -1,5 +1,5 @@
-import Box from '@mui/material/Box';
+import { Box, styled } from '@mui/material';
 
-export const FlexSpacer: React.FC = () => <Box sx={{ flexGrow: 1 }} />;
+export const FlexSpacer = styled(Box)(() => ({ flexGrow: 1 }));
 
 export default FlexSpacer;

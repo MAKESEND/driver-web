@@ -7,7 +7,13 @@ import type {
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useWindowSize } from 'react-use';
-import { Box, styled, SwipeableDrawer, Typography } from '@mui/material';
+import {
+  Box,
+  styled,
+  SwipeableDrawer,
+  Typography,
+  useTheme,
+} from '@mui/material';
 
 const Puller = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -46,11 +52,12 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   pullerHint,
   bodySx,
 }) => {
+  const theme = useTheme();
   const { width } = useWindowSize();
   const { t } = useTranslation('scanner');
 
   // only show in mobile-size screen
-  if (width > 900) return null;
+  if (width > theme.layout.size.drawerBreakpoint) return null;
 
   return (
     <SwipeableDrawer
@@ -78,11 +85,11 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
           height: swipeAreaWidth,
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
-          border: (t) => `1px solid ${t.palette.common.lightGrey}`,
+          border: (theme) => `1px solid ${theme.palette.common.lightGrey}`,
           visibility: 'visible',
           left: 0,
           right: 0,
-          backgroundColor: (t) => t.palette.common.white,
+          backgroundColor: (theme) => theme.palette.common.white,
           ...pullerSx,
         }}
       >

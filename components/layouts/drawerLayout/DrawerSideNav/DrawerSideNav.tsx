@@ -1,8 +1,8 @@
 import { useTranslation } from 'next-i18next';
 import FlexSpacer from 'components/common/FlexSpacer';
-import DrawerSignout from './DrawerSignout';
-import DrawerSideHead from './DrawerSideHead';
-import DrawerSideLinks from './DrawerSideLinks';
+import DrawerSignout from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSignout';
+import DrawerSideHead from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSideHead';
+import DrawerSideLinks from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSideLinks';
 import { Drawer, Divider } from '@mui/material';
 
 export interface DrawerSideNav {

@@ -1,10 +1,10 @@
 import type { SxProps, Theme } from '@mui/material';
-import { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
-import DrawerMain from './DrawerMain';
-import DrawerHeader from './DrawerHeader';
-import DrawerTopNav from './DrawerTopNav';
-import DrawerSideNav from './DrawerSideNav/DrawerSideNav';
+import DrawerMain from 'components/layouts/drawerLayout/DrawerMain';
+import DrawerHeader from 'components/layouts/drawerLayout/DrawerHeader';
+import DrawerTopNav from 'components/layouts/drawerLayout/DrawerTopNav';
+import DrawerSideNav from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSideNav';
 import MobileContainer from 'components/common/mobile/MobileContainer';
 import { useTheme } from '@mui/material';
 
@@ -35,10 +35,9 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
   const toggleDrawer = () => setOpenDrawer((oldVal) => !oldVal);
 
   useEffect(() => {
-    if (width > breakPoint) {
-      setOpenDrawer(true);
-      setIsMobile(false);
-    }
+    const reachThreshold = width > breakPoint;
+    setOpenDrawer(reachThreshold);
+    setIsMobile(!reachThreshold);
   }, [width, breakPoint]);
 
   return (
