@@ -9,11 +9,10 @@ import auth from 'utils/auth';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout'),
-  { ssr: false }
-);
 const Loader = dynamic(() => import('components/common/loader/Loader'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
 const PickupTasks = dynamic(
   () => import('components/tasks/pickup/PickupTasks'),
   { suspense: true }
@@ -41,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     await queryClient.prefetchQuery(
       ['pickupTasks', userData?.id],
-      async () => await getPickupTasks()
+      async () => await getPickupTasks(userData?.id)
     );
 
     return {
@@ -86,7 +85,11 @@ export const PickupPage: NextPageWithLayout<{ userId?: string }> = ({
 
 PickupPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout mobileContainer fillContainer sxMobile={{ p: 2 }}>
+    <DrawerLayout
+      mobileContainer
+      fillContainer
+      sxMobile={{ p: 2, height: 'auto' }}
+    >
       {page}
     </DrawerLayout>
   );

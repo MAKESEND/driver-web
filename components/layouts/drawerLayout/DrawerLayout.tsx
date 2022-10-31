@@ -1,7 +1,6 @@
 import type { SxProps, Theme } from '@mui/material';
 import { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useWindowSize } from 'react-use';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import DrawerMain from './DrawerMain';
 import DrawerHeader from './DrawerHeader';
 import DrawerTopNav from './DrawerTopNav';
@@ -33,26 +32,13 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
   const [isMobile, setIsMobile] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const mainRef = useRef();
-  const [container, setContainer] = useState<HTMLElement>();
-  const trigger = useScrollTrigger({ target: container });
-
   const toggleDrawer = () => setOpenDrawer((oldVal) => !oldVal);
-
-  useLayoutEffect(() => {
-    setContainer(mainRef.current);
-  }, []);
 
   useEffect(() => {
     if (width > breakPoint) {
       setOpenDrawer(true);
       setIsMobile(false);
     }
-
-    return () => {
-      setOpenDrawer(false);
-      setIsMobile(true);
-    };
   }, [width, breakPoint]);
 
   return (
@@ -68,7 +54,6 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
         isMobile={isMobile}
         onClick={toggleDrawer}
         hideOnScroll={hideOnScroll}
-        isScrolling={trigger}
       />
       <DrawerHeader />
       <DrawerMain
@@ -77,7 +62,6 @@ export const DrawerLayout: React.FC<DrawerLayout> = ({
         isMobile={isMobile}
         fillContainer={fillContainer}
         sx={sxMain}
-        ref={mainRef}
       >
         {mobileContainer ? (
           <MobileContainer sx={{ ...sxMobile, p: 2 }}>

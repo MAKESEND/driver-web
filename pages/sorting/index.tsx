@@ -9,11 +9,10 @@ import auth from 'utils/auth';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const DrawerLayout = dynamic(
-  () => import('components/layouts/drawerLayout/DrawerLayout'),
-  { ssr: false }
-);
 const Loader = dynamic(() => import('components/common/loader/Loader'));
+const DrawerLayout = dynamic(
+  () => import('components/layouts/drawerLayout/DrawerLayout')
+);
 const SortingList = dynamic(() => import('components/sorting/SortingList'), {
   suspense: true,
 });

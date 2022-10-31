@@ -1,7 +1,9 @@
 import type { PickupTask } from 'types';
 import api from './apiServices';
 
-export const getPickupTasks = async (): Promise<PickupTask[]> => {
+export const getPickupTasks = async (
+  driverId?: string
+): Promise<PickupTask[]> => {
   try {
     if (typeof globalThis?.window !== 'undefined') {
       throw new Error('getPickupTasks is server-side only');
@@ -15,6 +17,10 @@ export const getPickupTasks = async (): Promise<PickupTask[]> => {
 
     if (!parcelsToPick) {
       throw new Error('no pickup task');
+    }
+
+    if (driverId) {
+      return parcelsToPick.filter((task) => task.driver_id === driverId);
     }
 
     return parcelsToPick;
