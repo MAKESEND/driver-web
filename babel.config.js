@@ -1,4 +1,4 @@
-export const config = {
+module.exports = {
   presets: [
     [
       '@babel/preset-env',
@@ -12,5 +12,3 @@ export const config = {
   ],
   plugins: [['styled-components', { ssr: true, displayName: true }]],
 };
-
-export default config;
