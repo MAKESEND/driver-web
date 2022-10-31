@@ -8,7 +8,7 @@ import type {
   ParcelStatus,
 } from 'types';
 
-export const parcelByTrackingId: ParcelByTrackingId = {
+const parcelByTrackingId: ParcelByTrackingId = {
   orderID: 'MS2209030912488',
   trackingID: 'EX2209030912168',
   aliasID: '1529616860',
@@ -41,7 +41,7 @@ export const parcelByTrackingId: ParcelByTrackingId = {
   status: 'Delivered' as ParcelStatus,
 };
 
-export const parcels: Parcel[] = [
+const parcels: Parcel[] = [
   {
     branch_id: null,
     cod: 0,
@@ -81,7 +81,7 @@ export const parcels: Parcel[] = [
   },
 ];
 
-export const parcelsToSort: ParcelToSort[] = [
+const parcelsToSort: ParcelToSort[] = [
   {
     orderID: 'MS2209051141438',
     trackingID: 'EX2209051141578',
@@ -132,7 +132,7 @@ export const parcelsToSort: ParcelToSort[] = [
   },
 ];
 
-export const parcelsByOrderId: ParcelMixin[] = [
+const parcelsByOrderId: ParcelMixin[] = [
   {
     shipment_id: 302367,
     shipmentID: 'EX2209131729392',
@@ -542,3 +542,5 @@ export const parcelsByOrderId: ParcelMixin[] = [
     dropoff_postcode: '11130',
   },
 ];
+
+export { parcelByTrackingId, parcels, parcelsToSort, parcelsByOrderId };

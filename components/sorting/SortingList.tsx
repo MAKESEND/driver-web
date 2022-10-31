@@ -1,10 +1,15 @@
 import type { ParcelToSort, ParcelMixin, ParcelStatus } from 'types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { useUpdateParcelStatus } from 'hooks/useMutateData';
-import MobileContainer from 'components/common/mobile/MobileContainer';
 import ParcelCard from 'components/ParcelCard';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  Stack,
+} from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const SortingFilter = dynamic(
@@ -34,18 +39,12 @@ export const SortingList: React.FC<SortingList> = ({ sortingList = [] }) => {
     }
   };
 
-  useEffect(() => {
-    return () => setParcel(null);
-  }, []);
-
   return (
-    <MobileContainer
+    <Stack
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         height: '100%',
-        gap: '1.25rem',
+        gap: 2.5,
       }}
     >
       <SortingFilter
@@ -81,7 +80,7 @@ export const SortingList: React.FC<SortingList> = ({ sortingList = [] }) => {
           />
         </Box>
       )}
-    </MobileContainer>
+    </Stack>
   );
 };
 

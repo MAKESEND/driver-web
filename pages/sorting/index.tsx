@@ -82,7 +82,7 @@ export const SortingPage: NextPageWithLayout = () => {
 
 SortingPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout mobileContainer fillContainer sxMobile={{ p: 2 }}>
+    <DrawerLayout mobileContainer fillContainer>
       {page}
     </DrawerLayout>
   );

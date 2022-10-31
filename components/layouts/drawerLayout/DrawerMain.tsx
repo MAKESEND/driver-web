@@ -9,12 +9,11 @@ export const DrawerMain = styled(Box, {
   fillContainer?: boolean;
 }>(({ theme, open = false, isMobile = true, fillContainer = false }) => ({
   flexGrow: 1,
-  // padding: theme.spacing(2),
+  overflowY: 'auto',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowY: 'auto',
   ...(fillContainer && {
     [theme.breakpoints.up('xs')]: {
       height: 'calc(100vh - 56px)',
@@ -26,11 +25,11 @@ export const DrawerMain = styled(Box, {
     },
   }),
   ...(open && {
+    marginLeft: isMobile ? 0 : theme.layout.size.drawerWidth,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: isMobile ? 0 : theme.layout.size.drawerWidth,
   }),
 }));
 
