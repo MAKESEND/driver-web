@@ -24,7 +24,7 @@ export const SettingsPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Settings" />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader hideText />}>
         <Settings />
       </Suspense>
     </>

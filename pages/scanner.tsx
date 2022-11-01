@@ -30,7 +30,7 @@ export const ScannerPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Scanner" />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader hideText />}>
         <ScannerPanel
           type={router.query?.type as ScannerType}
           mode={router.query?.mode as ScannerMode}

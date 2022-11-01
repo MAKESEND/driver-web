@@ -72,7 +72,7 @@ export const SortingPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Sorting" />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader hideText />}>
         <SortingList sortingList={sortingList} />
       </Suspense>
     </>

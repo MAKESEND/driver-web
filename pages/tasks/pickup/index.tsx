@@ -76,7 +76,7 @@ export const PickupPage: NextPageWithLayout<{ userId?: string }> = ({
   return (
     <>
       <Seo title="Pickup" />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader hideText />}>
         <PickupTasks pickupTasks={pickupTasks} />
       </Suspense>
     </>
