@@ -12,10 +12,7 @@ import {
 } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const SortingFilter = dynamic(
-  () => import('components/sorting/SortingFilter'),
-  { ssr: false }
-);
+const SortingFilter = dynamic(() => import('components/sorting/SortingFilter'));
 
 export interface SortingList {
   sortingList?: ParcelToSort[];
