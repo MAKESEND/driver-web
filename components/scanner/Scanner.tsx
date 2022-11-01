@@ -8,8 +8,8 @@ import { camerasState, selectedCameraState } from 'states';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Box, Backdrop, IconButton, styled } from '@mui/material';
 import Loader from 'components/common/loader/Loader';
-import ScannerButtons from './ScannerButtons';
-import ScannerTitle from './ScannerTitle';
+import ScannerOptions from 'components/scanner/camera/ScannerOptions';
+import ScannerTitle from 'components/scanner/camera/ScannerTitle';
 
 import dynamic from 'next/dynamic';
 const CancelIcon = dynamic(() => import('@mui/icons-material/Cancel'));
@@ -232,7 +232,7 @@ export const Scanner: React.FC<ScannerFullProps> = ({
         <CancelIcon sx={{ color: (t) => t.palette.white.main }} />
       </IconButton>
       <ButtonWrapper minWidth={minWidth}>
-        <ScannerButtons />
+        <ScannerOptions />
       </ButtonWrapper>
     </Backdrop>
   );

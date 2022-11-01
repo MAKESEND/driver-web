@@ -3,7 +3,13 @@ export interface Camera {
   label: string;
 }
 
+export interface ScannerConfig {
+  type: keyof typeof ScannerType;
+  mode: keyof typeof ScannerMode;
+}
+
 export enum ScannerType {
+  scan = 'scan',
   pickup = 'pickup',
   dropoff = 'dropoff',
   sorting = 'sorting',

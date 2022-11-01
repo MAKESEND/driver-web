@@ -6,14 +6,8 @@ import type {
   Theme,
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
-import { useWindowSize } from 'react-use';
-import {
-  Box,
-  styled,
-  SwipeableDrawer,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import useTouchScreen from 'hooks/useTouchScreen';
+import { Box, styled, SwipeableDrawer, Typography } from '@mui/material';
 
 const Puller = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -52,12 +46,11 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   pullerHint,
   bodySx,
 }) => {
-  const theme = useTheme();
-  const { width } = useWindowSize();
   const { t } = useTranslation('scanner');
+  const isTouchScreen = useTouchScreen();
 
-  // only show in mobile-size screen
-  if (width > theme.layout.size.drawerBreakpoint) return null;
+  // only show in touch screen
+  if (!isTouchScreen) return <>{children}</>;
 
   return (
     <SwipeableDrawer
