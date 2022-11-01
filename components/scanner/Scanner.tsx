@@ -38,19 +38,18 @@ export interface CameraStarter {
   deviceId?: { exact: string };
 }
 
-export interface ScannerFullProps {
+export interface ScannerProps {
   isScanning?: boolean;
   setIsScanning?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDenied?: React.Dispatch<React.SetStateAction<boolean>>;
-  setScannedResult?: React.Dispatch<React.SetStateAction<ScannedResult | null>>;
+  setScannedResult?: React.Dispatch<React.SetStateAction<ScannedResult[]>>;
 }
 
-export const Scanner: React.FC<ScannerFullProps> = ({
+export const Scanner: React.FC<ScannerProps> = ({
   isScanning = false,
-  setIsScanning = () => console.warn('no setIsScanning given to ScannerFull'),
-  setIsDenied = () => console.warn('no setIsDenied given to ScannerFull'),
-  setScannedResult = () =>
-    console.warn('no setScannedResult given to ScannerFull'),
+  setIsScanning = () => console.warn('no setIsScanning given to Scanner'),
+  setIsDenied = () => console.warn('no setIsDenied given to Scanner'),
+  setScannedResult = () => console.warn('no setScannedResult given to Scanner'),
 }) => {
   const { width, height } = useWindowSize();
   const { t } = useTranslation(['scanner', 'common']);
@@ -79,10 +78,13 @@ export const Scanner: React.FC<ScannerFullProps> = ({
   const startScanner = useCallback(
     async (scanner: Html5Qrcode | null, cameraId?: string) => {
       const onSuccess = (decodedText: string) => {
-        setScannedResult({
-          text: decodedText,
-          scanned_at: new Date().toISOString(),
-        });
+        setScannedResult((list) => [
+          ...list,
+          {
+            text: decodedText,
+            scanned_at: new Date().toISOString(),
+          },
+        ]);
       };
 
       const onError = (errorText: string) => {

@@ -32,9 +32,7 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({
     mode,
     type,
   });
-  const [scannedResult, setScannedResult] = useState<ScannedResult | null>(
-    null
-  );
+  const [scannedResult, setScannedResult] = useState<ScannedResult[]>([]);
 
   return (
     <Stack sx={{ height: '100%' }}>
