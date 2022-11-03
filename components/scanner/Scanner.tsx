@@ -1,18 +1,25 @@
-import type { FacingMode, ScannedResult } from 'types';
+import type { ScannerConfig } from 'types';
 import type { Html5Qrcode } from 'html5-qrcode';
-import { useEffect, useMemo, useCallback, useRef } from 'react';
+import { useEffect, useMemo, useRef, memo } from 'react';
 import { useWindowSize } from 'react-use';
 import { useTranslation } from 'next-i18next';
 import { isMobile } from 'react-device-detect';
 import { camerasState, selectedCameraState } from 'states';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Box, Backdrop, IconButton, styled } from '@mui/material';
+import { useScannerResult } from 'hooks/useScannerResult';
+import initScanner from 'utils/scanner/initScanner';
+import startScanner from 'utils/scanner/startScanner';
+import stopScanner from 'utils/scanner/stopScanner';
+import cameraConfig from 'utils/scanner/cameraConfig';
 import Loader from 'components/common/loader/Loader';
-import ScannerOptions from 'components/scanner/camera/ScannerOptions';
 import ScannerTitle from 'components/scanner/camera/ScannerTitle';
+import { Box, Backdrop, IconButton, styled } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const CancelIcon = dynamic(() => import('@mui/icons-material/Cancel'));
+const ScannerOptions = dynamic(
+  () => import('components/scanner/camera/ScannerOptions')
+);
 
 const ButtonWrapper = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'minWidth' && prop !== 'isMobile',
@@ -33,154 +40,89 @@ const ButtonWrapper = styled(Box, {
   })
 );
 
-export interface CameraStarter {
-  facingMode?: keyof typeof FacingMode;
-  deviceId?: { exact: string };
-}
-
 export interface ScannerProps {
   isScanning?: boolean;
   setIsScanning?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDenied?: React.Dispatch<React.SetStateAction<boolean>>;
-  setScannedResult?: React.Dispatch<React.SetStateAction<ScannedResult[]>>;
+  scannerConfig?: ScannerConfig;
 }
 
 export const Scanner: React.FC<ScannerProps> = ({
   isScanning = false,
   setIsScanning = () => console.warn('no setIsScanning given to Scanner'),
   setIsDenied = () => console.warn('no setIsDenied given to Scanner'),
-  setScannedResult = () => console.warn('no setScannedResult given to Scanner'),
+  scannerConfig = null,
 }) => {
+  // const scannerTask = scannerConfig?.task || 'scan';
+  const scannerMode = scannerConfig?.mode || 'single';
+
   const { width, height } = useWindowSize();
+  const scannedResultRef = useScannerResult();
   const { t } = useTranslation(['scanner', 'common']);
-  const scannerRef = useRef<Html5Qrcode | null>(null);
+
   const hasStartedRef = useRef<boolean>(false);
+  const scannerRef = useRef<Html5Qrcode | null>(null);
   const setCameras = useSetRecoilState(camerasState);
   const selectedCamera = useRecoilValue(selectedCameraState);
 
-  const minWidth = useMemo(() => Math.min(width, height), [width, height]);
-  const camConfig = useMemo(() => {
-    const minWidth = Math.min(height, width);
-    const ratio = 2 / 3;
-    const aspectRatio = isMobile
-      ? Math.ceil((height / width) * 100) / 100
-      : width / height;
-    const qrbox = isMobile
-      ? { width: minWidth * ratio, height: minWidth * ratio }
-      : 300;
-    return {
-      fps: 2,
-      qrbox,
-      aspectRatio,
-    };
-  }, [width, height]);
-
-  const startScanner = useCallback(
-    async (scanner: Html5Qrcode | null, cameraId?: string) => {
-      const onSuccess = (decodedText: string) => {
-        setScannedResult((list) => [
-          ...list,
-          {
-            text: decodedText,
-            scanned_at: new Date().toISOString(),
-          },
-        ]);
-      };
-
-      const onError = (errorText: string) => {
-        return errorText;
-      };
-
-      try {
-        if (scanner) {
-          if (scanner.getState() === 2) {
-            await scanner.stop();
-            scanner.clear();
-          }
-
-          let camStarter: CameraStarter = {
-            facingMode: 'environment',
-          };
-          if (cameraId) {
-            camStarter = { deviceId: { exact: cameraId } };
-          }
-
-          await scanner.start(camStarter, camConfig, onSuccess, onError);
-        }
-      } catch (error: any) {
-        console.log('something went wrong when starting camera');
-        console.log(error.message || error);
-      }
-    },
-    [camConfig, setScannedResult]
+  const minSide = useMemo(() => Math.min(width, height), [width, height]);
+  const camConfig = useMemo(
+    () => cameraConfig({ width, height, isMobile }),
+    [width, height]
   );
-
-  const initScanner = useCallback(
-    async (camId: string) => {
-      try {
-        const { Html5Qrcode } = await import('html5-qrcode');
-        const cams = await Html5Qrcode.getCameras();
-        if (cams.length) {
-          setCameras(cams);
-          const scanner = new Html5Qrcode('reader');
-          await stopCamera(scannerRef.current);
-          scannerRef.current = scanner;
-          hasStartedRef.current = true;
-          startScanner(scanner, camId);
-          return;
-        }
-
-        throw new Error('no camera is available');
-      } catch (error: any) {
-        console.log('something went wrong when init qr reader');
-        console.warn(error);
-        if (error === 'NotAllowedError : Permission denied') {
-          setIsScanning(false);
-          setIsDenied(true);
-        }
-      }
-    },
-    [startScanner, setIsScanning, setIsDenied, setCameras]
-  );
-
-  const stopCamera = async (camera: Html5Qrcode | null) => {
-    try {
-      if (camera && camera.getState() === 2) {
-        await camera.stop();
-        camera.clear();
-      }
-    } catch (error: any) {
-      console.warn('something went wrong when stopping scanner');
-      console.log(error?.message ?? error);
-    }
-  };
 
   useEffect(() => {
     // init scanner with camera
     if (isScanning && !hasStartedRef.current) {
-      initScanner(selectedCamera);
+      initScanner({
+        cameraId: selectedCamera,
+        camConfig,
+        scannerRef,
+        scannedResultRef,
+        scannerMode,
+        setIsDenied,
+        setIsScanning,
+        setCameras,
+      }).then((hasStarted) => {
+        hasStartedRef.current = hasStarted;
+      });
     }
-  }, [initScanner, isScanning, selectedCamera]);
+  }, [
+    isScanning,
+    camConfig,
+    selectedCamera,
+    scannedResultRef,
+    scannerMode,
+    setIsDenied,
+    setIsScanning,
+    setCameras,
+  ]);
 
   useEffect(() => {
     // switch between cameras
     if (isScanning && hasStartedRef.current) {
-      startScanner(scannerRef.current, selectedCamera);
+      startScanner({
+        scanner: scannerRef.current,
+        cameraId: selectedCamera,
+        camConfig,
+        scannedResultRef,
+        scannerMode,
+      });
     } else if (!isScanning && hasStartedRef.current) {
       // stop and clear camera stream
-      stopCamera(scannerRef.current);
+      stopScanner(scannerRef.current);
       scannerRef.current = null;
       hasStartedRef.current = false;
     }
-  }, [isScanning, startScanner, selectedCamera]);
+  }, [isScanning, camConfig, selectedCamera, scannerMode, scannedResultRef]);
 
   useEffect(() => {
     // reset and clear active camera stream
     return () => {
-      stopCamera(scannerRef.current);
+      setIsScanning(false);
+      stopScanner(scannerRef.current);
       scannerRef.current = null;
       hasStartedRef.current = false;
-      setIsScanning(false);
     };
   }, [setIsScanning]);
 
@@ -208,12 +150,12 @@ export const Scanner: React.FC<ScannerProps> = ({
           },
         }}
         CircularProps={{
-          sx: { color: (t) => t.palette.white.main },
+          sx: { color: (theme) => theme.palette.white.main },
         }}
         TypographyProps={{
-          sx: { color: (t) => t.palette.white.main },
+          sx: { color: (theme) => theme.palette.white.main },
         }}
-        text={`${t('hint.starting', { ns: 'common' })}...`}
+        text={`${t('common:hint.starting')}...`}
       />
       <Box id="reader" sx={{ width: '100%', height: '100%' }} />
       <IconButton
@@ -231,13 +173,15 @@ export const Scanner: React.FC<ScannerProps> = ({
           setIsScanning(false);
         }}
       >
-        <CancelIcon sx={{ color: (t) => t.palette.white.main }} />
+        <CancelIcon sx={{ color: (theme) => theme.palette.white.main }} />
       </IconButton>
-      <ButtonWrapper minWidth={minWidth}>
+      <ButtonWrapper minWidth={minSide} isMobile={isMobile}>
         <ScannerOptions />
       </ButtonWrapper>
     </Backdrop>
   );
 };
 
-export default Scanner;
+export const MemoizedScanner = memo(Scanner);
+
+export default MemoizedScanner;

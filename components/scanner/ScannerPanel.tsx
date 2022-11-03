@@ -4,7 +4,8 @@ import type {
   ScannerConfig,
   ScannedResult,
 } from 'types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { ScannerContext } from 'context/ScannerContext';
 import ScannerButtons from 'components/scanner/buttons/ScannerButtons';
 import { Stack, Slide } from '@mui/material';
 
@@ -26,47 +27,46 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({
   mode = 'single',
   task = 'scan',
 }) => {
+  const scannedResultRef = useRef<ScannedResult[]>([]);
   const [isDenied, setIsDenied] = useState<boolean>(false);
   const [isScanning, setIsScanning] = useState<boolean>(false);
-  const [scannedResult, setScannedResult] = useState<ScannedResult[]>([]);
   const [scannerConfig, setScannerConfig] = useState<ScannerConfig>({
     mode,
     task,
   });
 
   return (
-    <Slide in direction="down">
-      <Stack sx={{ height: '100%', p: 2 }}>
-        <Scanner
-          isScanning={isScanning}
-          setIsScanning={setIsScanning}
-          setIsDenied={setIsDenied}
-          setScannedResult={setScannedResult}
-        />
-        <Stack
-          sx={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {isDenied ? (
-            <ScannerDenied />
-          ) : (
-            <ScannerButtons
-              isScanning={isScanning}
-              setIsScanning={setIsScanning}
-              scannerConfig={scannerConfig}
-              setScannerConfig={setScannerConfig}
-            />
-          )}
+    <ScannerContext.Provider value={scannedResultRef}>
+      <Slide in direction="down">
+        <Stack sx={{ height: '100%', p: 2 }}>
+          <Scanner
+            isScanning={isScanning}
+            setIsScanning={setIsScanning}
+            setIsDenied={setIsDenied}
+            scannerConfig={scannerConfig}
+          />
+          <Stack
+            sx={{
+              flexGrow: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {isDenied ? (
+              <ScannerDenied />
+            ) : (
+              <ScannerButtons
+                isScanning={isScanning}
+                setIsScanning={setIsScanning}
+                scannerConfig={scannerConfig}
+                setScannerConfig={setScannerConfig}
+              />
+            )}
+          </Stack>
+          <ScannerResult scannerConfig={scannerConfig} />
         </Stack>
-        <ScannerResult
-          scannerConfig={scannerConfig}
-          scannedResult={scannedResult}
-        />
-      </Stack>
-    </Slide>
+      </Slide>
+    </ScannerContext.Provider>
   );
 };
 
