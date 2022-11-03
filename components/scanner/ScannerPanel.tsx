@@ -1,12 +1,12 @@
 import type {
   ScannerMode,
-  ScannerType,
+  ScannerTask,
   ScannerConfig,
   ScannedResult,
 } from 'types';
 import { useState } from 'react';
 import ScannerButtons from 'components/scanner/buttons/ScannerButtons';
-import { Stack } from '@mui/material';
+import { Stack, Slide } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const ScannerResult = dynamic(() => import('components/scanner/ScannerResult'));
@@ -19,52 +19,54 @@ const Scanner = dynamic(() => import('components/scanner/Scanner'), {
 
 export interface ScannerPanelProps {
   mode?: keyof typeof ScannerMode;
-  type?: keyof typeof ScannerType;
+  task?: keyof typeof ScannerTask;
 }
 
 export const ScannerPanel: React.FC<ScannerPanelProps> = ({
   mode = 'single',
-  type = 'scan',
+  task = 'scan',
 }) => {
   const [isDenied, setIsDenied] = useState<boolean>(false);
   const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [scannedResult, setScannedResult] = useState<ScannedResult[]>([]);
   const [scannerConfig, setScannerConfig] = useState<ScannerConfig>({
     mode,
-    type,
+    task,
   });
-  const [scannedResult, setScannedResult] = useState<ScannedResult[]>([]);
 
   return (
-    <Stack sx={{ height: '100%' }}>
-      <Scanner
-        isScanning={isScanning}
-        setIsScanning={setIsScanning}
-        setIsDenied={setIsDenied}
-        setScannedResult={setScannedResult}
-      />
-      <Stack
-        sx={{
-          flexGrow: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        {isDenied ? (
-          <ScannerDenied />
-        ) : (
-          <ScannerButtons
-            isScanning={isScanning}
-            setIsScanning={setIsScanning}
-            scannerConfig={scannerConfig}
-            setScannerConfig={setScannerConfig}
-          />
-        )}
+    <Slide in direction="down">
+      <Stack sx={{ height: '100%', p: 2 }}>
+        <Scanner
+          isScanning={isScanning}
+          setIsScanning={setIsScanning}
+          setIsDenied={setIsDenied}
+          setScannedResult={setScannedResult}
+        />
+        <Stack
+          sx={{
+            flexGrow: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {isDenied ? (
+            <ScannerDenied />
+          ) : (
+            <ScannerButtons
+              isScanning={isScanning}
+              setIsScanning={setIsScanning}
+              scannerConfig={scannerConfig}
+              setScannerConfig={setScannerConfig}
+            />
+          )}
+        </Stack>
+        <ScannerResult
+          scannerConfig={scannerConfig}
+          scannedResult={scannedResult}
+        />
       </Stack>
-      <ScannerResult
-        scannerConfig={scannerConfig}
-        scannedResult={scannedResult}
-      />
-    </Stack>
+    </Slide>
   );
 };
 

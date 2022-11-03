@@ -1,11 +1,11 @@
-import type { ScannedResult, ScannerType } from 'types';
+import type { ScannedResult, ScannerTask } from 'types';
 import Link from 'next/link';
 import last from 'lodash/last';
 import { useState, useEffect } from 'react';
 import parseStringTypes from 'utils/parseStringType';
 
 export interface ScannerResultProps {
-  type?: keyof typeof ScannerType;
+  task?: keyof typeof ScannerTask;
   scannedResult?: ScannedResult[];
 }
 

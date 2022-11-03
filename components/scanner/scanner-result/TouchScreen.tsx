@@ -27,7 +27,7 @@ export const TouchScreen: React.FC<TouchScreenProps> = ({
       {isSingleMode ? (
         <ScannerResultSingle
           scannedResult={scannedResult}
-          type={scannerConfig?.type}
+          task={scannerConfig?.task}
         />
       ) : null}
     </SideDrawer>

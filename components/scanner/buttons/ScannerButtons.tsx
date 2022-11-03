@@ -1,17 +1,9 @@
 import type { ScannerConfig } from 'types';
-import { ScannerMode, ScannerType } from 'types/scanner.d';
+import { ScannerMode, ScannerTask } from 'types/scanner.d';
 import { useTranslation } from 'next-i18next';
-import {
-  Grid,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Grid, IconButton, Typography } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const Select = dynamic(() => import('@mui/material/Select'));
 const ScannerSelect = dynamic(
   () => import('components/scanner/buttons/ScannerSelect')
 );
@@ -20,7 +12,7 @@ const QrCodeScannerIcon = dynamic(
 );
 
 const modes = Object.keys(ScannerMode) as ScannerMode[];
-const types = Object.keys(ScannerType) as ScannerType[];
+const tasks = Object.keys(ScannerTask) as ScannerTask[];
 
 export interface ScannerButtonsProps {
   isScanning?: boolean;
@@ -45,14 +37,14 @@ export const ScannerButtons: React.FC<ScannerButtonsProps> = ({
         gap={2}
         sx={{
           width: '100%',
-          maxWidth: (theme) => theme.layout.size.btnMaxWidth,
           justifyContent: 'center',
+          maxWidth: (theme) => theme.layout.size.btnMaxWidth,
         }}
       >
         <Grid item xs={5}>
           <ScannerSelect
-            optionType="type"
-            options={types}
+            optionType="task"
+            options={tasks}
             scannerConfig={scannerConfig}
             setScannerConfig={setScannerConfig}
           />

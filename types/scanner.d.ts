@@ -4,11 +4,11 @@ export interface Camera {
 }
 
 export interface ScannerConfig {
-  type: keyof typeof ScannerType;
+  task: keyof typeof ScannerTask;
   mode: keyof typeof ScannerMode;
 }
 
-export enum ScannerType {
+export enum ScannerTask {
   scan = 'scan',
   pickup = 'pickup',
   dropoff = 'dropoff',

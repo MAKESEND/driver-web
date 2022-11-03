@@ -1,6 +1,9 @@
 import type { ScannerConfig } from 'types';
 import { useTranslation } from 'next-i18next';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem } from '@mui/material';
+
+import dynamic from 'next/dynamic';
+const Select = dynamic(() => import('@mui/material/Select'));
 
 export interface ScannerSelectProps {
   optionType: keyof ScannerConfig;
@@ -21,9 +24,9 @@ export const ScannerSelect: React.FC<ScannerSelectProps> = ({
 
   return (
     <FormControl fullWidth>
-      <InputLabel>{t('select.type.label')}</InputLabel>
+      <InputLabel>{t(`select.${optionType}.label`)}</InputLabel>
       <Select
-        label={t('select.type.label')}
+        label={t(`select.${optionType}.label`)}
         size="small"
         value={scannerConfig[optionType]}
         onChange={(e) =>

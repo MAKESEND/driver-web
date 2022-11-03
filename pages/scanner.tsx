@@ -1,4 +1,4 @@
-import type { ScannerType, ScannerMode } from 'types';
+import type { ScannerTask, ScannerMode } from 'types';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
 import { Suspense } from 'react';
@@ -32,7 +32,7 @@ export const ScannerPage: NextPageWithLayout = () => {
       <Seo title="Scanner" />
       <Suspense fallback={<Loader hideText />}>
         <ScannerPanel
-          type={router.query?.type as ScannerType}
+          task={router.query?.type as ScannerTask}
           mode={router.query?.mode as ScannerMode}
         />
       </Suspense>
