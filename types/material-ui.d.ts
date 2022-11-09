@@ -1,3 +1,4 @@
+import type { Theme, ThemeOptions } from '@mui/material/styles';
 import * as createPalette from '@mui/material/styles/createPalette';
 
 declare module '@mui/material/styles/createPalette' {
@@ -6,6 +7,7 @@ declare module '@mui/material/styles/createPalette' {
     black?: PaletteColorOptions;
     lightGrey?: PaletteColorOptions;
     darkGrey?: PaletteColorOptions;
+    layout?: Layout;
   }
 
   interface Palette {
@@ -13,6 +15,7 @@ declare module '@mui/material/styles/createPalette' {
     black: PaletteColor;
     lightGrey: PaletteColor;
     darkGrey: PaletteColor;
+    layout: Layout;
   }
 
   interface CommonColors {
@@ -25,10 +28,35 @@ declare module '@mui/material/styles/createPalette' {
     blue50: string;
     pink: string;
     secondary: string;
+    yellow50: string;
+    orange50: string;
   }
 }
 
+enum layoutComponents {
+  btnMaxWidth = 'btnMaxWidth',
+  portMaxWidth = 'portMaxWidth',
+  drawerBreakpoint = 'drawerBreakpoint',
+  drawerWidth = 'drawerWidth',
+}
+
 declare module '@mui/material/styles' {
+  interface Theme {
+    layout: {
+      size: {
+        [key in layoutComponents]: number;
+      };
+    };
+  }
+
+  interface ThemeOptions {
+    layout: {
+      size?: {
+        [key in layoutComponents]: number;
+      };
+    };
+  }
+
   interface TypographyVariants {
     secondary: React.CSSProperties;
   }

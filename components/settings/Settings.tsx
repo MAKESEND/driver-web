@@ -1,18 +1,18 @@
 import type { SelectChangeEvent } from '@mui/material';
-import { useRouter } from 'next/router';
 import { useState, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { languages } from 'utils/constants/locales';
 import { Box, Divider, Typography } from '@mui/material';
 
 import dynamic from 'next/dynamic';
+const Image = dynamic(() => import('components/common/StyledImage'));
 const Select = dynamic(() => import('@mui/material/Select'));
 const MenuItem = dynamic(() => import('@mui/material/MenuItem'));
-const Image = dynamic(() => import('next/image'));
+
+const langs = Object.values(languages);
 
 export const Settings: React.FC = () => {
-  const langs = Object.values(languages);
-
   const router = useRouter();
   const { t } = useTranslation('settings');
   const [lang, setLang] = useState<string>(router.locale ?? 'en');
@@ -56,7 +56,7 @@ export const Settings: React.FC = () => {
                 width="20px"
                 height="15px"
               />
-              <Typography component="span" sx={{ marginLeft: '10px' }}>
+              <Typography component="span" sx={{ ml: '10px' }}>
                 {title}
               </Typography>
             </Typography>

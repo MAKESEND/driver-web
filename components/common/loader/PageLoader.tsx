@@ -1,5 +1,5 @@
 import { Box as MuiBox, Fade, styled } from '@mui/material';
-import Loader from './Loader';
+import MSDeliveryLoader from './delivery/MSDeliveryLoader';
 
 const Box = styled(MuiBox)(({ theme }) => ({
   width: '100vw',
@@ -17,14 +17,16 @@ const Box = styled(MuiBox)(({ theme }) => ({
 
 interface PageLoaderProps {
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 
-export const PageLoader: React.FC<PageLoaderProps> = ({ isLoading = false }) => {
+export const PageLoader: React.FC<PageLoaderProps> = ({
+  isLoading = false,
+  children,
+}) => {
   return (
     <Fade in={isLoading} unmountOnExit>
-      <Box>
-        <Loader />
-      </Box>
+      <Box>{children ?? <MSDeliveryLoader />}</Box>
     </Fade>
   );
 };

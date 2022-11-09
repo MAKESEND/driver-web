@@ -1,4 +1,4 @@
-import type { Theme } from '@mui/material';
+import type { AutocompleteProps, Theme } from '@mui/material';
 import type { ParcelMixin, Parcel, ParcelToSort } from 'types';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -9,10 +9,13 @@ import { rounds } from 'utils/constants/delivery';
 import { FilterOption } from 'components/FilterOptions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import { Autocomplete, Button, Grid, Menu, styled } from '@mui/material';
+import { Button, Grid, Menu, styled, TextField } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const TextField = dynamic(() => import('@mui/material/TextField'));
+// const TextField = dynamic(() => import('@mui/material/TextField'));
+const Autocomplete = dynamic<
+  AutocompleteProps<ParcelMixin, undefined, undefined, undefined>
+>(() => import('@mui/material/Autocomplete'));
 const FilterIcon = dynamic(
   () => import('@mui/icons-material/FilterAltOutlined')
 );
@@ -87,10 +90,13 @@ export const SortingFilter: React.FC<SortingFilterProps> = ({
   }, []);
 
   return (
-    <Grid container spacing={1} justifyContent={{ xs: 'end', sm: 'center' }}>
-      <Grid item xs={12} sm={10}>
+    <Grid
+      container
+      justifyContent={{ xs: 'end', sm: 'center' }}
+      spacing={{ xs: 1, sm: 0 }}
+    >
+      <Grid item xs={12} sm={10} sx={{ pr: 0.5 }}>
         <Autocomplete
-          sx={{ flexGrow: 1 }}
           disablePortal
           disableCloseOnSelect
           options={parcels.sort((a, b) => +(a?.round ?? 0) - +(b?.round ?? 0))}

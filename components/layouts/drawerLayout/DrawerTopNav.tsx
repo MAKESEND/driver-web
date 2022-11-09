@@ -20,7 +20,6 @@ const MenuIcon = dynamic(() => import('@mui/icons-material/Menu'));
 
 export interface DrawerTopNavProps {
   open?: boolean;
-  drawerWidth?: string;
   isMobile?: boolean;
   hideOnScroll?: boolean;
   position?: string;
@@ -29,23 +28,22 @@ export interface DrawerTopNavProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) =>
-    prop !== 'open' && prop !== 'drawerWidth' && prop !== 'isMobile',
-})<DrawerTopNavProps>(
-  ({ theme, open = false, drawerWidth = '16rem', isMobile = true }) => ({
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'isMobile',
+})<DrawerTopNavProps>(({ theme, open = false, isMobile = true }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: isMobile
+      ? '100%'
+      : `calc(100% - ${theme.layout.size.drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      width: isMobile ? '100%' : `calc(100% - ${drawerWidth})`,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  })
-);
+  }),
+}));
 
 export const DrawerTopNav: React.FC<DrawerTopNavProps> = ({
   open = false,
@@ -62,8 +60,6 @@ export const DrawerTopNav: React.FC<DrawerTopNavProps> = ({
   useEffect(() => {
     const paths = router.pathname.split('/').join('.');
     setOnPath(paths);
-
-    return () => setOnPath('');
   }, [router.pathname]);
 
   return (

@@ -5,3 +5,4 @@ export * from './getPickupTasks';
 export * from './getParcelsByTrackingId';
 export * from './getParcelsByDate';
 export * from './getParcelsByOrderId';
+export * from './getSortingList';

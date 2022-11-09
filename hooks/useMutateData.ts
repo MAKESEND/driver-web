@@ -3,6 +3,7 @@ import type {
   ParcelStatusRequest,
   UpdateParcelStatusAPI,
   ImageUploadRequest,
+  DriverAuthRequest,
 } from 'types';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
@@ -33,6 +34,28 @@ export const useUploadImage = () => {
   );
 };
 
-export const mutations = { useUpdateParcelStatus, useUploadImage };
+export const useDriverLogin = () => {
+  return useMutation((payload: DriverAuthRequest) =>
+    axios.post('/api/auth/login', payload)
+  );
+};
+
+export const useDriverCheckin = () => {
+  return useMutation((payload: DriverAuthRequest) =>
+    axios.post('/api/auth/driver/checkin', payload)
+  );
+};
+
+export const useSignout = () => {
+  return useMutation(() => axios.get('/api/auth/signout'));
+};
+
+export const mutations = {
+  useUpdateParcelStatus,
+  useUploadImage,
+  useDriverLogin,
+  useDriverCheckin,
+  useSignout,
+};
 
 export default mutations;

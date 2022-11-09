@@ -38,10 +38,6 @@ export const SelectorFilter = <T extends ParcelMixin>({
   };
 
   useEffect(() => {
-    return () => setFusedParcels([]);
-  }, []);
-
-  useEffect(() => {
     if (parcels.length) {
       setFusedParcels(parcels);
     }
@@ -78,6 +74,7 @@ export const SelectorFilter = <T extends ParcelMixin>({
         value={searchVal}
         onChange={onChange}
         InputProps={{
+          sx: { height: (theme) => theme.spacing(5) },
           ...(searchVal && {
             endAdornment: (
               <IconButton

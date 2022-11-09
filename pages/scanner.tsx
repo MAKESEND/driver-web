@@ -1,15 +1,19 @@
+import type { ScannerTask, ScannerMode } from 'types';
 import type { GetStaticProps } from 'next';
 import type { NextPageWithLayout } from './_app';
+import { Suspense } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Loader } from 'components/common/loader/Loader';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
+const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'), {
+  suspense: true,
+});
 const DrawerLayout = dynamic(
   () => import('components/layouts/drawerLayout/DrawerLayout')
 );
-const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -22,20 +26,16 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 
 export const ScannerPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const [mode, setMode] = useState('');
-
-  useEffect(() => {
-    setMode((router.query?.type as string) ?? '');
-
-    return () => {
-      setMode('');
-    };
-  }, [router.query]);
 
   return (
     <>
       <Seo title="Scanner" />
-      <ScannerPanel />
+      <Suspense fallback={<Loader />}>
+        <ScannerPanel
+          task={router.query?.type as ScannerTask}
+          mode={router.query?.mode as ScannerMode}
+        />
+      </Suspense>
     </>
   );
 };

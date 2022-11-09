@@ -16,11 +16,11 @@ export const CancelBtn: React.FC<ICancelBtnProps> = ({
         position: 'absolute',
         top: 20,
         left: 20,
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex: (t) => t.zIndex.drawer + 1,
       }}
       onClick={onClick}
     >
-      <CancelIcon sx={{ color: (theme) => theme.palette.white.main }} />
+      <CancelIcon sx={{ color: (t) => t.palette.white.main }} />
     </IconButton>
   );
 };

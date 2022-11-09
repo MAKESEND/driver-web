@@ -1,13 +1,12 @@
 import { useTranslation } from 'next-i18next';
 import FlexSpacer from 'components/common/FlexSpacer';
-import DrawerSignout from './DrawerSignout';
-import DrawerSideHead from './DrawerSideHead';
-import DrawerSideLinks from './DrawerSideLinks';
+import DrawerSignout from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSignout';
+import DrawerSideHead from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSideHead';
+import DrawerSideLinks from 'components/layouts/drawerLayout/DrawerSideNav/DrawerSideLinks';
 import { Drawer, Divider } from '@mui/material';
 
 export interface DrawerSideNav {
   screenWidth?: number;
-  drawerWidth?: string;
   breakPoint?: number;
   open?: boolean;
   onClose?: () => void;
@@ -15,7 +14,6 @@ export interface DrawerSideNav {
 
 export const DrawerSideNav: React.FC<DrawerSideNav> = ({
   screenWidth = 0,
-  drawerWidth = '16rem',
   breakPoint = 900,
   open = false,
   onClose = () => console.warn('no callback is given to DrawerSideNav'),
@@ -31,7 +29,9 @@ export const DrawerSideNav: React.FC<DrawerSideNav> = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        '& .MuiDrawer-paper': { width: drawerWidth },
+        '& .MuiDrawer-paper': {
+          width: (theme) => theme.layout.size.drawerWidth,
+        },
       }}
     >
       <DrawerSideHead

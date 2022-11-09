@@ -1,85 +1,78 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
-import {
-  Box,
-  Button,
-  IconButton as MuiIconButton,
-  styled,
-  Typography,
-} from '@mui/material';
-
-const IconButton = styled(MuiIconButton)(() => ({
-  width: '100%',
-  height: '100%',
-  maxWidth: '350px',
-  maxHeight: '350px',
-}));
+import type {
+  ScannerMode,
+  ScannerTask,
+  ScannerConfig,
+  ScannedResult,
+} from 'types';
+import { useState, useRef } from 'react';
+import { ScannerContext } from 'context/ScannerContext';
+import ScannerButtons from 'components/scanner/buttons/ScannerButtons';
+import { Stack, Slide } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const Scanner = dynamic(() => import('./Scanner'), { ssr: false });
-const QrCodeScannerIcon = dynamic(
-  () => import('@mui/icons-material/QrCodeScanner'),
-  { ssr: false }
+const ScannerResult = dynamic(() => import('components/scanner/ScannerResult'));
+const ScannerDenied = dynamic(
+  () => import('components/scanner/buttons/ScannerDenied')
 );
+const Scanner = dynamic(() => import('components/scanner/Scanner'), {
+  ssr: false,
+});
 
-const Container = styled(Box)(() => ({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
+export interface ScannerPanelProps {
+  mode?: keyof typeof ScannerMode;
+  task?: keyof typeof ScannerTask;
+}
 
-export const ScannerPanel: React.FC = () => {
-  const { t } = useTranslation(['scanner', 'common']);
-  const router = useRouter();
-  const [isScanning, setIsScanning] = useState<boolean>(false);
+export const ScannerPanel: React.FC<ScannerPanelProps> = ({
+  mode = 'single',
+  task = 'scan',
+}) => {
+  const scannedResultRef = useRef<ScannedResult[]>([]);
   const [isDenied, setIsDenied] = useState<boolean>(false);
-
-  useEffect(() => {
-    return () => {
-      setIsScanning(false);
-      setIsDenied(false);
-    };
-  }, []);
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [openResult, setOpenResult] = useState<boolean>(false);
+  const [scannerConfig, setScannerConfig] = useState<ScannerConfig>({
+    mode,
+    task,
+  });
 
   return (
-    <>
-      <Scanner
-        isScanning={isScanning}
-        setIsScanning={setIsScanning}
-        setIsDenied={setIsDenied}
-      />
-      <Container>
-        {isDenied ? (
-          <Box>
-            <Typography variant="body1">{t('title.cameraDenied')}</Typography>
-            <Button onClick={() => router.reload()}>{t('btn.reload')}</Button>
-          </Box>
-        ) : (
-          <>
-            <IconButton
-              size="large"
-              disabled={isScanning}
-              aria-label="qr-reader-button"
-              onClick={() => {
-                setIsScanning((oldVal) => !oldVal);
-              }}
-            >
-              <QrCodeScannerIcon
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                }}
+    <ScannerContext.Provider value={scannedResultRef}>
+      <Slide in direction="down">
+        <Stack sx={{ height: '100%', p: 2 }}>
+          <Scanner
+            isScanning={isScanning}
+            setIsScanning={setIsScanning}
+            setIsDenied={setIsDenied}
+            setOpenResult={setOpenResult}
+            scannerConfig={scannerConfig}
+          />
+          <Stack
+            sx={{
+              flexGrow: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {isDenied ? (
+              <ScannerDenied />
+            ) : (
+              <ScannerButtons
+                isScanning={isScanning}
+                setIsScanning={setIsScanning}
+                scannerConfig={scannerConfig}
+                setScannerConfig={setScannerConfig}
               />
-            </IconButton>
-            <Typography>{t('title.tapToScan')}</Typography>
-          </>
-        )}
-      </Container>
-    </>
+            )}
+          </Stack>
+          <ScannerResult
+            open={openResult}
+            setOpen={setOpenResult}
+            scannerConfig={scannerConfig}
+          />
+        </Stack>
+      </Slide>
+    </ScannerContext.Provider>
   );
 };
 

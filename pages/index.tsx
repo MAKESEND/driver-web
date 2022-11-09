@@ -1,10 +1,11 @@
 import type { NextPage, GetStaticProps } from 'next';
+import { Suspense } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
+const Loader = dynamic(() => import('components/common/loader/Loader'));
+const HomeFC = dynamic(() => import('components/Home'));
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
@@ -16,14 +17,12 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.push('/dashboard');
-  });
-
   return (
     <>
       <Seo title="MAKESEND" />
+      <Suspense fallback={<Loader />}>
+        <HomeFC />
+      </Suspense>
     </>
   );
 };

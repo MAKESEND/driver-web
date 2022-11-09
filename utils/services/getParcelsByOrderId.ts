@@ -3,9 +3,9 @@ import api from './apiServices';
 
 export const getParcelsByOrderId = async (
   orderId: string
-): Promise<Parcel[] | void> => {
+): Promise<Parcel[]> => {
   try {
-    if (window || typeof window !== 'undefined') {
+    if (typeof globalThis?.window !== 'undefined') {
       throw new Error('getParcelsByOrderId is server-side only');
     }
 
@@ -17,11 +17,17 @@ export const getParcelsByOrderId = async (
       data: { data: parcels },
     } = await api.getParcelsByOrderId(orderId);
 
+    if (!parcels) {
+      throw new Error(`no parcels under orderID ${orderId}`);
+    }
+
     return parcels;
   } catch (error: any) {
     console.log("something went wrong in 'getParcelsByOrderId'");
     console.log(error?.message ?? error);
   }
+
+  return [];
 };
 
 export default getParcelsByOrderId;

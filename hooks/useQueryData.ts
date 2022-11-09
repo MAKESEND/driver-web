@@ -6,6 +6,8 @@ import type {
   PickupTask,
   DropoffTask,
   ParcelByTrackingId,
+  Driver,
+  UserData,
 } from 'types';
 import type { countries } from 'utils/constants/locales';
 import axios from 'axios';
@@ -207,11 +209,63 @@ export const useGetParcelsByDate = (
   );
 };
 
+export const useGetDriverData = (
+  driverId: string,
+  customConfig?: Omit<
+    UseQueryOptions<Driver | undefined, unknown, Driver | undefined, string[]>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery(
+    ['driver', driverId],
+    async () => {
+      const {
+        data: { data: driverData },
+      } = await axios.get<MSApiResponse<Driver>>(`/api/driver/${driverId}`);
+
+      return driverData;
+    },
+    { ...config, ...customConfig }
+  );
+};
+
+export const useUser = (
+  customConfig?: Omit<
+    UseQueryOptions<UserData | null, unknown, UserData | null, string[]>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery(
+    ['user'],
+    async () => {
+      try {
+        const {
+          data: { data: userData },
+        } = await axios.get<MSApiResponse<UserData>>('/api/auth/user');
+
+        return userData ?? null;
+      } catch (error: any) {
+        // prevent printing when unauthenticated
+        if (error?.response.status !== 401) {
+          console.log(
+            error?.response?.data?.message ?? error?.message ?? error
+          );
+        }
+
+        return null;
+      }
+    },
+    { ...config, ...customConfig }
+  );
+};
+
 export const queries = {
   useGetSortingList,
   useGetParcelsByOrderId,
   useGetPickupTasks,
   useGetDropoffTasks,
+  useGetDriverData,
+  useUser,
 };
 
 export default queries;

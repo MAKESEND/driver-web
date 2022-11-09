@@ -41,11 +41,17 @@
     "loading": "Loading",
     "starting": "Starting",
     "offline": "App is offline",
-    "online": "App is connected to the Internet"
+    "online": "App is connected to the Internet",
+    "rememberMe": "Remember me",
+    "forgetPassword": "Forget password?"
   },
   "btn": {
+    "login": "Login",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm",
+    "ok": "OK",
+    "no": "No"
   },
   "pincode": {
     "title": {
@@ -61,6 +67,16 @@
       "browse": "Browse",
       "cancel": "Cancel",
       "upload": "Upload"
+    }
+  },
+  "auth": {
+    "phone": "Phone",
+    "dob": "Date of birth",
+    "error": {
+      "invalidPhone": "Invalid phone number",
+      "invalidDOB": "Invalid date of birth",
+      "required": "{{field}} is required!",
+      "loginFailed": "Invalid phone or date of birth"
     }
   }
 }

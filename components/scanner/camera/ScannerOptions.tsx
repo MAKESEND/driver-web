@@ -3,11 +3,11 @@ import { camerasState, selectedCameraState } from 'states';
 import ImageIcon from '@mui/icons-material/Image';
 import { ButtonGroup, MenuItem, IconButton, Select } from '@mui/material';
 
-export interface ScannerButtonsProps {
+export interface ScannerOptions {
   isLoading?: boolean;
 }
 
-export const ScannerButtons: React.FC<ScannerButtonsProps> = ({
+export const ScannerOptions: React.FC<ScannerOptions> = ({
   isLoading = false,
 }) => {
   const cameras = useRecoilValue(camerasState);
@@ -49,4 +49,4 @@ export const ScannerButtons: React.FC<ScannerButtonsProps> = ({
   );
 };
 
-export default ScannerButtons;
+export default ScannerOptions;

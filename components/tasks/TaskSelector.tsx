@@ -2,7 +2,7 @@ import type { ParcelMixin } from 'types';
 import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Checkbox } from '@mui/material';
-import SelectorFilter from './selector-filter/SelectorFilter';
+import SelectorFilter from 'components/tasks/selector-filter/SelectorFilter';
 
 import dynamic from 'next/dynamic';
 const QrCodeScannerIcon = dynamic(
@@ -71,14 +71,14 @@ export const TaskSelector = <T extends ParcelMixin>({
     <Box
       sx={{
         display: 'flex',
-        gap: (t) => t.spacing(2),
-        backgroundColor: (t) => t.palette.white.main,
+        gap: 1,
         ...(sticky && {
           position: 'sticky',
           top: 0,
-          zIndex: (t) => t.zIndex.drawer,
-          paddingTop: (t) => t.spacing(3),
-          paddingBottom: (t) => t.spacing(1),
+          pt: 3,
+          pb: 1,
+          zIndex: (theme) => theme.zIndex.drawer,
+          bgcolor: (theme) => theme.palette.white.main,
         }),
       }}
     >
@@ -100,10 +100,13 @@ export const TaskSelector = <T extends ParcelMixin>({
       />
       <Link href={href} passHref>
         <Button
-          variant="outlined"
           size="small"
-          sx={{ minWidth: '1rem' }}
+          variant="outlined"
           disabled={disabled}
+          sx={{
+            minWidth: (theme) => theme.spacing(5),
+            height: (theme) => theme.spacing(5),
+          }}
         >
           <QrCodeScannerIcon />
         </Button>

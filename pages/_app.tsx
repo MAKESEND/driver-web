@@ -3,8 +3,9 @@ import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 
 import dynamic from 'next/dynamic';
-const CoreProvider = dynamic(
-  () => import('components/common/_app/CoreProvider')
+const CoreProvider = dynamic(() => import('components/_app/CoreProvider'));
+const OnlineIndicator = dynamic(
+  () => import('components/_app/OnlineIndicator')
 );
 
 export type NextPageWithLayout<T = unknown> = NextPage<T> & {
@@ -17,13 +18,14 @@ export type AppPropsWithLayout = AppProps & {
 
 function MyApp({
   Component,
-  pageProps: { session, dehydratedState, ...pageProps },
+  pageProps: { dehydratedState, ...pageProps },
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <CoreProvider session={session} dehydratedState={dehydratedState}>
+    <CoreProvider dehydratedState={dehydratedState}>
       {getLayout(<Component {...pageProps} />)}
+      <OnlineIndicator />
     </CoreProvider>
   );
 }

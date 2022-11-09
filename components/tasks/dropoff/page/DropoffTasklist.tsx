@@ -1,6 +1,5 @@
 import type { DropoffTask } from 'types';
 import { useState, useEffect } from 'react';
-import NoTask from 'components/tasks/NoTask';
 import TaskFilter from 'components/tasks/TaskFilter';
 import { dropoffTaskProps } from 'utils/constants/delivery';
 import { dropoffTaskStatusFilters } from 'utils/constants/delivery';
@@ -15,15 +14,11 @@ export interface DropoffTasklistProps {
 export const DropoffTasklist: React.FC<DropoffTasklistProps> = ({
   dropoffTasks = [],
 }) => {
-  const [filteredTasks, setFilteredTasks] = useState<DropoffTask[]>([]);
-
-  useEffect(() => {
-    setFilteredTasks(dropoffTasks);
-    return () => setFilteredTasks([]);
-  }, [dropoffTasks]);
+  const [filteredTasks, setFilteredTasks] =
+    useState<DropoffTask[]>(dropoffTasks);
 
   if (!dropoffTasks.length) {
-    return <NoTask />;
+    return null;
   }
 
   return (

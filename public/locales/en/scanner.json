@@ -5,9 +5,25 @@
     "switchCamera": "Switch camera",
     "cameraDenied": "Camera is not available. Please update your permission"
   },
+  "select": {
+    "task": {
+      "label": "Task",
+      "scan": "Scan",
+      "pickup": "Pickup",
+      "dropoff": "Dropoff",
+      "sorting": "Sorting"
+    },
+    "mode": {
+      "label": "Mode",
+      "single": "Single",
+      "bulk": "Bulk"
+    }
+  },
   "btn": {
+    "swipeUp": "Swipe up",
     "start": "Start",
     "stop": "Stop",
-    "reload": "Reload"
+    "reload": "Reload",
+    "result": "Result"
   }
 }

@@ -10,6 +10,9 @@ export enum Routes {
   uploadImg = 'uploadImg',
   updateParcelStatus = 'updateParcelStatus',
   getParcelsByDate = 'getParcelsByDate',
+  driverCheckin = 'driverCheckin',
+  driverAuth = 'driverAuth',
+  driversRoot = 'driversRoot',
 }
 
 export interface ApiResponse<T = unknown> {

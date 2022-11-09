@@ -51,7 +51,7 @@ export const PickupTaskCard: React.FC<PickupTaskCardProps> = ({
           width: '100%',
           display: 'inline-flex',
           flexDirection: 'column',
-          gap: '0.5rem',
+          gap: 1,
         }}
       >
         <Box
@@ -87,7 +87,7 @@ export const PickupTaskCard: React.FC<PickupTaskCardProps> = ({
           </a>
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ padding: 2 }}>
         <FlexSpacer />
         <Link href={`/tasks/pickup/${order_id}`} passHref>
           <Button variant="outlined">{t('btn.details')}</Button>

@@ -5,13 +5,15 @@ import namedServices from 'utils/constants/namedServices';
 import paths from 'utils/constants/assetPaths';
 import hosts from 'utils/constants/hosts';
 
+type TRoutes = keyof typeof Routes;
+
 export interface EndpointsArgs {
-  route: Routes;
+  route: TRoutes;
   ENV?: ENVs;
 }
 
 export const isNamedService = (
-  route: Routes,
+  route: TRoutes,
   services: TNameService
 ): boolean => services?.hasOwnProperty(route) ?? Boolean(services[route]);
 

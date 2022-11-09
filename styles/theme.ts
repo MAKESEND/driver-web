@@ -1,18 +1,21 @@
 import { createTheme } from '@mui/material';
 
 // colors
-const white = '#FFF';
+const blue50 = '#488FEF';
 const black = '#000';
 const lightGrey = '#ccc';
 const darkGrey = '#777';
 const grey40 = '#BFC2C9';
 const grey80 = '#343840';
-const blue50 = '#488FEF';
+const white = '#FFF';
 const pink = '#EDEFF2';
 const secondary = 'rgba(0,0,0,0.6)';
+const yellow50 = '#ECB424';
+const orange50 = '#FFA500';
 
 // size
-const maxWidth = '34rem';
+const btnMaxWidth = 360;
+const portMaxWidth = 544;
 
 export const theme = createTheme({
   palette: {
@@ -32,7 +35,6 @@ export const theme = createTheme({
       main: darkGrey,
     },
     common: {
-      white,
       black,
       blue50,
       lightGrey,
@@ -41,6 +43,17 @@ export const theme = createTheme({
       grey80,
       pink,
       secondary,
+      white,
+      yellow50,
+      orange50,
+    },
+  },
+  layout: {
+    size: {
+      btnMaxWidth,
+      portMaxWidth,
+      drawerBreakpoint: 900,
+      drawerWidth: 320,
     },
   },
   typography: {
@@ -75,7 +88,7 @@ export const theme = createTheme({
       defaultProps: {
         sx: {
           width: '100%',
-          maxWidth,
+          portMaxWidth,
         },
       },
     },
@@ -86,6 +99,10 @@ export const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
+        root: {
+          padding: '0.5rem 0',
+          fontSize: '0.875rem',
+        },
         outlinedSecondary: {
           color: grey80,
           border: grey40,

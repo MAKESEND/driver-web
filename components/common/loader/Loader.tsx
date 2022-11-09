@@ -11,21 +11,23 @@ export interface LoaderProps {
   CircularProps?: CircularProgressProps;
   BoxProps?: BoxProps;
   TypographyProps?: TypographyProps;
-  text?: string;
+  loadingText?: string;
 }
 
 export const Loader: React.FC<LoaderProps> = ({
   CircularProps,
   BoxProps,
   TypographyProps,
-  text = 'Loading',
+  loadingText,
 }) => {
   return (
     <Box sx={{ textAlign: 'center' }} {...BoxProps}>
       <CircularProgress {...CircularProps} />
-      <Typography color="primary" {...TypographyProps}>
-        {text}
-      </Typography>
+      {loadingText && (
+        <Typography color="primary" {...TypographyProps}>
+          {loadingText}
+        </Typography>
+      )}
     </Box>
   );
 };
