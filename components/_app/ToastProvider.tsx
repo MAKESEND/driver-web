@@ -13,6 +13,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, dispatch] = useReducer(toastReducer, toastInitState);
   const { message, title, props } = state;
 
+  const onClose = () => {
+    dispatch({ type: 'hide' });
+  };
+
   return (
     <ToastContext.Provider value={[state, dispatch]}>
       <Collapse
@@ -20,10 +24,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
         sx={{
           position: 'fixed',
           top: 20,
-          zIndex: (t) => t.zIndex.drawer + 1,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
-        <Alert {...props}>
+        <Alert {...props} onClose={onClose}>
           {title && <AlertTitle>{title}</AlertTitle>}
           {message}
         </Alert>

@@ -2,6 +2,7 @@ export type TModelProps = {
   title: string;
   description: string;
   onConfirm: () => void;
+  onClose?: (() => void) | (() => Promise<void>);
   confirmText?: string;
   cancelText?: string;
 };
@@ -13,11 +14,12 @@ export type ModalProps = {
 
 export type ModalType = keyof ModalProps;
 
-export type ConfirmModalProps = ModalProps[ModalType.CONFIRM];
+export type ConfirmModalProps = ModalProps['CONFIRM'];
+export type AlertModalProps = ModalProps['ALERT'];
 
 interface ModalShowAction {
   type: 'show';
-  handleClose: () => void;
+  handleClose?: () => void;
   props?: ModalProps[keyof ModalProps];
   modalType: ModalType;
 }

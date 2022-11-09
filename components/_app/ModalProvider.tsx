@@ -3,6 +3,7 @@ import { useReducer, createContext } from 'react';
 import { modalInitState, modalReducer } from 'components/common/modal/reducer';
 import { Modal } from '@mui/material';
 import ConfirmModal from 'components/common/modal/confirm-modal/ConfirmModal';
+import AlertModal from 'components/common/modal/alert-modal/AlertModal';
 
 export const ModalContext = createContext<
   [typeof modalInitState, React.Dispatch<ModalAction>] | null
@@ -12,6 +13,7 @@ const MODAL: {
   [key in ModalType]?: React.FC<any>;
 } = {
   CONFIRM: ConfirmModal,
+  ALERT: AlertModal,
 };
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({

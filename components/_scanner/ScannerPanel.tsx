@@ -6,15 +6,17 @@ import type {
 } from 'types';
 import { useState, useRef } from 'react';
 import { ScannerContext } from 'context/ScannerContext';
-import ScannerButtons from 'components/scanner/buttons/ScannerButtons';
+import ScannerButtons from 'components/_scanner/buttons/ScannerButtons';
 import { Stack, Slide } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const ScannerResult = dynamic(() => import('components/scanner/ScannerResult'));
-const ScannerDenied = dynamic(
-  () => import('components/scanner/buttons/ScannerDenied')
+const ScannerResult = dynamic(
+  () => import('components/_scanner/ScannerResult')
 );
-const Scanner = dynamic(() => import('components/scanner/Scanner'), {
+const ScannerDenied = dynamic(
+  () => import('components/_scanner/buttons/ScannerDenied')
+);
+const Scanner = dynamic(() => import('components/_scanner/Scanner'), {
   ssr: false,
 });
 
