@@ -17,7 +17,8 @@
       "label": "Mode",
       "single": "Single",
       "bulk": "Bulk"
-    }
+    },
+    "camera": { "label": "Camera" }
   },
   "btn": {
     "swipeUp": "Swipe up",
@@ -25,5 +26,9 @@
     "stop": "Stop",
     "reload": "Reload",
     "result": "Result"
+  },
+  "error": {
+    "somethingWentWrong": "Something went wrong",
+    "scannerError": "Scanner error"
   }
 }

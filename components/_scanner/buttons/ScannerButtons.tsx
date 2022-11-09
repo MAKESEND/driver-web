@@ -5,7 +5,7 @@ import { Grid, IconButton, Typography } from '@mui/material';
 
 import dynamic from 'next/dynamic';
 const ScannerSelect = dynamic(
-  () => import('components/scanner/buttons/ScannerSelect')
+  () => import('components/_scanner/buttons/ScannerSelect')
 );
 const QrCodeScannerIcon = dynamic(
   () => import('@mui/icons-material/QrCodeScanner')

@@ -1,218 +1,178 @@
-import type { ScannerConfig } from 'types';
-import type { Html5Qrcode } from 'html5-qrcode';
-import { useEffect, useMemo, useRef, memo, useCallback } from 'react';
-import { useWindowSize } from 'react-use';
+import type { ScannerConfig, ScannedResult } from 'types';
+import type { SelectChangeEvent } from '@mui/material';
+import type { QrReaderProps } from 'react-qr-reader';
+import { ScannerTask, ScannerMode } from 'types/scanner.d';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
-import { isMobile } from 'react-device-detect';
-import { camerasState, selectedCameraState } from 'states';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useScannerResult } from 'hooks/useScannerResult';
-import initScanner from 'utils/scanner/initScanner';
-import startScanner from 'utils/scanner/startScanner';
-import stopScanner from 'utils/scanner/stopScanner';
-import cameraConfig from 'utils/scanner/cameraConfig';
-import Loader from 'components/common/loader/Loader';
-import ScannerTitle from 'components/scanner/camera/ScannerTitle';
-import { Box, Backdrop, IconButton, styled } from '@mui/material';
+import { useRecoilState } from 'recoil';
+import { selectedCameraState } from 'states';
+import { useToast } from 'hooks/useToast';
+import { useModal } from 'hooks/useModal';
+import { useVideoDevices } from 'hooks/useVideoDevices';
+import { ScannerContext } from 'context/ScannerContext';
+import ScannerSelect from 'components/scanner/ScannerSelect';
+import { Box, Button, Stack, IconButton, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 import dynamic from 'next/dynamic';
-const CancelIcon = dynamic(() => import('@mui/icons-material/Cancel'));
-const ScannerOptions = dynamic(
-  () => import('components/scanner/camera/ScannerOptions')
+const QrReader = dynamic(() =>
+  import('react-qr-reader').then((mod) => mod.QrReader)
+);
+const QrCodeScannerIcon = dynamic(
+  () => import('@mui/icons-material/QrCodeScanner')
 );
 
-const ButtonWrapper = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'minWidth' && prop !== 'isMobile',
-})<{ minWidth?: number; isMobile?: boolean }>(
-  ({ theme, minWidth, isMobile = true }) => ({
-    position: 'absolute',
-    bottom: 45,
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: theme.zIndex.drawer + 2,
-    width: isMobile
-      ? 300
-      : `calc(${minWidth ? `${minWidth}px` : '100%'} * (2 / 3))`,
-    maxWidth: '500px',
-    padding: '1.5rem 0',
-    display: 'flex',
-    justifyContent: 'center',
-  })
-);
+const tasks = Object.keys(ScannerTask) as ScannerTask[];
+const modes = Object.keys(ScannerMode) as ScannerMode[];
 
 export interface ScannerProps {
-  isScanning?: boolean;
-  setIsScanning?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsDenied?: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenResult?: React.Dispatch<React.SetStateAction<boolean>>;
-  scannerConfig?: ScannerConfig;
+  mode?: keyof typeof ScannerMode;
+  task?: keyof typeof ScannerTask;
 }
 
 export const Scanner: React.FC<ScannerProps> = ({
-  isScanning = false,
-  setIsScanning = () => console.warn('no setIsScanning given to Scanner'),
-  setIsDenied = () => console.warn('no setIsDenied given to Scanner'),
-  setOpenResult = () => console.warn('no setOpenResult given to Scanner'),
-  scannerConfig = null,
+  mode = 'single',
+  task = 'scan',
 }) => {
-  // const scannerTask = scannerConfig?.task || 'scan';
-  const scannerMode = scannerConfig?.mode || 'single';
+  const [showToast] = useToast();
+  const [showModal] = useModal();
+  const devices = useVideoDevices();
+  const { t } = useTranslation(['scanner']);
 
-  const { width, height } = useWindowSize();
-  const scannedResultRef = useScannerResult();
-  const { t } = useTranslation(['scanner', 'common']);
+  const initRef = useRef(false);
+  const scannedResultRef = useRef<ScannedResult[]>([]);
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [config, setConfig] = useState<ScannerConfig>({ mode, task });
+  const [selectedCamera, setSelectedCamera] =
+    useRecoilState(selectedCameraState);
 
-  const hasStartedRef = useRef<boolean>(false);
-  const scannerRef = useRef<Html5Qrcode | null>(null);
-  const setCameras = useSetRecoilState(camerasState);
-  const selectedCamera = useRecoilValue(selectedCameraState);
+  useEffect(() => {
+    if (selectedCamera && initRef.current) {
+      setIsScanning(true);
+    }
 
-  const minSide = useMemo(() => Math.min(width, height), [width, height]);
-  const camConfig = useMemo(
-    () => cameraConfig({ width, height, isMobile }),
-    [width, height]
-  );
+    if (!initRef.current) {
+      initRef.current = true;
+    }
+  }, [selectedCamera]);
 
-  const onSuccessCallback = useCallback(
-    (decodedText: string) => {
-      if (scannerMode === 'single') {
-        scannedResultRef.current = [
-          {
-            text: decodedText,
-            scanned_at: Date.now(),
-          },
-        ];
+  const toggleScanning = () => {
+    setIsScanning((isScanning) => !isScanning);
+  };
 
-        setOpenResult(true);
+  const onSelectChange = (event: SelectChangeEvent) => {
+    setSelectedCamera(event.target.value);
+    setIsScanning(false);
+  };
+
+  const onScannedResult: QrReaderProps['onResult'] = (result, error) => {
+    if (result) {
+      const scannedResult = { text: result.getText(), scanned_at: Date.now() };
+
+      if (config.mode === 'single') {
+        scannedResultRef.current = [scannedResult];
         setIsScanning(false);
-        stopScanner(scannerRef.current);
-        scannerRef.current = null;
-        hasStartedRef.current = false;
-      } else if (scannerMode === 'bulk') {
-        const cache = [...scannedResultRef.current];
-
-        scannedResultRef.current = [
-          ...cache,
-          {
-            text: decodedText,
-            scanned_at: Date.now(),
-          },
-        ];
+      } else if (config.mode === 'bulk') {
+        scannedResultRef.current = [...scannedResultRef.current, scannedResult];
       }
-    },
-    [scannerMode, scannedResultRef, setIsScanning, setOpenResult]
-  );
+    }
 
-  useEffect(() => {
-    // init scanner with camera
-    if (isScanning && !hasStartedRef.current) {
-      initScanner({
-        cameraId: selectedCamera,
-        camConfig,
-        scannerRef,
-        setIsDenied,
-        setIsScanning,
-        setCameras,
-        onSuccessCallback,
-      }).then((hasStarted) => {
-        hasStartedRef.current = hasStarted;
+    // error will be an empty object {}
+    // when scanner got nothing during the deply interval (default 0.5s)
+    if (!!error && JSON.stringify(error) !== JSON.stringify({})) {
+      showModal({
+        modalType: 'ALERT',
+        props: {
+          title: t('error.scannerError'),
+          description: error?.message || t('error.somethingWentWrong'),
+        },
       });
     }
-  }, [
-    isScanning,
-    onSuccessCallback,
-    camConfig,
-    selectedCamera,
-    scannedResultRef,
-    scannerMode,
-    setIsDenied,
-    setIsScanning,
-    setCameras,
-  ]);
-
-  useEffect(() => {
-    // switch between cameras
-    if (isScanning && hasStartedRef.current) {
-      startScanner({
-        scanner: scannerRef.current,
-        cameraId: selectedCamera,
-        camConfig,
-        onSuccessCallback,
-      });
-    } else if (!isScanning && hasStartedRef.current) {
-      // stop and clear camera stream
-      stopScanner(scannerRef.current);
-      scannerRef.current = null;
-      hasStartedRef.current = false;
-    }
-  }, [camConfig, isScanning, selectedCamera, onSuccessCallback]);
-
-  useEffect(() => {
-    // reset and clear active camera stream
-    return () => {
-      setIsScanning(false);
-      stopScanner(scannerRef.current);
-      scannerRef.current = null;
-      hasStartedRef.current = false;
-    };
-  }, [setIsScanning]);
+  };
 
   return (
-    <Backdrop
-      open={isScanning}
-      sx={{
-        backdropFilter: 'blur(4px)',
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <ScannerTitle title={t('title.scanQrCode')} />
-      <Loader
-        BoxProps={{
-          sx: {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-          },
-        }}
-        CircularProps={{
-          sx: { color: (theme) => theme.palette.white.main },
-        }}
-        TypographyProps={{
-          sx: { color: (theme) => theme.palette.white.main },
-        }}
-        loadingText={`${t('common:hint.starting')}...`}
-      />
-      <Box id="reader" sx={{ width: '100%', height: '100%' }} />
-      <IconButton
+    <ScannerContext.Provider value={scannedResultRef}>
+      <Stack sx={{ gap: 2, my: 1 }}>
+        <Button
+          variant="contained"
+          color={isScanning ? 'error' : 'primary'}
+          onClick={toggleScanning}
+        >
+          {isScanning ? t('btn.stop') : t('btn.start')}
+        </Button>
+        <Grid container sx={{ justifyContent: 'space-between' }}>
+          <Grid item xs={6} sx={{ pr: 1 }}>
+            <ScannerSelect
+              optionType="task"
+              options={tasks}
+              scannerConfig={config}
+              setScannerConfig={setConfig}
+            />
+          </Grid>
+          <Grid item xs={6} sx={{ pl: 1 }}>
+            <ScannerSelect
+              optionType="mode"
+              options={modes}
+              scannerConfig={config}
+              setScannerConfig={setConfig}
+            />
+          </Grid>
+        </Grid>
+        {devices.length && (
+          <FormControl fullWidth>
+            <InputLabel>{t(`select.camera.label`)}</InputLabel>
+            <Select
+              size="small"
+              label={t(`select.camera.label`)}
+              value={selectedCamera}
+              onChange={onSelectChange}
+            >
+              {devices.map(({ deviceId, label }) => (
+                <MenuItem key={deviceId} value={deviceId}>
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+      </Stack>
+      <Box
         sx={{
-          position: 'absolute',
-          top: 20,
-          left: 20,
-        }}
-        onClick={() => {
-          if (scannerRef.current && scannerRef.current.getState() === 2) {
-            scannerRef.current.stop().then(() => {
-              scannerRef.current?.clear();
-            });
-          }
-          setIsScanning(false);
+          mx: 'auto',
+          width: '100%',
+          height: '100%',
+          maxWidth: '350px',
+          maxHeight: '350px',
         }}
       >
-        <CancelIcon sx={{ color: (theme) => theme.palette.white.main }} />
-      </IconButton>
-      <ButtonWrapper minWidth={minSide} isMobile={isMobile}>
-        <ScannerOptions />
-      </ButtonWrapper>
-    </Backdrop>
+        {isScanning ? (
+          <QrReader
+            onResult={onScannedResult}
+            constraints={{
+              aspectRatio: 1,
+              ...(selectedCamera
+                ? { deviceId: { exact: selectedCamera } }
+                : { facingMode: 'environment' }),
+            }}
+          />
+        ) : (
+          <>
+            <IconButton
+              size="large"
+              disabled={isScanning}
+              aria-label="qr-reader-button"
+              onClick={toggleScanning}
+              sx={{ width: '100%', height: '100%' }}
+            >
+              <QrCodeScannerIcon sx={{ width: '100%', height: '100%' }} />
+            </IconButton>
+            <Typography>{t('title.tapToScan')}</Typography>
+          </>
+        )}
+      </Box>
+    </ScannerContext.Provider>
   );
 };
 
-export const MemoizedScanner = memo(Scanner);
-
-export default MemoizedScanner;
+export default Scanner;

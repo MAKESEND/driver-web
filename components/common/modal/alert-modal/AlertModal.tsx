@@ -1,4 +1,4 @@
-import type { ConfirmModalProps } from 'types';
+import type { AlertModalProps } from 'types';
 import { forwardRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useModal } from 'hooks/useModal';
@@ -12,11 +12,8 @@ import {
 
 const Typography = styled(MuiTypography)(() => ({ textAlign: 'center' }));
 
-export const ConfirmModal: React.FC<ConfirmModalProps> = forwardRef(
-  (
-    { title, description, confirmText, cancelText, onConfirm, onClose },
-    ref
-  ) => {
+export const AlertModal: React.FC<AlertModalProps> = forwardRef(
+  ({ title, description, cancelText, onClose }, ref) => {
     const { t } = useTranslation('common');
     const [, hide] = useModal();
 
@@ -38,13 +35,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = forwardRef(
             >
               {cancelText || t('btn.cancel')}
             </Button>
-            <Button
-              variant="contained"
-              sx={{ flex: 1, height: 40 }}
-              onClick={onConfirm}
-            >
-              {confirmText || t('btn.confirm')}
-            </Button>
           </Stack>
         </Stack>
       </ModalLayout>
@@ -52,6 +42,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = forwardRef(
   }
 );
 
-ConfirmModal.displayName = 'ConfirmModal';
+AlertModal.displayName = 'AlertModal';
 
-export default ConfirmModal;
+export default AlertModal;

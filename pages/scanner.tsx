@@ -8,7 +8,7 @@ import { Loader } from 'components/common/loader/Loader';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'), {
+const Scanner = dynamic(() => import('components/scanner/Scanner'), {
   suspense: true,
 });
 const DrawerLayout = dynamic(
@@ -31,7 +31,7 @@ export const ScannerPage: NextPageWithLayout = () => {
     <>
       <Seo title="Scanner" />
       <Suspense fallback={<Loader />}>
-        <ScannerPanel
+        <Scanner
           task={router.query?.type as ScannerTask}
           mode={router.query?.mode as ScannerMode}
         />
@@ -41,7 +41,11 @@ export const ScannerPage: NextPageWithLayout = () => {
 };
 
 ScannerPage.getLayout = (page: React.ReactNode) => {
-  return <DrawerLayout fillContainer>{page}</DrawerLayout>;
+  return (
+    <DrawerLayout fillContainer mobileContainer>
+      {page}
+    </DrawerLayout>
+  );
 };
 
 export default ScannerPage;

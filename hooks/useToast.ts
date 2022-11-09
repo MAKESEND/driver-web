@@ -1,10 +1,10 @@
 import type { CustomAlertProps } from 'types';
-import { useState, useCallback, useContext } from 'react';
+import { useRef, useCallback, useContext } from 'react';
 import { ToastContext } from 'components/_app/ToastProvider';
 
-export const useToast = () => {
+export const useToast = (timeout = 3000) => {
   const context = useContext(ToastContext);
-  const [timeout, setNewTimeout] = useState<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout>();
 
   if (!context) {
     throw new Error('useToast should only be used in ToastProvider');
@@ -14,20 +14,14 @@ export const useToast = () => {
 
   const show = useCallback(
     (message: string, props?: CustomAlertProps) => {
-      if (!dispatch) return;
-
-      if (timeout) {
-        clearTimeout(timeout);
-      }
+      clearTimeout(timerRef.current);
 
       dispatch({ type: 'show', message, props });
 
       if (props?.autoHide || typeof props?.autoHide === 'undefined') {
-        const currentTimeout = setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           dispatch({ type: 'hide' });
-        }, 3000);
-
-        setNewTimeout(currentTimeout);
+        }, timeout);
       }
     },
     [dispatch, timeout]
