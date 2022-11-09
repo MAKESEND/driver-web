@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next';
 import {
   Box,
   BoxProps,
@@ -12,25 +11,21 @@ export interface LoaderProps {
   CircularProps?: CircularProgressProps;
   BoxProps?: BoxProps;
   TypographyProps?: TypographyProps;
-  hideText?: boolean;
-  text?: string;
+  loadingText?: string;
 }
 
 export const Loader: React.FC<LoaderProps> = ({
   CircularProps,
   BoxProps,
   TypographyProps,
-  hideText = false,
-  text,
+  loadingText,
 }) => {
-  const { t } = useTranslation(['common']);
-
   return (
     <Box sx={{ textAlign: 'center' }} {...BoxProps}>
       <CircularProgress {...CircularProps} />
-      {!hideText && (
+      {loadingText && (
         <Typography color="primary" {...TypographyProps}>
-          {text || `${t('hint.loading')}...`}
+          {loadingText}
         </Typography>
       )}
     </Box>

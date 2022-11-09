@@ -8,21 +8,21 @@ import stopScanner from 'utils/scanner/stopScanner';
 export const initScanner = async ({
   cameraId,
   camConfig,
-  scannerMode,
-  scannedResultRef,
   scannerRef,
   setIsScanning,
   setIsDenied,
   setCameras,
+  onSuccessCallback,
 }: {
   cameraId: string;
   camConfig: Html5QrcodeCameraScanConfig;
-  scannerMode: keyof typeof ScannerMode;
-  scannedResultRef: React.MutableRefObject<ScannedResult[]>;
   scannerRef: React.MutableRefObject<Html5Qrcode | null>;
   setIsScanning: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDenied: React.Dispatch<React.SetStateAction<boolean>>;
   setCameras: SetterOrUpdater<Camera[]>;
+  onSuccessCallback:
+    | ((decodedText: string) => void)
+    | ((decodedText: string) => Promise<void>);
 }): Promise<boolean> => {
   try {
     const { Html5Qrcode } = await import('html5-qrcode');
@@ -40,9 +40,8 @@ export const initScanner = async ({
       startScanner({
         scanner,
         cameraId,
-        scannerMode,
-        scannedResultRef,
         camConfig,
+        onSuccessCallback,
       });
 
       return true;

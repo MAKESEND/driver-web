@@ -91,7 +91,7 @@ export const DropoffPage: NextPageWithLayout<{ userId?: string }> = ({
   return (
     <>
       <Seo title="Dropoff" />
-      <Suspense fallback={<Loader hideText />}>
+      <Suspense fallback={<Loader />}>
         {toConfirm ? (
           <DropoffTasklist dropoffTasks={dropoffTasks} />
         ) : (

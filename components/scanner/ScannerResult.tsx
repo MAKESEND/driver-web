@@ -8,17 +8,34 @@ const TouchScreen = dynamic(
 );
 
 export interface ScannerResultProps {
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   scannerConfig: ScannerConfig;
 }
 
 export const ScannerResult: React.FC<ScannerResultProps> = ({
+  open = false,
+  setOpen = () => console.warn('no setOpen given ScannerResult'),
   scannerConfig,
 }) => {
   const isTouchScreen = useTouchScreen();
 
-  if (isTouchScreen) return <TouchScreen scannerConfig={scannerConfig} />;
+  if (isTouchScreen)
+    return (
+      <TouchScreen
+        open={open}
+        setOpen={setOpen}
+        scannerConfig={scannerConfig}
+      />
+    );
 
-  return <DesktopScreen />;
+  return (
+    <DesktopScreen
+      open={open}
+      setOpen={setOpen}
+      scannerConfig={scannerConfig}
+    />
+  );
 };
 
 export default ScannerResult;

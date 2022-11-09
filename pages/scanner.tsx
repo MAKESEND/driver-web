@@ -4,10 +4,10 @@ import type { NextPageWithLayout } from './_app';
 import { Suspense } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
+import { Loader } from 'components/common/loader/Loader';
 
 import dynamic from 'next/dynamic';
 const Seo = dynamic(() => import('components/common/Seo'));
-const Loader = dynamic(() => import('components/common/loader/Loader'));
 const ScannerPanel = dynamic(() => import('components/scanner/ScannerPanel'), {
   suspense: true,
 });
@@ -30,7 +30,7 @@ export const ScannerPage: NextPageWithLayout = () => {
   return (
     <>
       <Seo title="Scanner" />
-      <Suspense fallback={<Loader hideText />}>
+      <Suspense fallback={<Loader />}>
         <ScannerPanel
           task={router.query?.type as ScannerTask}
           mode={router.query?.mode as ScannerMode}

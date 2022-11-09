@@ -30,6 +30,7 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({
   const scannedResultRef = useRef<ScannedResult[]>([]);
   const [isDenied, setIsDenied] = useState<boolean>(false);
   const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [openResult, setOpenResult] = useState<boolean>(false);
   const [scannerConfig, setScannerConfig] = useState<ScannerConfig>({
     mode,
     task,
@@ -43,6 +44,7 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({
             isScanning={isScanning}
             setIsScanning={setIsScanning}
             setIsDenied={setIsDenied}
+            setOpenResult={setOpenResult}
             scannerConfig={scannerConfig}
           />
           <Stack
@@ -63,7 +65,11 @@ export const ScannerPanel: React.FC<ScannerPanelProps> = ({
               />
             )}
           </Stack>
-          <ScannerResult scannerConfig={scannerConfig} />
+          <ScannerResult
+            open={openResult}
+            setOpen={setOpenResult}
+            scannerConfig={scannerConfig}
+          />
         </Stack>
       </Slide>
     </ScannerContext.Provider>

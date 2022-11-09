@@ -27,5 +27,5 @@ export enum FacingMode {
 
 export interface ScannedResult {
   text: string;
-  scanned_at: string;
+  scanned_at: number;
 }

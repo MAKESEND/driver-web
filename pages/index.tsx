@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Seo title="MAKESEND" />
-      <Suspense fallback={<Loader hideText />}>
+      <Suspense fallback={<Loader />}>
         <HomeFC />
       </Suspense>
     </>

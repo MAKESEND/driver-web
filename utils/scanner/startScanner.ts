@@ -1,4 +1,4 @@
-import type { FacingMode, ScannedResult, ScannerMode } from 'types';
+import type { FacingMode } from 'types';
 import type { Html5Qrcode } from 'html5-qrcode';
 import type { Html5QrcodeCameraScanConfig } from 'html5-qrcode/esm/html5-qrcode';
 
@@ -10,31 +10,23 @@ export interface CameraStarter {
 export interface StartScannerArgs {
   scanner: Html5Qrcode | null;
   cameraId?: string;
-  scannedResultRef?: React.MutableRefObject<ScannedResult[]>;
+  onSuccessCallback?:
+    | ((decodedText: string) => void)
+    | ((decodedText: string) => Promise<void>);
   camConfig?: Html5QrcodeCameraScanConfig;
-  scannerMode?: keyof typeof ScannerMode;
 }
 
 export const startScanner = async ({
   scanner,
   cameraId,
-  scannedResultRef = { current: [] as ScannedResult[] },
+  onSuccessCallback,
   camConfig = { fps: 2 },
-  scannerMode = 'single',
 }: StartScannerArgs) => {
   const onSuccess = (decodedText: string) => {
-    // TODO: handle for multiple mode
-
-    if (scannerMode === 'single') {
-      const cache = [...scannedResultRef.current];
-
-      scannedResultRef.current = [
-        ...cache,
-        {
-          text: decodedText,
-          scanned_at: new Date().toISOString(),
-        },
-      ];
+    if (onSuccessCallback) {
+      onSuccessCallback(decodedText);
+    } else {
+      console.log(decodedText);
     }
   };
 

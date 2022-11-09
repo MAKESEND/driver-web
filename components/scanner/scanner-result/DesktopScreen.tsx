@@ -1,17 +1,36 @@
+import type { ScannerConfig } from 'types';
+import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useScannerResult } from 'hooks/useScannerResult';
 import { Button } from '@mui/material';
 
-export const DesktopScreen: React.FC = () => {
+export interface DesktopScreenProps {
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  scannerConfig: ScannerConfig | null;
+}
+
+export const DesktopScreen: React.FC<DesktopScreenProps> = ({
+  open = false,
+  setOpen = () => console.warn('no setOpen given ScannerResult'),
+  scannerConfig = null,
+}) => {
   const { t } = useTranslation(['scanner']);
   const scannedResultRef = useScannerResult();
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     // TODO: open modal with scanned result
     // custom modal for single mode
     // custom modal for multiple mode
     console.log('open modal');
-  };
+    console.log(scannedResultRef.current);
+  }, [scannedResultRef]);
+
+  useEffect(() => {
+    if (open) {
+      onClick();
+    }
+  }, [open, onClick]);
 
   return (
     <Button

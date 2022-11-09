@@ -1,6 +1,6 @@
 import type { ScannerConfig } from 'types';
 import type { Html5Qrcode } from 'html5-qrcode';
-import { useEffect, useMemo, useRef, memo } from 'react';
+import { useEffect, useMemo, useRef, memo, useCallback } from 'react';
 import { useWindowSize } from 'react-use';
 import { useTranslation } from 'next-i18next';
 import { isMobile } from 'react-device-detect';
@@ -44,6 +44,7 @@ export interface ScannerProps {
   isScanning?: boolean;
   setIsScanning?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDenied?: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenResult?: React.Dispatch<React.SetStateAction<boolean>>;
   scannerConfig?: ScannerConfig;
 }
 
@@ -51,6 +52,7 @@ export const Scanner: React.FC<ScannerProps> = ({
   isScanning = false,
   setIsScanning = () => console.warn('no setIsScanning given to Scanner'),
   setIsDenied = () => console.warn('no setIsDenied given to Scanner'),
+  setOpenResult = () => console.warn('no setOpenResult given to Scanner'),
   scannerConfig = null,
 }) => {
   // const scannerTask = scannerConfig?.task || 'scan';
@@ -71,6 +73,36 @@ export const Scanner: React.FC<ScannerProps> = ({
     [width, height]
   );
 
+  const onSuccessCallback = useCallback(
+    (decodedText: string) => {
+      if (scannerMode === 'single') {
+        scannedResultRef.current = [
+          {
+            text: decodedText,
+            scanned_at: Date.now(),
+          },
+        ];
+
+        setOpenResult(true);
+        setIsScanning(false);
+        stopScanner(scannerRef.current);
+        scannerRef.current = null;
+        hasStartedRef.current = false;
+      } else if (scannerMode === 'bulk') {
+        const cache = [...scannedResultRef.current];
+
+        scannedResultRef.current = [
+          ...cache,
+          {
+            text: decodedText,
+            scanned_at: Date.now(),
+          },
+        ];
+      }
+    },
+    [scannerMode, scannedResultRef, setIsScanning, setOpenResult]
+  );
+
   useEffect(() => {
     // init scanner with camera
     if (isScanning && !hasStartedRef.current) {
@@ -78,17 +110,17 @@ export const Scanner: React.FC<ScannerProps> = ({
         cameraId: selectedCamera,
         camConfig,
         scannerRef,
-        scannedResultRef,
-        scannerMode,
         setIsDenied,
         setIsScanning,
         setCameras,
+        onSuccessCallback,
       }).then((hasStarted) => {
         hasStartedRef.current = hasStarted;
       });
     }
   }, [
     isScanning,
+    onSuccessCallback,
     camConfig,
     selectedCamera,
     scannedResultRef,
@@ -105,8 +137,7 @@ export const Scanner: React.FC<ScannerProps> = ({
         scanner: scannerRef.current,
         cameraId: selectedCamera,
         camConfig,
-        scannedResultRef,
-        scannerMode,
+        onSuccessCallback,
       });
     } else if (!isScanning && hasStartedRef.current) {
       // stop and clear camera stream
@@ -114,7 +145,7 @@ export const Scanner: React.FC<ScannerProps> = ({
       scannerRef.current = null;
       hasStartedRef.current = false;
     }
-  }, [isScanning, camConfig, selectedCamera, scannerMode, scannedResultRef]);
+  }, [camConfig, isScanning, selectedCamera, onSuccessCallback]);
 
   useEffect(() => {
     // reset and clear active camera stream
@@ -155,7 +186,7 @@ export const Scanner: React.FC<ScannerProps> = ({
         TypographyProps={{
           sx: { color: (theme) => theme.palette.white.main },
         }}
-        text={`${t('common:hint.starting')}...`}
+        loadingText={`${t('common:hint.starting')}...`}
       />
       <Box id="reader" sx={{ width: '100%', height: '100%' }} />
       <IconButton
