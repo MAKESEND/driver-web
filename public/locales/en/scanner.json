@@ -3,7 +3,8 @@
     "scanQrCode": "Scan QR Code",
     "tapToScan": "Tap to scan",
     "switchCamera": "Switch camera",
-    "cameraDenied": "Camera is not available. Please update your permission"
+    "cameraDenied": "Camera is not available. Please update your permission",
+    "received": "Received"
   },
   "select": {
     "task": {

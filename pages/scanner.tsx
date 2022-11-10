@@ -42,7 +42,11 @@ export const ScannerPage: NextPageWithLayout = () => {
 
 ScannerPage.getLayout = (page: React.ReactNode) => {
   return (
-    <DrawerLayout fillContainer mobileContainer>
+    <DrawerLayout
+      fillContainer
+      mobileContainer
+      sxMobile={{ position: 'relative' }}
+    >
       {page}
     </DrawerLayout>
   );

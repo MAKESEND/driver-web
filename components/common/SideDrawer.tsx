@@ -5,7 +5,6 @@ import type {
   SxProps,
   Theme,
 } from '@mui/material';
-import { useTranslation } from 'next-i18next';
 import useTouchScreen from 'hooks/useTouchScreen';
 import { Box, styled, SwipeableDrawer, Typography } from '@mui/material';
 
@@ -46,7 +45,6 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
   pullerHint,
   bodySx,
 }) => {
-  const { t } = useTranslation('scanner');
   const isTouchScreen = useTouchScreen();
 
   // only show in touch screen
@@ -87,19 +85,21 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({
         }}
       >
         <Puller />
-        <Typography
-          variant="secondary"
-          sx={{
-            p: 2,
-            pb: 0.5,
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          {pullerHint || t('btn.swipeUp')}
-        </Typography>
+        {pullerHint && (
+          <Typography
+            variant="secondary"
+            sx={{
+              p: 2,
+              pb: 0.5,
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+          >
+            {pullerHint}
+          </Typography>
+        )}
       </Box>
       <Box sx={{ p: 2, ...bodySx }}>{children}</Box>
     </SwipeableDrawer>

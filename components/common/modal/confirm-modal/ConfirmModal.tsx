@@ -2,7 +2,7 @@ import type { ConfirmModalProps } from 'types';
 import { forwardRef } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useModal } from 'hooks/useModal';
-import ModalLayout from '../ModalLayout';
+import ModalLayout from 'components/common/modal/ModalLayout';
 import {
   Button,
   Stack,
@@ -14,7 +14,7 @@ const Typography = styled(MuiTypography)(() => ({ textAlign: 'center' }));
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = forwardRef(
   (
-    { title, description, confirmText, cancelText, onConfirm, onClose },
+    { title, description, bodyEl, confirmText, cancelText, onConfirm, onClose },
     ref
   ) => {
     const { t } = useTranslation('common');
@@ -24,8 +24,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = forwardRef(
       <ModalLayout ref={ref}>
         <Stack gap={1}>
           <Typography>{title}</Typography>
-          <Typography>{description}</Typography>
-          <Stack sx={{ flex: 1, height: 40 }}>
+          {description && <Typography>{description}</Typography>}
+          {bodyEl}
+          <Stack sx={{ flex: 1, height: 40, flexDirection: 'row' }}>
             <Button
               variant="text"
               sx={{
