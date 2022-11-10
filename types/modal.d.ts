@@ -1,6 +1,7 @@
 export type TModelProps = {
   title: string;
-  description: string;
+  description?: string;
+  bodyEl?: React.ReactNode;
   onConfirm: () => void;
   onClose?: (() => void) | (() => Promise<void>);
   confirmText?: string;

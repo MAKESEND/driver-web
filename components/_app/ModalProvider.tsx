@@ -27,7 +27,9 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
     <ModalContext.Provider value={[state, dispatch]}>
       {state.show && ModalComponent && (
         <Modal open={state.show}>
-          <ModalComponent {...props} />
+          <>
+            <ModalComponent {...props} />
+          </>
         </Modal>
       )}
       {children}

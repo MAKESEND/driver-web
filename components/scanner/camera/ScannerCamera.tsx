@@ -23,10 +23,12 @@ const QrCodeScannerIcon = dynamic(
 
 export interface ScannerCameraProps {
   scannerConfig: ScannerConfig;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ScannerCamera: React.FC<ScannerCameraProps> = ({
   scannerConfig,
+  setOpen = () => console.warn('no setOpen given ScannerCamera'),
 }) => {
   const [showToast] = useToast();
   const [showModal] = useModal();
@@ -65,6 +67,7 @@ export const ScannerCamera: React.FC<ScannerCameraProps> = ({
       if (scannerConfig.mode === 'single') {
         scannedResultRef.current = [scannedResult];
         setIsScanning(false);
+        setOpen(true);
       } else if (scannerConfig.mode === 'bulk') {
         showToast(`${t('title.received')} ${text}`);
         scannedResultRef.current = [...scannedResultRef.current, scannedResult];

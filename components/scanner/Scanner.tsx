@@ -10,11 +10,11 @@ import ScannerOptions from 'components/scanner/buttons/ScannerOptions';
 import { Skeleton } from '@mui/material';
 
 import dynamic from 'next/dynamic';
+const ScannerResult = dynamic(
+  () => import('components/scanner/result/ScannerResult')
+);
 const ScannerCamera = dynamic(
   () => import('components/scanner/camera/ScannerCamera')
-);
-const TouchScreen = dynamic(
-  () => import('components/scanner/result/TouchScreen')
 );
 
 export interface ScannerProps {
@@ -27,6 +27,7 @@ export const Scanner: React.FC<ScannerProps> = ({
   task = 'scan',
 }) => {
   const scannedResultRef = useRef<ScannedResult[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
   const [scannerConfig, setScannerConfig] = useState<ScannerConfig>({
     mode,
     task,
@@ -46,8 +47,12 @@ export const Scanner: React.FC<ScannerProps> = ({
           scannerConfig={scannerConfig}
           setScannerConfig={setScannerConfig}
         />
-        <ScannerCamera scannerConfig={scannerConfig} />
-        <TouchScreen scannerConfig={scannerConfig} />
+        <ScannerCamera scannerConfig={scannerConfig} setOpen={setOpen} />
+        <ScannerResult
+          open={open}
+          setOpen={setOpen}
+          scannerConfig={scannerConfig}
+        />
       </Suspense>
     </ScannerContext.Provider>
   );
