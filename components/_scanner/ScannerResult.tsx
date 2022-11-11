@@ -1,10 +1,10 @@
 import type { ScannerConfig } from 'types';
 import useTouchScreen from 'hooks/useTouchScreen';
-import DesktopScreen from 'components/scanner/scanner-result/DesktopScreen';
+import DesktopScreen from 'components/_scanner/scanner-result/DesktopScreen';
 
 import dynamic from 'next/dynamic';
 const TouchScreen = dynamic(
-  () => import('components/scanner/scanner-result/TouchScreen')
+  () => import('components/_scanner/scanner-result/TouchScreen')
 );
 
 export interface ScannerResultProps {
