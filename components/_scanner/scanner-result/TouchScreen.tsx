@@ -1,7 +1,7 @@
 import type { ScannedResult, ScannerConfig } from 'types';
 import { useState, useEffect } from 'react';
 import SideDrawer from 'components/common/SideDrawer';
-import ScannerResultSingle from 'components/scanner/scanner-result/single/ScannerResultSingle';
+import ScannerResultSingle from 'components/_scanner/scanner-result/single/ScannerResultSingle';
 
 export interface TouchScreenProps {
   open?: boolean;

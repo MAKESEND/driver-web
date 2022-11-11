@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 const HighlightOffIcon = dynamic(
   () => import('@mui/icons-material/HighlightOff')
 );
-const QrReader = dynamic(() =>
+const QrReader = dynamic<QrReaderProps>(() =>
   import('react-qr-reader').then((mod) => mod.QrReader)
 );
 const QrCodeScannerIcon = dynamic(
