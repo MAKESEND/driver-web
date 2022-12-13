@@ -15,6 +15,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 export const LoginPage: NextPage = () => {
+  // TODO: redirect to dashboard if the user has logged in
   return (
     <>
       <Seo title="Login" description="MAKESEND Driver App" />

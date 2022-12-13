@@ -25,6 +25,8 @@ const nextConfig = {
     jwt: {
       production: 'ccfe889f96a010040bc13ca2850dd58d16bebc7a',
       develop: '9569e7aa43082713eb4e81c236cbae75843c429d',
+      accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+      refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
     },
     msKey: {
       production: {

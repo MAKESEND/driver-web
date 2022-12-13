@@ -5,10 +5,9 @@ import { api } from 'utils/services/apiServices';
 import tokenMethods from 'utils/auth/token';
 
 const {
-  publicRuntimeConfig: {
-    ENV: { APP_ENV },
+  serverRuntimeConfig: {
+    jwt: { accessTokenSecret, refreshTokenSecret },
   },
-  serverRuntimeConfig: { jwt: jwtSecret },
 } = getConfig();
 
 export default async function handler(
@@ -22,7 +21,6 @@ export default async function handler(
   try {
     if (req.method === 'POST' && req.body.phone && req.body.dob) {
       const isProdENV = process.env.NODE_ENV === 'production';
-      const secret = jwtSecret[APP_ENV];
 
       const [authResponse, _checkinResponse] = await Promise.all([
         api.authDriver(req.body),
@@ -42,28 +40,25 @@ export default async function handler(
         throw new Error('driver data is missing from api.getDriverData');
       }
 
-      const { id, driver_id, name, surname, nickname } = driverData;
+      const { id, driver_id: driverId, name, surname, nickname } = driverData;
+
+      // sign new accessToken
+      const accessToken = jwt.sign({ id, driverId }, accessTokenSecret);
+
+      // return user info. and accessToken
+      data = { id, driverId, name, surname, nickname, accessToken };
 
       const tokenAge = Math.ceil(tokenMethods.getMaxAge('th') / 1000);
 
-      // sign token
-      const token = jwt.sign(
-        {
-          id,
-          driverId: driver_id,
-          firstname: name,
-          surname,
-          nickname,
-        },
-        secret,
-        {
-          expiresIn: tokenAge,
-        }
-      );
+      // sign new refreshToken
+      const refreshToken = jwt.sign({ id, driverId }, refreshTokenSecret, {
+        expiresIn: tokenAge,
+      });
 
+      // set refreshToken in cookie
       res.setHeader(
         'Set-Cookie',
-        `token=${token}; httpOnly; samesite=Lax; path=/; Max-Age=${tokenAge}; ${
+        `refreshToken=${refreshToken}; httpOnly; samesite=None; path=/; Max-Age=${tokenAge}; ${
           isProdENV ? 'Secure;' : ''
         }`
       );

@@ -82,6 +82,11 @@ export const api = {
       payload,
       getConfigKey('driverMgnt')
     ),
+  refreshToken: (config?: AxiosRequestConfig) =>
+    axios.get<{ accessToken: string }>('/api/auth/refresh-token', {
+      withCredentials: true, // used when authentication service is on different app
+      ...config,
+    }),
 };
 
 export default api;

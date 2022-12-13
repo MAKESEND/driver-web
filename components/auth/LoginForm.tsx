@@ -2,7 +2,9 @@ import type { SxProps, Theme } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import useUser from 'hooks/useUser';
+import useAuth from 'hooks/auth/useAuth';
 import { useDriverLogin } from 'hooks/useMutateData';
 import FlexCenterBox from 'components/layouts/FlexCenterBox';
 
@@ -33,11 +35,13 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
+  const { setAuth } = useAuth();
   const [, setUserData] = useUser();
+  const router = useRouter();
   const { t } = useTranslation('common');
   const [remember, setRemember] = useState(false);
   const { handleSubmit, setError } = useFormContext();
-  const { mutateAsync: driverLogin } = useDriverLogin();
+  const { mutateAsync: driverLoginAsync } = useDriverLogin();
 
   const formComponentProps: LoginFormComponentProps = {
     formId,
@@ -49,10 +53,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
 
   const onSubmit = async (formData: any) => {
     try {
-      const { status, data } = await driverLogin(formData);
+      const { status, data } = await driverLoginAsync(formData);
 
       if (status === 200) {
         setUserData(data);
+        setAuth(data);
+
+        router.push((router.query?.from as string) || '/dashboard');
       }
     } catch (error: any) {
       if (error?.response?.status === 400) {
