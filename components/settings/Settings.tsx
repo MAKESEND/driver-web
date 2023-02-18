@@ -52,9 +52,8 @@ export const Settings: React.FC = () => {
               <Image
                 src={`https://flagcdn.com/w20/${flag.toLowerCase()}.png`}
                 alt={`${id}_flag`}
-                layout="fixed"
-                width="20px"
-                height="15px"
+                width={20}
+                height={15}
               />
               <Typography component="span" sx={{ ml: '10px' }}>
                 {title}

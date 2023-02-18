@@ -87,19 +87,11 @@ export default NextAuth({
       return updatedToken;
     },
     session: async (ctx) => {
-      const {
-        session,
-        token,
-        // user
-      } = ctx;
+      const { session, token } = ctx;
 
       if (token) {
-        const { expiresAt, accessToken } = token;
-        session.token = {
-          expiresAt: expiresAt as number,
-          accessToken: accessToken as string,
-          testExpiresAt: Date.now() + 20 * 1000,
-        };
+        const { expiresAt } = token;
+        session.expires = expiresAt as string;
       }
 
       return session;

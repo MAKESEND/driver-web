@@ -58,7 +58,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ id: formId }) => {
       if (error?.response?.status === 400) {
         setError('login_failed', {
           type: 'login_failure',
-          message: t('auth.error.loginFailed'),
+          message: t('auth.error.loginFailed') || 'Login failed',
         });
       }
     }

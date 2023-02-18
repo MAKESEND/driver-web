@@ -169,7 +169,7 @@ export const Scanner: React.FC<ScannerProps> = ({
         alignItems: 'center',
       }}
     >
-      <ScannerTitle title={t('title.scanQrCode')} />
+      <ScannerTitle title={t('title.scanQrCode') || 'Scan QR code'} />
       <Loader
         BoxProps={{
           sx: {

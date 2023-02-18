@@ -98,7 +98,7 @@ export const LoginFormPhone: React.FC<LoginFormComponentProps> = ({
               autoFocus
               required
               value={value}
-              placeholder={t('auth.phone')}
+              placeholder={t('auth.phone') || 'Phone'}
               endAdornment={
                 clearable &&
                 value && (

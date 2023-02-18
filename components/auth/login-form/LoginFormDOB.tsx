@@ -105,7 +105,7 @@ export const LoginFormDOB: React.FC<LoginFormComponentProps> = ({
               type="date"
               required
               value={value}
-              placeholder={t('auth.dob')}
+              placeholder={t('auth.dob') || 'Date of birth'}
               inputRef={dateInputRef}
               endAdornment={
                 clearable &&

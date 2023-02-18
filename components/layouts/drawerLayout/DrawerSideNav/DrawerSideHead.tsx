@@ -4,7 +4,7 @@ import { Box, styled, Typography } from '@mui/material';
 export interface DrawerSideHeadProps {
   placeholder?: string;
   imgSrc?: string;
-  drawerWidth?: string;
+  drawerWidth?: number;
 }
 
 const Container = styled(Box)(() => ({
@@ -22,22 +22,12 @@ const AppLogo = styled(Typography)(() => ({
 export const DrawerSideHead: React.FC<DrawerSideHeadProps> = ({
   placeholder = 'MAKESEND',
   imgSrc,
-  drawerWidth = '16rem',
+  drawerWidth = 256,
 }) => {
   return (
-    <Container
-      sx={{
-        height: { xs: '56px', sm: '64px' },
-      }}
-    >
+    <Container sx={{ height: { xs: '56px', sm: '64px' } }}>
       {imgSrc ? (
-        <Image
-          layout="responsive"
-          width={drawerWidth}
-          height="3rem"
-          src={imgSrc}
-          alt="logo"
-        />
+        <Image width={drawerWidth} height={48} src={imgSrc} alt="logo" />
       ) : (
         <AppLogo variant="h1">{placeholder}</AppLogo>
       )}
